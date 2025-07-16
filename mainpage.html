@@ -68,10 +68,40 @@
                             </a>
                         </div>
                         <div class="border-l border-green-600 h-8"></div>
-                        <a href="#" onclick="navigateTo('login')" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
-                            <i data-lucide="user" size="18"></i>
-                            <span>เข้าสู่ระบบ</span>
-                        </a>
+                        <div class="relative" id="loginSection">
+                            <button id="loginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                                <i data-lucide="user" size="18"></i>
+                                <span>เข้าสู่ระบบ</span>
+                                <i data-lucide="chevron-down" size="16"></i>
+                            </button>
+                            <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                                <a href="#" onclick="navigateToLogin('student')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
+                                    สำหรับนักศึกษา
+                                </a>
+                                <a href="#" onclick="navigateToLogin('teacher')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="user-check" size="16" class="inline mr-2"></i>
+                                    สำหรับอาจารย์
+                                </a>
+                            </div>
+                        </div>
+                        <div class="relative hidden" id="profileSection">
+                            <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                                <i data-lucide="user" size="18"></i>
+                                <span>นักศึกษา</span>
+                                <i data-lucide="chevron-down" size="16"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                                <a href="#" onclick="navigateTo('profile')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="user" size="16" class="inline mr-2"></i>
+                                    โปรไฟล์
+                                </a>
+                                <a href="#" onclick="logout()" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="log-out" size="16" class="inline mr-2"></i>
+                                    ออกจากระบบ
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Mobile menu button -->
@@ -120,10 +150,29 @@
                         <a href="#" onclick="navigateTo('profile')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="profile">
                             โปรไฟล์
                         </a>
-                        <a href="#" onclick="navigateTo('login')" class="flex items-center space-x-1 px-3 py-2 mt-2 bg-green-700 rounded hover:bg-green-600 transition">
-                            <i data-lucide="user" size="18"></i>
-                            <span>เข้าสู่ระบบ</span>
-                        </a>
+                        <div class="relative mt-2" id="mobileLoginSection">
+                            <button id="mobileLoginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition w-full">
+                                <i data-lucide="user" size="18"></i>
+                                <span>เข้าสู่ระบบ</span>
+                                <i data-lucide="chevron-down" size="16" class="ml-auto"></i>
+                            </button>
+                            <div id="mobileLoginDropdown" class="mt-2 w-full bg-white rounded-lg shadow-lg border hidden">
+                                <a href="#" onclick="navigateToLogin('student')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
+                                    สำหรับนักศึกษา
+                                </a>
+                                <a href="#" onclick="navigateToLogin('teacher')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="user-check" size="16" class="inline mr-2"></i>
+                                    สำหรับอาจารย์
+                                </a>
+                            </div>
+                        </div>
+                        <div class="relative mt-2 hidden" id="mobileProfileSection">
+                            <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-red-600 rounded hover:bg-red-700 transition w-full">
+                                <i data-lucide="log-out" size="18"></i>
+                                <span>ออกจากระบบ</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -932,16 +981,125 @@
             return dayMap[day] || day;
         }
 
+        // Login dropdown functionality
+        function navigateToLogin(userType) {
+            // Store user type in localStorage to pass to login page
+            localStorage.setItem('userType', userType);
+            // Navigate to login.html
+            window.location.href = 'login.html';
+        }
+
         // Initialize the app
         function initializeApp() {
             // Set current year
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Check login status first
+            checkLoginStatus();
             
             // Initialize with home page
             navigateTo('home');
             
             // Initialize Lucide icons
             lucide.createIcons();
+            
+            // Initialize login dropdown
+            initializeLoginDropdown();
+            
+            // Initialize profile dropdown
+            initializeProfileDropdown();
+        }
+
+        // Profile dropdown functionality
+        function initializeProfileDropdown() {
+            const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileDropdownBtn && profileDropdown) {
+                profileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('isLoggedIn');
+                showLoginSection();
+            }
+        }
+
+        // Show/Hide login and profile sections
+        function showLoginSection() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+            document.getElementById('mobileLoginSection').classList.remove('hidden');
+            document.getElementById('mobileProfileSection').classList.add('hidden');
+        }
+
+        function showProfileSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+            document.getElementById('mobileLoginSection').classList.add('hidden');
+            document.getElementById('mobileProfileSection').classList.remove('hidden');
+        }
+
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+            
+            if (isLoggedIn === 'true' && userType === 'student') {
+                showProfileSection();
+            } else {
+                showLoginSection();
+            }
+        }
+
+        // Login dropdown functionality
+        function initializeLoginDropdown() {
+            const dropdownBtn = document.getElementById('loginDropdownBtn');
+            const dropdown = document.getElementById('loginDropdown');
+            const mobileDropdownBtn = document.getElementById('mobileLoginDropdownBtn');
+            const mobileDropdown = document.getElementById('mobileLoginDropdown');
+            
+            if (dropdownBtn && dropdown) {
+                dropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (mobileDropdownBtn && mobileDropdown) {
+                mobileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    mobileDropdown.classList.toggle('hidden');
+                });
+
+                // Close mobile dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!mobileDropdownBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+                        mobileDropdown.classList.add('hidden');
+                    }
+                });
+            }
         }
 
         // Run initialization when page loads

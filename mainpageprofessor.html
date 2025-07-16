@@ -1,0 +1,459 @@
+<!--หน้าหลักอาจารย์-->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการการเรียนการสอน - มหาวิทยาลัยแม่โจ้</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Component Structure with Layout -->
+    <div class="flex flex-col min-h-screen bg-gray-50">
+        
+        <!-- Navbar Component -->
+        <header class="bg-green-800 text-white shadow-lg">
+            <nav class="container mx-auto px-4 py-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
+                             alt="Maejo University" 
+                             class="h-12" />
+                        <div class="hidden md:flex flex-col">
+                            <span class="font-bold text-lg">ระบบจัดการการเรียนการสอน</span>
+                            <span class="text-sm">มหาวิทยาลัยแม่โจ้</span>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden lg:flex items-center space-x-4">
+                        <div class="flex space-x-2">
+                            <a href="#" onclick="navigateTo('home')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="home">
+                                หน้าหลัก
+                            </a>
+                            <a href="#" onclick="navigateTo('teaching-courses')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="teaching-courses">
+                                รายวิชาที่สอน
+                            </a>
+                            <a href="#" onclick="navigateTo('grade-management')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="grade-management">
+                                บันทึกเกรดรายบุคคล
+                            </a>
+                        </div>
+                        <div class="border-l border-green-600 h-8"></div>
+                        <div class="relative">
+                            <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                                <i data-lucide="user" size="18"></i>
+                                <span>อาจารย์</span>
+                                <i data-lucide="chevron-down" size="16"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                                <a href="#" onclick="navigateTo('profile')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="user" size="16" class="inline mr-2"></i>
+                                    โปรไฟล์
+                                </a>
+                                <a href="#" onclick="logout()" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="log-out" size="16" class="inline mr-2"></i>
+                                    ออกจากระบบ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
+                        <i id="menuIcon" data-lucide="menu" size="24"></i>
+                        <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation -->
+                <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
+                    <div class="flex flex-col space-y-1">
+                        <a href="#" onclick="navigateTo('home')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="home">
+                            หน้าหลัก
+                        </a>
+                        <a href="#" onclick="navigateTo('teaching-courses')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="teaching-courses">
+                            รายวิชาที่สอน
+                        </a>
+                        <a href="#" onclick="navigateTo('grade-management')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="grade-management">
+                            บันทึกเกรดรายบุคคล
+                        </a>
+                        <a href="#" onclick="navigateTo('profile')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="profile">
+                            โปรไฟล์
+                        </a>
+                        <div class="relative mt-2">
+                            <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-red-600 rounded hover:bg-red-700 transition w-full">
+                                <i data-lucide="log-out" size="18"></i>
+                                <span>ออกจากระบบ</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area (Routes) -->
+        <main class="flex-grow w-full">
+            
+            <!-- Home Page -->
+            <div id="page-home" class="page-content active">
+                <div class="bg-gray-50 min-h-screen">
+                    <!-- Hero Section -->
+                    <div class="bg-green-800 text-white py-12">
+                        <div class="container mx-auto px-4">
+                            <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                                ระบบจัดการการเรียนการสอน
+                            </h1>
+                            <p class="text-xl mb-6">
+                                คณะวิทยาการคอมพิวเตอร์ มหาวิทยาลัยแม่โจ้
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <button onclick="navigateTo('teaching-courses')" class="bg-white text-green-800 hover:bg-green-100 px-6 py-3 rounded-lg font-bold transition">
+                                    รายวิชาที่สอน
+                                </button>
+                                <button onclick="navigateTo('grade-management')" class="bg-green-700 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold transition">
+                                    บันทึกเกรดรายบุคคล
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links - Only 2 buttons as requested -->
+                    <div class="container mx-auto px-4 py-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                            <button onclick="navigateTo('teaching-courses')" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
+                                <i data-lucide="book-open" class="text-green-700 mr-3" size="24"></i>
+                                <div>
+                                    <h3 class="font-bold text-lg">รายวิชาที่สอน</h3>
+                                    <p class="text-gray-600 text-sm">จัดการรายวิชาที่ท่านรับผิดชอบ</p>
+                                </div>
+                            </button>
+                            <button onclick="navigateTo('grade-management')" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
+                                <i data-lucide="clipboard-list" class="text-green-700 mr-3" size="24"></i>
+                                <div>
+                                    <h3 class="font-bold text-lg">บันทึกเกรดรายบุคคล</h3>
+                                    <p class="text-gray-600 text-sm">บันทึกและจัดการเกรดของนักศึกษา</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Announcements -->
+                    <div class="container mx-auto px-4 py-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold">ประกาศจากมหาวิทยาลัย</h2>
+                            <button onclick="navigateTo('announcements')" class="text-green-700 hover:underline">
+                                ดูทั้งหมด
+                            </button>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="p-4 border-b bg-green-50">
+                                <div class="flex items-start">
+                                    <div class="bg-red-500 text-white text-xs px-2 py-1 rounded mr-2 mt-1">
+                                        สำคัญ
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg">กำหนดส่งเกรดภาคเรียนที่ 1/2566</h3>
+                                        <p class="text-gray-500 text-sm mb-2">
+                                            วันที่ 15 ตุลาคม 2566
+                                        </p>
+                                        <p class="text-gray-700">ขอให้อาจารย์ทุกท่านส่งเกรดนักศึกษาภายในวันที่ 31 ตุลาคม 2566</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 border-b">
+                                <div class="flex items-start">
+                                    <div>
+                                        <h3 class="font-bold text-lg">การประชุมคณะกรรมการบริหารคณะ</h3>
+                                        <p class="text-gray-500 text-sm mb-2">
+                                            วันที่ 20 ตุลาคม 2566
+                                        </p>
+                                        <p class="text-gray-700">ขอเชิญอาจารย์ทุกท่านเข้าร่วมประชุมคณะกรรมการบริหารคณะ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Calendar Highlight -->
+                    <div class="bg-green-50 py-8">
+                        <div class="container mx-auto px-4">
+                            <h2 class="text-2xl font-bold mb-6">
+                                ปฏิทินการศึกษา - กำหนดการสำคัญ
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">เปิดภาคเรียน</h3>
+                                    <p class="text-gray-700">1 มิถุนายน 2566</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">สอบกลางภาค</h3>
+                                    <p class="text-gray-700">1-7 กรกฎาคม 2566</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">
+                                        วันสุดท้ายของการถอนรายวิชา
+                                    </h3>
+                                    <p class="text-gray-700">31 กรกฎาคม 2566</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">สอบปลายภาค</h3>
+                                    <p class="text-gray-700">1-15 ตุลาคม 2566</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">ส่งเกรด</h3>
+                                    <p class="text-gray-700">31 ตุลาคม 2566</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow">
+                                    <h3 class="font-bold text-green-800">ประกาศผลการเรียน</h3>
+                                    <p class="text-gray-700">15 พฤศจิกายน 2566</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teaching Courses Page -->
+            <div id="page-teaching-courses" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="book-open" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้ารายวิชาที่สอน</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+            <!-- Grade Management Page -->
+            <div id="page-grade-management" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="clipboard-list" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้าบันทึกเกรดรายบุคคล</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+            <!-- Class Schedule Page -->
+            <div id="page-class-schedule" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="calendar" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้าตารางสอน</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+            <!-- Academic Calendar Page -->
+            <div id="page-academic-calendar" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="calendar" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้าปฏิทินการศึกษา</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="page-profile" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="user" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้าโปรไฟล์</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+            <!-- Announcements Page -->
+            <div id="page-announcements" class="page-content">
+                <div class="p-8 text-center">
+                    <i data-lucide="megaphone" class="mx-auto mb-4 text-gray-400" size="64"></i>
+                    <h2 class="text-2xl font-bold mb-2">หน้าประกาศทั้งหมด</h2>
+                    <p class="text-gray-600">หน้านี้อยู่ระหว่างการพัฒนา</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer Component -->
+        <footer class="bg-green-800 text-white py-6">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
+                        <p class="text-sm">
+                            63 หมู่ 4 ตำบลหนองหาร อำเภอสันทราย จังหวัดเชียงใหม่ 50290
+                        </p>
+                        <p class="text-sm">โทรศัพท์: 053-873000</p>
+                    </div>
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
+                        <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
+                        <p class="text-sm">โทรศัพท์: 053-873460</p>
+                        <p class="text-sm">อีเมล: academic@mju.ac.th</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
+                        <ul class="text-sm">
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    คำถามที่พบบ่อย
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    คู่มือการใช้งาน
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    แจ้งปัญหาการใช้งาน
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
+                    <p>
+                        &copy; <span id="currentYear"></span> ระบบจัดการการเรียนการสอน
+                        มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let currentPage = 'home';
+
+        // Navigation functionality
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(`page-${page}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                currentPage = page;
+            }
+            
+            // Update navigation active states
+            updateNavigation(page);
+            
+            // Close mobile menu
+            closeMobileMenu();
+            
+            // Update page title
+            updatePageTitle(page);
+        }
+
+        function updateNavigation(page) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                link.classList.remove('bg-green-700');
+            });
+            
+            // Add active class to current page links
+            document.querySelectorAll(`[data-page="${page}"]`).forEach(link => {
+                link.classList.add('bg-green-700');
+            });
+        }
+
+        function updatePageTitle(page) {
+            const pageTitles = {
+                'home': 'ระบบจัดการการเรียนการสอน - มหาวิทยาลัยแม่โจ้',
+                'teaching-courses': 'รายวิชาที่สอน - ระบบจัดการการเรียนการสอน',
+                'grade-management': 'บันทึกเกรดรายบุคคล - ระบบจัดการการเรียนการสอน',
+                'class-schedule': 'ตารางสอน - ระบบจัดการการเรียนการสอน',
+                'academic-calendar': 'ปฏิทินการศึกษา - ระบบจัดการการเรียนการสอน',
+                'profile': 'โปรไฟล์ - ระบบจัดการการเรียนการสอน'
+            };
+            
+            document.title = pageTitles[page] || 'ระบบจัดการการเรียนการสอน - มหาวิทยาลัยแม่โจ้';
+        }
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+        let isMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                closeMobileMenu();
+            }
+        });
+
+        function closeMobileMenu() {
+            isMenuOpen = false;
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        }
+
+        // Profile dropdown functionality
+        function initializeProfileDropdown() {
+            const dropdownBtn = document.getElementById('profileDropdownBtn');
+            const dropdown = document.getElementById('profileDropdown');
+            
+            if (dropdownBtn && dropdown) {
+                dropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                window.location.href = 'mainpage.html';
+            }
+        }
+
+        // Initialize the app
+        function initializeApp() {
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Initialize with home page
+            navigateTo('home');
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Initialize profile dropdown
+            initializeProfileDropdown();
+        }
+
+        // Run initialization when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

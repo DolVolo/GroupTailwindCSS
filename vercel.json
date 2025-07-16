@@ -23,7 +23,16 @@
     {
       "source": "/datestudy",
       "destination": "/datestudy.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/mainpageprofessor",
+      "destination": "/mainpageprofessor.html"
     }
+
   ],
   "cleanUrls": true,
   "trailingSlash": false
