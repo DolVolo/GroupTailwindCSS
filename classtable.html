@@ -1,1 +1,339 @@
 <!--ตารางเรียน-->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางเรียน - ระบบทะเบียนนักศึกษา</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">ตารางเรียน</h1>
+            <div class="flex space-x-2 no-print">
+                <button onclick="handlePrint()" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    <i data-lucide="printer" size="18" class="mr-1"></i>
+                    พิมพ์
+                </button>
+                <button onclick="handleDownload()" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    <i data-lucide="download" size="18" class="mr-1"></i>
+                    ดาวน์โหลด PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Class Schedule -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="p-4 bg-green-700 text-white">
+                <h2 class="text-xl font-bold">ตารางเรียนประจำสัปดาห์</h2>
+                <p class="text-sm">ภาคการศึกษาที่ 1/2566</p>
+            </div>
+            <div class="p-4 overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="border p-2 bg-gray-50">เวลา/วัน</th>
+                            <th class="border p-2 bg-gray-50 min-w-[150px]">จันทร์</th>
+                            <th class="border p-2 bg-gray-50 min-w-[150px]">อังคาร</th>
+                            <th class="border p-2 bg-gray-50 min-w-[150px]">พุธ</th>
+                            <th class="border p-2 bg-gray-50 min-w-[150px]">พฤหัสบดี</th>
+                            <th class="border p-2 bg-gray-50 min-w-[150px]">ศุกร์</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleTableBody">
+                        <!-- Schedule will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Exam Schedule -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-green-700 text-white">
+                <h2 class="text-xl font-bold">ตารางสอบ</h2>
+                <p class="text-sm">ภาคการศึกษาที่ 1/2566</p>
+            </div>
+            <div class="p-4 overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border p-2">รหัสวิชา</th>
+                            <th class="border p-2">ชื่อวิชา</th>
+                            <th class="border p-2">วันที่</th>
+                            <th class="border p-2">เวลา</th>
+                            <th class="border p-2">ห้องสอบ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="examTableBody">
+                        <!-- Exam schedule will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Course Summary -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+            <div class="p-4 bg-green-700 text-white">
+                <h2 class="text-xl font-bold">สรุปรายวิชาที่ลงทะเบียน</h2>
+            </div>
+            <div class="p-4">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border p-2">รหัสวิชา</th>
+                            <th class="border p-2">ชื่อวิชา</th>
+                            <th class="border p-2">Section</th>
+                            <th class="border p-2">หน่วยกิต</th>
+                            <th class="border p-2">อาจารย์ผู้สอน</th>
+                        </tr>
+                    </thead>
+                    <tbody id="courseSummaryBody">
+                        <!-- Course summary will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample course data - registered courses
+        const registeredCourses = [
+            {
+                code: "CS101",
+                name: "การเขียนโปรแกรมเบื้องต้น",
+                section: "001",
+                credits: 3,
+                time: [
+                    { day: "Monday", start: "09:00", end: "12:00" },
+                    { day: "Wednesday", start: "09:00", end: "12:00" }
+                ],
+                room: "CS-201",
+                instructor: "อ.สมชาย ใจดี"
+            },
+            {
+                code: "CS301",
+                name: "วิศวกรรมซอฟต์แวร์",
+                section: "001",
+                credits: 3,
+                time: [
+                    { day: "Tuesday", start: "09:00", end: "12:00" },
+                    { day: "Thursday", start: "09:00", end: "12:00" }
+                ],
+                room: "CS-401",
+                instructor: "อ.เก่ง มากมาย"
+            },
+            {
+                code: "CS201",
+                name: "การออกแบบและวิเคราะห์อัลกอริทึม",
+                section: "001",
+                credits: 3,
+                time: [
+                    { day: "Monday", start: "13:00", end: "16:00" },
+                    { day: "Wednesday", start: "13:00", end: "16:00" }
+                ],
+                room: "CS-301",
+                instructor: "อ.วิชาญ เก่งมาก"
+            },
+            {
+                code: "CS109",
+                name: "คณิตศาสตร์ดิสครีต",
+                section: "001",
+                credits: 3,
+                time: [
+                    { day: "Tuesday", start: "13:00", end: "16:00" },
+                    { day: "Friday", start: "09:00", end: "12:00" }
+                ],
+                room: "CS-101",
+                instructor: "อ.คณิต เลขดี"
+            }
+        ];
+
+        // Sample exam schedule
+        const examSchedule = [
+            {
+                code: "CS101",
+                name: "การเขียนโปรแกรมเบื้องต้น",
+                date: "15 ตุลาคม 2566",
+                time: "09:00-12:00",
+                room: "CS-201"
+            },
+            {
+                code: "CS301",
+                name: "วิศวกรรมซอฟต์แวร์",
+                date: "17 ตุลาคม 2566",
+                time: "13:00-16:00",
+                room: "CS-401"
+            },
+            {
+                code: "CS201",
+                name: "การออกแบบและวิเคราะห์อัลกอริทึม",
+                date: "20 ตุลาคม 2566",
+                time: "09:00-12:00",
+                room: "CS-301"
+            },
+            {
+                code: "CS109",
+                name: "คณิตศาสตร์ดิสครีต",
+                date: "22 ตุลาคม 2566",
+                time: "13:00-16:00",
+                room: "CS-101"
+            }
+        ];
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
+        const hours = Array.from({ length: 10 }, (_, i) => i + 8); // 8:00 to 17:00
+
+        // Get color for a course (consistently)
+        function getCourseColor(courseCode) {
+            const colors = [
+                'bg-blue-100 border-blue-300 text-blue-800',
+                'bg-green-100 border-green-300 text-green-800',
+                'bg-yellow-100 border-yellow-300 text-yellow-800',
+                'bg-purple-100 border-purple-300 text-purple-800',
+                'bg-pink-100 border-pink-300 text-pink-800',
+                'bg-indigo-100 border-indigo-300 text-indigo-800'
+            ];
+            // Use the course code to determine a consistent color
+            const index = parseInt(courseCode.replace('CS', '')) % colors.length;
+            return colors[index];
+        }
+
+        // Check if a course is scheduled at a specific day and hour
+        function getCourseAtTime(day, hour) {
+            return registeredCourses.filter(course => {
+                return course.time.some(timeSlot => {
+                    if (timeSlot.day !== day) return false;
+                    const startHour = parseInt(timeSlot.start.split(':')[0]);
+                    const endHour = parseInt(timeSlot.end.split(':')[0]);
+                    return hour >= startHour && hour < endHour;
+                });
+            });
+        }
+
+        // Calculate if a course spans multiple hours
+        function getCourseTimespan(course, day, hour) {
+            const timeSlot = course.time.find(t => t.day === day);
+            if (!timeSlot) return 1;
+            const startHour = parseInt(timeSlot.start.split(':')[0]);
+            const endHour = parseInt(timeSlot.end.split(':')[0]);
+            if (hour === startHour) {
+                return endHour - startHour;
+            }
+            return 0; // Not the start hour
+        }
+
+        // Render the schedule table
+        function renderScheduleTable() {
+            const tbody = document.getElementById('scheduleTableBody');
+            let html = '';
+
+            hours.forEach(hour => {
+                html += '<tr>';
+                html += `<td class="border p-2 text-center bg-gray-50 font-medium">${hour}:00 - ${hour + 1}:00</td>`;
+                
+                days.forEach(day => {
+                    const coursesAtTime = getCourseAtTime(day, hour);
+                    if (coursesAtTime.length === 0) {
+                        html += `<td class="border p-2"></td>`;
+                    } else {
+                        coursesAtTime.forEach(course => {
+                            const timespan = getCourseTimespan(course, day, hour);
+                            if (timespan === 0) return; // Skip if not the start hour
+                            
+                            const colorClass = getCourseColor(course.code);
+                            html += `<td rowspan="${timespan}" class="border p-2 ${colorClass}">
+                                <div class="font-bold">${course.code}</div>
+                                <div class="text-sm">${course.name}</div>
+                                <div class="text-xs">ห้อง ${course.room}</div>
+                                <div class="text-xs">อาจารย์ ${course.instructor}</div>
+                            </td>`;
+                        });
+                    }
+                });
+                
+                html += '</tr>';
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Render the exam schedule table
+        function renderExamTable() {
+            const tbody = document.getElementById('examTableBody');
+            const registeredCoursesCodes = registeredCourses.map(c => c.code);
+            const registeredExams = examSchedule.filter(exam => 
+                registeredCoursesCodes.includes(exam.code)
+            );
+
+            const html = registeredExams.map(exam => `
+                <tr>
+                    <td class="border p-2 font-medium">${exam.code}</td>
+                    <td class="border p-2">${exam.name}</td>
+                    <td class="border p-2">${exam.date}</td>
+                    <td class="border p-2">${exam.time}</td>
+                    <td class="border p-2">${exam.room}</td>
+                </tr>
+            `).join('');
+
+            tbody.innerHTML = html;
+        }
+
+        // Render the course summary table
+        function renderCourseSummary() {
+            const tbody = document.getElementById('courseSummaryBody');
+            const totalCredits = registeredCourses.reduce((sum, course) => sum + course.credits, 0);
+
+            let html = registeredCourses.map(course => `
+                <tr>
+                    <td class="border p-2 font-medium">${course.code}</td>
+                    <td class="border p-2">${course.name}</td>
+                    <td class="border p-2 text-center">${course.section}</td>
+                    <td class="border p-2 text-center">${course.credits}</td>
+                    <td class="border p-2">${course.instructor}</td>
+                </tr>
+            `).join('');
+
+            html += `
+                <tr class="bg-gray-50 font-bold">
+                    <td colspan="3" class="border p-2 text-right">รวมหน่วยกิต</td>
+                    <td class="border p-2 text-center">${totalCredits}</td>
+                    <td class="border p-2"></td>
+                </tr>
+            `;
+
+            tbody.innerHTML = html;
+        }
+
+        // Handle print functionality
+        function handlePrint() {
+            window.print();
+        }
+
+        // Handle download functionality
+        function handleDownload() {
+            alert('ฟีเจอร์ดาวน์โหลด PDF จะพัฒนาในอนาคต');
+        }
+
+        // Initialize the page
+        function init() {
+            renderScheduleTable();
+            renderExamTable();
+            renderCourseSummary();
+            lucide.createIcons();
+        }
+
+        // Run initialization when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
