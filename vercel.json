@@ -1,0 +1,30 @@
+{
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/mainpage.html"
+    },
+    {
+      "src": "/mainpage",
+      "dest": "/mainpage.html"
+    },
+    {
+      "src": "/classtable",
+      "dest": "/classtable.html"
+    },
+    {
+      "src": "/tableclassuse",
+      "dest": "/tableclassuse.html"
+    },
+    {
+      "src": "/professorlogin",
+      "dest": "/professorlogin.html"
+    },
+    {
+      "src": "/datestudy",
+      "dest": "/datestudy.html"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}
