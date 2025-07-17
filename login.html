@@ -6,6 +6,37 @@
   <title id="pageTitle">เข้าสู่ระบบ | มหาวิทยาลัยแม่โจ้</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="data.js"></script>
+  <style>
+    .autocomplete-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #d1d5db;
+      border-top: none;
+      border-radius: 0 0 0.5rem 0.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .autocomplete-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .autocomplete-item:hover {
+      background-color: #f9fafb;
+    }
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+    .username-container {
+      position: relative;
+    }
+  </style>
 </head>
 <body class="bg-gradient-to-br from-green-100 to-green-300 h-screen flex items-center justify-center font-sans">
 
@@ -19,7 +50,10 @@
     <form onsubmit="return login(event)">
       <div class="mb-4">
         <label for="username" class="block font-semibold text-gray-700 mb-1">ชื่อผู้ใช้</label>
-        <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400" placeholder="ไม่จำเป็นต้องกรอก">
+        <div class="username-container">
+          <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400" placeholder="ไม่จำเป็นต้องกรอก" autocomplete="off">
+          <div id="autocomplete-dropdown" class="autocomplete-dropdown hidden"></div>
+        </div>
       </div>
       <div class="mb-6">
         <label for="password" class="block font-semibold text-gray-700 mb-1">รหัสผ่าน</label>
@@ -42,17 +76,155 @@
     // Get user type from localStorage
     const userType = localStorage.getItem('userType') || 'student';
     
+    // Get unique instructor names from course data
+    function getInstructorNames() {
+      if (typeof courseData === 'undefined') {
+        return [];
+      }
+      const instructors = courseData.map(course => course.instructor);
+      return [...new Set(instructors)].sort();
+    }
+
+    // Initialize autocomplete functionality
+    function initializeAutocomplete() {
+      const usernameInput = document.getElementById('username');
+      const dropdown = document.getElementById('autocomplete-dropdown');
+      const instructors = getInstructorNames();
+
+      // Only enable autocomplete for teachers
+      if (userType !== 'teacher') {
+        return;
+      }
+
+      // Show dropdown when input is focused or clicked
+      usernameInput.addEventListener('focus', () => {
+        showAutocomplete(instructors, '');
+      });
+
+      usernameInput.addEventListener('click', () => {
+        showAutocomplete(instructors, usernameInput.value);
+      });
+
+      // Filter dropdown based on input
+      usernameInput.addEventListener('input', (e) => {
+        const value = e.target.value.toLowerCase();
+        const filteredInstructors = instructors.filter(instructor => 
+          instructor.toLowerCase().includes(value)
+        );
+        showAutocomplete(filteredInstructors, value);
+      });
+
+      // Hide dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!usernameInput.contains(e.target) && !dropdown.contains(e.target)) {
+          hideAutocomplete();
+        }
+      });
+
+      // Handle keyboard navigation
+      usernameInput.addEventListener('keydown', (e) => {
+        const items = dropdown.querySelectorAll('.autocomplete-item');
+        const activeItem = dropdown.querySelector('.autocomplete-item.active');
+        let activeIndex = -1;
+
+        if (activeItem) {
+          activeIndex = Array.from(items).indexOf(activeItem);
+        }
+
+        switch (e.key) {
+          case 'ArrowDown':
+            e.preventDefault();
+            if (activeIndex < items.length - 1) {
+              if (activeItem) activeItem.classList.remove('active');
+              items[activeIndex + 1].classList.add('active');
+            }
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            if (activeIndex > 0) {
+              if (activeItem) activeItem.classList.remove('active');
+              items[activeIndex - 1].classList.add('active');
+            }
+            break;
+          case 'Enter':
+            if (activeItem) {
+              e.preventDefault();
+              selectInstructor(activeItem.textContent);
+            }
+            break;
+          case 'Escape':
+            hideAutocomplete();
+            break;
+        }
+      });
+    }
+
+    function showAutocomplete(instructors, currentValue) {
+      const dropdown = document.getElementById('autocomplete-dropdown');
+      
+      if (instructors.length === 0) {
+        hideAutocomplete();
+        return;
+      }
+
+      dropdown.innerHTML = '';
+      
+      instructors.forEach((instructor, index) => {
+        const item = document.createElement('div');
+        item.className = 'autocomplete-item';
+        item.textContent = instructor;
+        
+        // Highlight matching text
+        if (currentValue) {
+          const regex = new RegExp(`(${currentValue})`, 'gi');
+          item.innerHTML = instructor.replace(regex, '<strong>$1</strong>');
+        }
+        
+        item.addEventListener('click', () => {
+          selectInstructor(instructor);
+        });
+
+        item.addEventListener('mouseenter', () => {
+          // Remove active class from all items
+          dropdown.querySelectorAll('.autocomplete-item').forEach(i => i.classList.remove('active'));
+          // Add active class to hovered item
+          item.classList.add('active');
+        });
+
+        dropdown.appendChild(item);
+      });
+
+      dropdown.classList.remove('hidden');
+    }
+
+    function hideAutocomplete() {
+      const dropdown = document.getElementById('autocomplete-dropdown');
+      dropdown.classList.add('hidden');
+    }
+
+    function selectInstructor(instructorName) {
+      const usernameInput = document.getElementById('username');
+      usernameInput.value = instructorName;
+      hideAutocomplete();
+      
+      // Store selected instructor in localStorage for potential future use
+      localStorage.setItem('selectedInstructor', instructorName);
+    }
+
     // Update page content based on user type
     function updatePageContent() {
       const titleElement = document.getElementById('loginTitle');
       const pageTitleElement = document.getElementById('pageTitle');
+      const usernameInput = document.getElementById('username');
       
       if (userType === 'teacher') {
         titleElement.textContent = 'เข้าสู่ระบบสำหรับอาจารย์';
         pageTitleElement.textContent = 'เข้าสู่ระบบอาจารย์ | มหาวิทยาลัยแม่โจ้';
+        usernameInput.placeholder = 'พิมพ์ชื่ออาจารย์หรือคลิกเพื่อดูรายชื่อ';
       } else {
         titleElement.textContent = 'เข้าสู่ระบบสำหรับนักศึกษา';
         pageTitleElement.textContent = 'เข้าสู่ระบบนักศึกษา | มหาวิทยาลัยแม่โจ้';
+        usernameInput.placeholder = 'ไม่จำเป็นต้องกรอก';
       }
     }
 
@@ -63,9 +235,19 @@
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userType', userType);
       
+      // Store username if provided
+      const username = document.getElementById('username').value;
+      if (username) {
+        localStorage.setItem('currentUser', username);
+      }
+      
       // Allow login without checking username/password
       // Show success message and redirect
-      alert(`เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ${userType === 'teacher' ? 'อาจารย์' : 'นักศึกษา'}`);
+      const welcomeMessage = userType === 'teacher' 
+        ? `เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ${username ? ' ' + username : 'อาจารย์'}`
+        : `เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับนักศึกษา`;
+      
+      alert(welcomeMessage);
       
       // Redirect to appropriate page based on user type
       if (userType === 'teacher') {
@@ -82,6 +264,7 @@
     // Initialize page when loaded
     document.addEventListener('DOMContentLoaded', () => {
       updatePageContent();
+      initializeAutocomplete();
       lucide.createIcons();
     });
   </script>

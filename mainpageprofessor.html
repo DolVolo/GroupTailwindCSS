@@ -336,6 +336,12 @@
 
         // Navigation functionality
         function navigateTo(page) {
+// Special case for teaching-courses - redirect to professorclass.html
+if (page === 'teaching-courses') {
+window.location.href = 'professorclass.html';
+return;
+}
+
             // Hide all pages
             document.querySelectorAll('.page-content').forEach(content => {
                 content.classList.remove('active');
