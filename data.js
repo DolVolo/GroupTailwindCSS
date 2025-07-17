@@ -11,7 +11,12 @@ const courseData = [
         room: 'CS-201',
         instructor: 'ดร.สมชาย ใจดี',
         seats: { total: 40, available: 15 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 25 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS102',
@@ -24,7 +29,12 @@ const courseData = [
         room: 'CS-202',
         instructor: 'ผศ.ดร.วิชัย เรียนเก่ง',
         seats: { total: 35, available: 10 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 25 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS103',
@@ -36,7 +46,12 @@ const courseData = [
         room: 'CS-301',
         instructor: 'อ.สุดา เว็บเก่ง',
         seats: { total: 30, available: 5 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 25 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS104',
@@ -49,7 +64,12 @@ const courseData = [
         room: 'CS-203',
         instructor: 'รศ.ดร.ปัญญา คิดเร็ว',
         seats: { total: 35, available: 12 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 23 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS105',
@@ -62,7 +82,12 @@ const courseData = [
         room: 'CS-204',
         instructor: 'ดร.ฐานข้อมูล จัดเก็บดี',
         seats: { total: 30, available: 8 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 22 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS106',
@@ -74,7 +99,12 @@ const courseData = [
         room: 'CS-302',
         instructor: 'ผศ.ดร.พัฒนา ซอฟต์แวร์',
         seats: { total: 30, available: 7 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 23 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS107',
@@ -87,7 +117,12 @@ const courseData = [
         room: 'CS-205',
         instructor: 'อ.ระบบ ปฏิบัติการ',
         seats: { total: 35, available: 15 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 20 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS108',
@@ -100,7 +135,12 @@ const courseData = [
         room: 'CS-206',
         instructor: 'อ.เครือข่าย คอมพิวเตอร์',
         seats: { total: 30, available: 10 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 20 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS109',
@@ -112,7 +152,12 @@ const courseData = [
         room: 'CS-303',
         instructor: 'รศ.ดร.ปัญญา ประดิษฐ์',
         seats: { total: 25, available: 3 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 22 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS110',
@@ -124,7 +169,12 @@ const courseData = [
         room: 'CS-304',
         instructor: 'อ.ปฏิสัมพันธ์ มนุษย์คอม',
         seats: { total: 30, available: 12 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 18 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS111',
@@ -136,7 +186,12 @@ const courseData = [
         room: 'CS-305',
         instructor: 'ผศ.แอพ มือถือ',
         seats: { total: 25, available: 5 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 20 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS112',
@@ -148,7 +203,12 @@ const courseData = [
         room: 'CS-306',
         instructor: 'อ.ความปลอดภัย ไซเบอร์',
         seats: { total: 25, available: 8 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 17 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS113',
@@ -160,7 +220,12 @@ const courseData = [
         room: 'CS-307',
         instructor: 'ดร.คลาวด์ คอมพิวติ้ง',
         seats: { total: 25, available: 10 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 15 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS114',
@@ -172,7 +237,12 @@ const courseData = [
         room: 'CS-308',
         instructor: 'ผศ.ดร.กราฟิก คอมพิวเตอร์',
         seats: { total: 25, available: 7 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 18 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     },
     {
         code: 'CS115',
@@ -184,6 +254,11 @@ const courseData = [
         room: 'CS-309',
         instructor: 'รศ.ดร.โครงงาน วิจัย',
         seats: { total: 20, available: 5 },
-        credits: 3
+        credits: 3,
+        students: Array.from({ length: 15 }, (_, i) => ({
+            studentId: `6704101${String(i + 1).padStart(3, '0')}`,
+            name: 'none none',
+            grades: { semester1: '', semester2: '' }
+        }))
     }
 ];

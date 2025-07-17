@@ -336,11 +336,17 @@
 
         // Navigation functionality
         function navigateTo(page) {
-// Special case for teaching-courses - redirect to professorclass.html
-if (page === 'teaching-courses') {
-window.location.href = 'professorclass.html';
-return;
-}
+            // Special case for teaching-courses - redirect to professorclass.html
+            if (page === 'teaching-courses') {
+                window.location.href = 'professorclass.html';
+                return;
+            }
+
+            // Special case for grade-management - redirect to professorsavegrade.html
+            if (page === 'grade-management') {
+                window.location.href = 'professorsavegrade.html';
+                return;
+            }
 
             // Hide all pages
             document.querySelectorAll('.page-content').forEach(content => {

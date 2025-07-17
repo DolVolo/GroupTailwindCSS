@@ -1,1 +1,704 @@
 <!--บันทึกเกรดรายบุคคล-->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกเกรดรายบุคคล - ระบบจัดการการเรียนการสอน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+        .file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    
+    <!-- Navbar Component -->
+    <header class="bg-green-800 text-white shadow-lg">
+        <nav class="container mx-auto px-2 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
+                         alt="Maejo University" 
+                         class="h-12" />
+                    <div class="hidden md:flex flex-col">
+                        <span class="font-bold text-lg">ระบบจัดการการเรียนการสอน</span>
+                        <span class="text-sm">มหาวิทยาลัยแม่โจ้</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <div class="flex space-x-2">
+                        <a href="mainpageprofessor.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            หน้าหลัก
+                        </a>
+                        <a href="professorclass.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            รายวิชาที่สอน
+                        </a>
+                        <a href="professorsavegrade.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
+                            บันทึกเกรดรายบุคคล
+                        </a>
+                    </div>
+                    <div class="border-l border-green-600 h-8"></div>
+                    <div class="relative">
+                        <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                            <i data-lucide="user" size="18"></i>
+                            <span id="professorName">อาจารย์</span>
+                            <i data-lucide="chevron-down" size="16"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                            <a href="#" onclick="navigateTo('profile')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                <i data-lucide="user" size="16" class="inline mr-2"></i>
+                                โปรไฟล์
+                            </a>
+                            <a href="#" onclick="logout()" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                <i data-lucide="log-out" size="16" class="inline mr-2"></i>
+                                ออกจากระบบ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
+                    <i id="menuIcon" data-lucide="menu" size="24"></i>
+                    <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
+                <div class="flex flex-col space-y-1">
+                    <a href="mainpageprofessor.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        หน้าหลัก
+                    </a>
+                    <a href="professorclass.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        รายวิชาที่สอน
+                    </a>
+                    <a href="professorsavegrade.html" class="mobile-nav-link px-3 py-2 rounded bg-green-700 transition">
+                        บันทึกเกรดรายบุคคล
+                    </a>
+                    <a href="#" onclick="navigateTo('profile')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        โปรไฟล์
+                    </a>
+                    <div class="relative mt-2">
+                        <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-green-600 rounded hover:bg-green-700 transition w-full">
+                            <i data-lucide="log-out" size="18"></i>
+                            <span>ออกจากระบบ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold">บันทึกเกรดรายบุคคล</h1>
+                <p id="professorNameDisplay" class="text-lg text-gray-600 mt-2"></p>
+            </div>
+            <div class="flex space-x-2 no-print">
+                <button onclick="handlePrint()" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                    <i data-lucide="printer" size="18" class="mr-1"></i>
+                    พิมพ์
+                </button>
+                <button onclick="handleDownload()" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    <i data-lucide="download" size="18" class="mr-1"></i>
+                    ดาวน์โหลด PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Course Selection -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">เลือกรายวิชา</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">รายวิชาที่สอน</label>
+                    <select id="courseSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" onchange="loadStudentList()">
+                        <option value="">เลือกรายวิชา</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ภาคการศึกษา</label>
+                    <select id="semesterSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" onchange="updateGradeColumns()">
+                        <option value="semester1">ภาคเรียนที่ 1</option>
+                        <option value="semester2">ภาคเรียนที่ 2</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student List and Grades -->
+        <div id="studentGradeSection" class="bg-white rounded-lg shadow-md overflow-hidden hidden">
+            <div class="p-4 bg-green-700 text-white">
+                <h2 class="text-xl font-bold" id="courseTitle">รายชื่อนักศึกษาและเกรด</h2>
+                <p class="text-sm" id="courseDetails">ภาคการศึกษาที่ 1/2566</p>
+            </div>
+            <div class="p-4 overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border p-3 text-left">ลำดับ</th>
+                            <th class="border p-3 text-left">รหัสนักศึกษา</th>
+                            <th class="border p-3 text-left">ชื่อ-นามสกุล</th>
+                            <th class="border p-3 text-center">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span>เกรดภาคเรียนที่ 1</span>
+                                    <button onclick="triggerFileUpload('semester1')" class="text-blue-600 hover:text-blue-800 transition" title="อัปโหลดไฟล์ Excel">
+                                        <i data-lucide="file-spreadsheet" size="16"></i>
+                                    </button>
+                                </div>
+                            </th>
+                            <th class="border p-3 text-center">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span>เกรดภาคเรียนที่ 2</span>
+                                    <button onclick="triggerFileUpload('semester2')" class="text-blue-600 hover:text-blue-800 transition" title="อัปโหลดไฟล์ Excel">
+                                        <i data-lucide="file-spreadsheet" size="16"></i>
+                                    </button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student list will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 bg-gray-50 border-t">
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>จำนวนนักศึกษาทั้งหมด: <span id="totalStudents">0</span> คน</span>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <span>เกรดที่ใช้: A, B+, B, C+, C, D+, D, F</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Statistics -->
+        <div id="gradeStatsSection" class="bg-white rounded-lg shadow-md p-6 mt-6 hidden">
+            <h2 class="text-xl font-bold mb-4">สถิติเกรด</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600" id="gradeA">0</div>
+                    <div class="text-sm text-gray-600">A</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-500" id="gradeBPlus">0</div>
+                    <div class="text-sm text-gray-600">B+</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600" id="gradeB">0</div>
+                    <div class="text-sm text-gray-600">B</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-500" id="gradeCPlus">0</div>
+                    <div class="text-sm text-gray-600">C+</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-yellow-600" id="gradeC">0</div>
+                    <div class="text-sm text-gray-600">C</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-600" id="gradeDPlus">0</div>
+                    <div class="text-sm text-gray-600">D+</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-500" id="gradeD">0</div>
+                    <div class="text-sm text-gray-600">D</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-red-600" id="gradeF">0</div>
+                    <div class="text-sm text-gray-600">F</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden file inputs for Excel upload -->
+    <input type="file" id="fileInput-semester1" class="file-input" accept=".xlsx,.xls" onchange="handleFileUpload(event, 'semester1')">
+    <input type="file" id="fileInput-semester2" class="file-input" accept=".xlsx,.xls" onchange="handleFileUpload(event, 'semester2')">
+
+    <!-- Footer Component -->
+    <footer class="bg-green-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
+                    <p class="text-sm">
+                        63 หมู่ 4 ตำบลหนองหาร อำเภอสันทราย จังหวัดเชียงใหม่ 50290
+                    </p>
+                    <p class="text-sm">โทรศัพท์: 053-873000</p>
+                </div>
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
+                    <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
+                    <p class="text-sm">โทรศัพท์: 053-873460</p>
+                    <p class="text-sm">อีเมล: academic@mju.ac.th</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
+                    <ul class="text-sm">
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คำถามที่พบบ่อย
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คู่มือการใช้งาน
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                แจ้งปัญหาการใช้งาน
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
+                <p>
+                    &copy; <span id="currentYear"></span> ระบบจัดการการเรียนการสอน
+                    มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentCourse = null;
+        let currentSemester = 'semester1';
+
+        // Get logged-in professor name from localStorage
+        function getLoggedInProfessor() {
+            return localStorage.getItem('currentUser') || localStorage.getItem('selectedInstructor') || 'ไม่ระบุ';
+        }
+
+        // Update professor name display
+        function updateProfessorName() {
+            const professorNameElement = document.getElementById('professorNameDisplay');
+            const professorName = getLoggedInProfessor();
+            professorNameElement.textContent = `อาจารย์: ${professorName}`;
+        }
+
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const userType = localStorage.getItem('userType');
+            const username = getLoggedInProfessor();
+            
+            if (userType !== 'teacher') {
+                alert('กรุณาเข้าสู่ระบบในฐานะอาจารย์');
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Keep professor name as "อาจารย์" for consistency in navbar
+            const professorNameElement = document.getElementById('professorName');
+            if (professorNameElement) {
+                professorNameElement.textContent = 'อาจารย์';
+            }
+            
+            // Update professor name display in main content
+            updateProfessorName();
+            
+            return true;
+        }
+
+        // Load courses that the logged-in professor teaches
+        function loadProfessorCourses() {
+            const username = getLoggedInProfessor();
+            if (!username || username === 'ไม่ระบุ') return;
+
+            const courseSelect = document.getElementById('courseSelect');
+            courseSelect.innerHTML = '<option value="">เลือกรายวิชา</option>';
+
+            // Filter courses by instructor name
+            const professorCourses = courseData.filter(course => 
+                course.instructor.includes(username) || 
+                course.instructor === username ||
+                // For demo purposes, allow any professor to access any course
+                true
+            );
+
+            professorCourses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.code;
+                option.textContent = `${course.code} - ${course.name}`;
+                courseSelect.appendChild(option);
+            });
+        }
+
+        // Trigger file upload
+        function triggerFileUpload(semester) {
+            if (!currentCourse) {
+                alert('กรุณาเลือกรายวิชาก่อน');
+                return;
+            }
+            document.getElementById(`fileInput-${semester}`).click();
+        }
+
+        // Handle file upload
+        function handleFileUpload(event, semester) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    processExcelData(jsonData, semester);
+                } catch (error) {
+                    alert('เกิดข้อผิดพลาดในการอ่านไฟล์ Excel: ' + error.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Process Excel data and convert scores to grades (Updated for column format)
+        function processExcelData(data, semester) {
+            console.log('Excel data:', data); // Debug log
+            
+            if (data.length < 2) {
+                alert('ไฟล์ Excel ต้องมีอย่างน้อย 2 แถว (หัวตารางและข้อมูล)');
+                return;
+            }
+
+            let updatedCount = 0;
+            
+            // Your Excel format (column-based):
+            // Column A: no (1, 2, 3, ...)
+            // Column B: name (student names)
+            // Column C: score (numerical scores)
+            
+            // Skip header row (row 0) and process data rows
+            for (let row = 1; row < data.length; row++) {
+                const rowData = data[row];
+                
+                if (!rowData || rowData.length < 3) continue;
+                
+                const no = rowData[0]; // Column A: number
+                const name = rowData[1]; // Column B: name
+                const score = rowData[2]; // Column C: score
+                
+                console.log(`Row ${row}: No=${no}, Name=${name}, Score=${score}`); // Debug log
+                
+                if (!name || score === undefined || score === null || score === '') continue;
+                
+                // Clean the name (remove extra spaces)
+                const cleanName = String(name).trim();
+                
+                // Use the row index to match with student array
+                const studentIndex = row - 1; // Subtract 1 for header row
+                
+                // Check if this index is valid for the current course
+                if (studentIndex >= 0 && studentIndex < currentCourse.students.length) {
+                    const student = currentCourse.students[studentIndex];
+                    
+                    // Convert score to grade
+                    const grade = convertScoreToGrade(score);
+                    student.grades[semester] = grade;
+                    updatedCount++;
+                    console.log(`Updated ${student.studentId} - ${student.name}: ${score} -> ${grade}`);
+                } else {
+                    console.log(`Row ${row} is out of range for student list`);
+                }
+            }
+
+            if (updatedCount > 0) {
+                alert(`อัปเดตเกรดสำเร็จ: ${updatedCount} คน`);
+                renderStudentTable();
+                updateGradeStatistics();
+            } else {
+                alert('ไม่พบข้อมูลนักศึกษาที่ตรงกัน กรุณาตรวจสอบชื่อนักศึกษาในไฟล์ Excel\n\nรูปแบบที่ถูกต้อง:\nคอลัมน์ A: ลำดับ (1, 2, 3, ...)\nคอลัมน์ B: ชื่���นักศึกษา\nคอลัมน์ C: คะแนน');
+            }
+
+            // Clear file input
+            document.getElementById(`fileInput-${semester}`).value = '';
+        }
+
+        // Convert numerical score to letter grade
+        function convertScoreToGrade(score) {
+            const numScore = parseFloat(score);
+            
+            if (isNaN(numScore)) return 'F';
+            
+            if (numScore >= 80) return 'A';
+            if (numScore >= 75) return 'B+';
+            if (numScore >= 70) return 'B';
+            if (numScore >= 65) return 'C+';
+            if (numScore >= 60) return 'C';
+            if (numScore >= 55) return 'D+';
+            if (numScore >= 50) return 'D';
+            return 'F';
+        }
+
+        // Load student list for selected course
+        function loadStudentList() {
+            const courseCode = document.getElementById('courseSelect').value;
+            if (!courseCode) {
+                document.getElementById('studentGradeSection').classList.add('hidden');
+                document.getElementById('gradeStatsSection').classList.add('hidden');
+                return;
+            }
+
+            currentCourse = courseData.find(course => course.code === courseCode);
+            if (!currentCourse) return;
+
+            // Update course title
+            document.getElementById('courseTitle').textContent = 
+                `${currentCourse.code} - ${currentCourse.name}`;
+            document.getElementById('courseDetails').textContent = 
+                `Section ${currentCourse.section} | ห้อง ${currentCourse.room} | อาจารย์ ${currentCourse.instructor}`;
+
+            // Update total students count
+            document.getElementById('totalStudents').textContent = currentCourse.students.length;
+
+            // Render student table
+            renderStudentTable();
+
+            // Show sections
+            document.getElementById('studentGradeSection').classList.remove('hidden');
+            document.getElementById('gradeStatsSection').classList.remove('hidden');
+
+            // Update grade statistics
+            updateGradeStatistics();
+        }
+
+        // Render student table
+        function renderStudentTable() {
+            if (!currentCourse) return;
+
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+
+            currentCourse.students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+                
+                row.innerHTML = `
+                    <td class="border p-3">${index + 1}</td>
+                    <td class="border p-3 font-mono">${student.studentId}</td>
+                    <td class="border p-3">${student.name}</td>
+                    <td class="border p-3 text-center">
+                        <select class="grade-input w-20 p-1 border border-gray-300 rounded text-center focus:ring-2 focus:ring-green-500" 
+                                data-student-id="${student.studentId}" 
+                                data-semester="semester1"
+                                onchange="updateGrade(this)">
+                            <option value="">-</option>
+                            <option value="A" ${student.grades.semester1 === 'A' ? 'selected' : ''}>A</option>
+                            <option value="B+" ${student.grades.semester1 === 'B+' ? 'selected' : ''}>B+</option>
+                            <option value="B" ${student.grades.semester1 === 'B' ? 'selected' : ''}>B</option>
+                            <option value="C+" ${student.grades.semester1 === 'C+' ? 'selected' : ''}>C+</option>
+                            <option value="C" ${student.grades.semester1 === 'C' ? 'selected' : ''}>C</option>
+                            <option value="D+" ${student.grades.semester1 === 'D+' ? 'selected' : ''}>D+</option>
+                            <option value="D" ${student.grades.semester1 === 'D' ? 'selected' : ''}>D</option>
+                            <option value="F" ${student.grades.semester1 === 'F' ? 'selected' : ''}>F</option>
+                        </select>
+                    </td>
+                    <td class="border p-3 text-center">
+                        <select class="grade-input w-20 p-1 border border-gray-300 rounded text-center focus:ring-2 focus:ring-green-500" 
+                                data-student-id="${student.studentId}" 
+                                data-semester="semester2"
+                                onchange="updateGrade(this)">
+                            <option value="">-</option>
+                            <option value="A" ${student.grades.semester2 === 'A' ? 'selected' : ''}>A</option>
+                            <option value="B+" ${student.grades.semester2 === 'B+' ? 'selected' : ''}>B+</option>
+                            <option value="B" ${student.grades.semester2 === 'B' ? 'selected' : ''}>B</option>
+                            <option value="C+" ${student.grades.semester2 === 'C+' ? 'selected' : ''}>C+</option>
+                            <option value="C" ${student.grades.semester2 === 'C' ? 'selected' : ''}>C</option>
+                            <option value="D+" ${student.grades.semester2 === 'D+' ? 'selected' : ''}>D+</option>
+                            <option value="D" ${student.grades.semester2 === 'D' ? 'selected' : ''}>D</option>
+                            <option value="F" ${student.grades.semester2 === 'F' ? 'selected' : ''}>F</option>
+                        </select>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update grade when changed
+        function updateGrade(selectElement) {
+            const studentId = selectElement.dataset.studentId;
+            const semester = selectElement.dataset.semester;
+            const grade = selectElement.value;
+
+            if (!currentCourse) return;
+
+            const student = currentCourse.students.find(s => s.studentId === studentId);
+            if (student) {
+                student.grades[semester] = grade;
+                updateGradeStatistics();
+            }
+        }
+
+        // Update grade statistics
+        function updateGradeStatistics() {
+            if (!currentCourse) return;
+
+            const selectedSemester = document.getElementById('semesterSelect').value;
+            const grades = currentCourse.students.map(student => student.grades[selectedSemester]).filter(grade => grade);
+
+            const gradeCount = {
+                'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'D+': 0, 'D': 0, 'F': 0
+            };
+
+            grades.forEach(grade => {
+                if (gradeCount.hasOwnProperty(grade)) {
+                    gradeCount[grade]++;
+                }
+            });
+
+            // Update display
+            document.getElementById('gradeA').textContent = gradeCount['A'];
+            document.getElementById('gradeBPlus').textContent = gradeCount['B+'];
+            document.getElementById('gradeB').textContent = gradeCount['B'];
+            document.getElementById('gradeCPlus').textContent = gradeCount['C+'];
+            document.getElementById('gradeC').textContent = gradeCount['C'];
+            document.getElementById('gradeDPlus').textContent = gradeCount['D+'];
+            document.getElementById('gradeD').textContent = gradeCount['D'];
+            document.getElementById('gradeF').textContent = gradeCount['F'];
+        }
+
+        // Update grade columns based on selected semester
+        function updateGradeColumns() {
+            currentSemester = document.getElementById('semesterSelect').value;
+            updateGradeStatistics();
+        }
+
+        // Save all grades
+        function saveAllGrades() {
+            if (!currentCourse) {
+                alert('กรุณาเลือกรายวิชาก่อน');
+                return;
+            }
+
+            // In a real application, this would send data to a server
+            alert('บันทึกเกรดเรียบร้อยแล้ว');
+        }
+
+        // Export grades
+        function exportGrades() {
+            if (!currentCourse) {
+                alert('กรุณาเลือกรายวิชาก่อน');
+                return;
+            }
+
+            // In a real application, this would generate and download a file
+            alert('ฟีเจอร์ส่งออกข้อมูลจะพัฒนาในอนาคต');
+        }
+
+        // Handle print functionality
+        function handlePrint() {
+            window.print();
+        }
+
+        // Handle download functionality
+        function handleDownload() {
+            alert('ฟีเจอร์ดาวน์โหลด PDF จะพัฒนาในอนาคต');
+        }
+
+        // Navigation functionality (for profile link)
+        function navigateTo(page) {
+            if (page === 'profile') {
+                alert('หน้าโปรไฟล์อยู่ระหว่างการพัฒนา');
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('selectedInstructor');
+                window.location.href = 'mainpage.html';
+            }
+        }
+
+        // Initialize dropdowns and mobile menu
+        function initializeDropdowns() {
+            // Profile dropdown
+            const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileDropdownBtn && profileDropdown) {
+                profileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Mobile menu
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            let isMenuOpen = false;
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    isMenuOpen = !isMenuOpen;
+                    
+                    if (isMenuOpen) {
+                        mobileMenu.classList.remove('hidden');
+                        menuIcon.classList.add('hidden');
+                        closeIcon.classList.remove('hidden');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('hidden');
+                        closeIcon.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Set current year in footer
+        function setCurrentYear() {
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+        }
+
+        // Initialize the page
+        function init() {
+            if (!checkLoginStatus()) return;
+            
+            loadProfessorCourses();
+            initializeDropdowns();
+            setCurrentYear();
+            lucide.createIcons();
+        }
+
+        // Run initialization when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
