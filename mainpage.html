@@ -49,7 +49,7 @@
                                 ลงทะเบียนเรียน
                             </a>
                             <a href="#" onclick="navigateTo('class-schedule')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="class-schedule">
-                                ตารางเรียน
+                                ตารางเรียน   
                             </a>
                             <a href="#" onclick="navigateTo('exam-schedule')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="exam-schedule">
                                 ตารางสอบ
@@ -646,6 +646,12 @@
 
         // Navigation functionality
         function navigateTo(page) {
+            // Special case for academic-calendar - redirect to datestudy.html
+            if (page === 'academic-calendar') {
+                window.location.href = 'datestudy.html';
+                return;
+            }
+            
             // Hide all pages
             document.querySelectorAll('.page-content').forEach(content => {
                 content.classList.remove('active');
