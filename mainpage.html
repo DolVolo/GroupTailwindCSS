@@ -646,6 +646,12 @@
 
         // Navigation functionality
         function navigateTo(page) {
+            // Special case for academic-calendar - redirect to datestudy.html
+            if (page === 'academic-calendar') {
+                window.location.href = 'datestudy.html';
+                return;
+            }
+            
             // Hide all pages
             document.querySelectorAll('.page-content').forEach(content => {
                 content.classList.remove('active');
