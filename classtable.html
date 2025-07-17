@@ -42,19 +42,19 @@
                         <a href="classtable.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
                             ตารางเรียน
                         </a>
-                        <a href="mainpage.html#exam-schedule" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        <a href="#" onclick="showUnderDevelopment('ตารางสอบ')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             ตารางสอบ
                         </a>
                         <a href="datestudy.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             ปฏิทินการศึกษา
                         </a>
-                        <a href="mainpage.html#tuition-fees" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        <a href="#" onclick="showUnderDevelopment('ค่าธรรมเนียม')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             ค่าธรรมเนียม
                         </a>
-                        <a href="mainpage.html#grade-report" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        <a href="#" onclick="showUnderDevelopment('ผลการเรียน')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             ผลการเรียน
                         </a>
-                        <a href="mainpage.html#enrollment-status" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        <a href="#" onclick="showUnderDevelopment('สถานะการลงทะเบียน')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             สถานะการลงทะเบียน
                         </a>
                         <a href="tableclassuse.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
@@ -69,11 +69,11 @@
                             <i data-lucide="chevron-down" size="16"></i>
                         </button>
                         <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
-                            <a href="login.html?type=student" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                            <a href="#" onclick="navigateToLogin('student')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                 <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
                                 สำหรับนักศึกษา
                             </a>
-                            <a href="professorlogin.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                            <a href="#" onclick="navigateToLogin('teacher')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
                                 <i data-lucide="user-check" size="16" class="inline mr-2"></i>
                                 สำหรับอาจารย์
                             </a>
@@ -117,19 +117,19 @@
                     <a href="classtable.html" class="mobile-nav-link px-3 py-2 rounded bg-green-700 transition">
                         ตารางเรียน
                     </a>
-                    <a href="mainpage.html#exam-schedule" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                    <a href="#" onclick="showUnderDevelopment('ตารางสอบ')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         ตารางสอบ
                     </a>
                     <a href="datestudy.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         ปฏิทินการศึกษา
                     </a>
-                    <a href="mainpage.html#tuition-fees" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                    <a href="#" onclick="showUnderDevelopment('ค่าธรรมเนียม')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         ค่าธรรมเนียม
                     </a>
-                    <a href="mainpage.html#grade-report" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                    <a href="#" onclick="showUnderDevelopment('ผลการเรียน')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         ผลการเรียน
                     </a>
-                    <a href="mainpage.html#enrollment-status" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                    <a href="#" onclick="showUnderDevelopment('สถานะการลงทะเบียน')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         สถานะการลงทะเบียน
                     </a>
                     <a href="tableclassuse.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
@@ -528,6 +528,14 @@
             }
         }
 
+        // Login navigation functionality
+        function navigateToLogin(userType) {
+            // Store user type in localStorage to pass to login page
+            localStorage.setItem('userType', userType);
+            // Navigate to login.html
+            window.location.href = 'login.html';
+        }
+
         // Initialize dropdowns and mobile menu
         function initializeDropdowns() {
             // Login dropdown
@@ -596,6 +604,11 @@
             if (currentYearElement) {
                 currentYearElement.textContent = new Date().getFullYear();
             }
+        }
+
+        // Show under development modal
+        function showUnderDevelopment(pageName) {
+            alert(`หน้า${pageName}\n\nหน้านี้อยู่ระหว่างการพัฒนา`);
         }
 
         // Initialize the page
