@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/mainpage.html"
+      "destination": "/index.html"
     },
     {
       "source": "/mainpage",
@@ -31,8 +31,19 @@
     {
       "source": "/mainpageprofessor",
       "destination": "/mainpageprofessor.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/register.html"
+    },
+    {
+      "source": "/professorclass",
+      "destination": "/professorclass.html"
+    },
+    {
+      "source": "/professorsavegrade",
+      "destination": "/professorsavegrade.html"
     }
-
   ],
   "cleanUrls": true,
   "trailingSlash": false
