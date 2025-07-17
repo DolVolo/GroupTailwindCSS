@@ -1,4 +1,5 @@
-<!DOCTYPE html<html lang="th">
+<!DOCTYPE html>
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -136,7 +137,7 @@
     <main class="container mx-auto px-4 py-8">
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800">ลงทะเบียนเรียน</h1>
-            <p class="text-gray-600 mt-2">ค้นหาและลงทะเบียนรายวิชาที่ต้อง���ารเรียน</p>
+            <p class="text-gray-600 mt-2">ค้นหาและลงทะเบียนรายวิชาที่ต้องการเรียน</p>
         </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -208,8 +209,46 @@
     <!-- Footer -->
     <footer class="bg-green-800 text-white py-6 mt-12">
         <div class="container mx-auto px-4">
-            <div class="text-center">
-                <p>&copy; 2024 ระบบทะเบียนนักศึกษา มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์</p>
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
+                    <p class="text-sm">
+                        63 หมู่ 4 ตำบลหนองหาร อำเภอสันทราย จังหวัดเชียงใหม่ 50290
+                    </p>
+                    <p class="text-sm">โทรศัพท์: 053-873000</p>
+                </div>
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
+                    <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
+                    <p class="text-sm">โทรศัพท์: 053-873460</p>
+                    <p class="text-sm">อีเมล: academic@mju.ac.th</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
+                    <ul class="text-sm">
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คำถามที่พบบ่อย
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คู่มือการใช้งาน
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                แจ้งปัญหาการใช้งาน
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
+                <p>
+                    &copy; <span id="currentYear"></span> ระบบทะเบียนนักศึกษา
+                    มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์
+                </p>
             </div>
         </div>
     </footer>
@@ -399,9 +438,72 @@
             return dayMap[day] || day;
         }
 
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+            
+            if (isLoggedIn === 'true' && userType === 'student') {
+                showProfileSection();
+            } else {
+                showLoginSection();
+            }
+        }
+
+        // Show/Hide login and profile sections
+        function showLoginSection() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+        }
+
+        function showProfileSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('isLoggedIn');
+                showLoginSection();
+            }
+        }
+
+        // Profile dropdown functionality
+        function initializeProfileDropdown() {
+            const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileDropdownBtn && profileDropdown) {
+                profileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Set current year in footer
+        function setCurrentYear() {
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+        }
+
         // Confirm registration
         document.addEventListener('DOMContentLoaded', () => {
             initializeCourseRegistration();
+            checkLoginStatus();
+            initializeProfileDropdown();
+            setCurrentYear();
             lucide.createIcons();
 
             document.getElementById('confirmCourseRegistration').addEventListener('click', () => {

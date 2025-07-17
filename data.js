@@ -66,7 +66,7 @@ const courseData = [
     },
     {
         code: 'CS106',
-        name: 'วิศวกร���มซอฟต์แวร์',
+        name: 'วิศวกรรมซอฟต์แวร์',
         section: 1,
         time: [
             { day: 'Wednesday', start: '13:00', end: '16:00' }

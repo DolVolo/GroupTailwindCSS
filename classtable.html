@@ -15,8 +15,133 @@
         }
     </style>
 </head>
-<body>
-    <div class="container mx-auto px-4 py-8">
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <!-- Navbar -->
+    <header class="bg-green-800 text-white shadow-lg">
+        <nav class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
+                         alt="Maejo University" 
+                         class="h-12" />
+                    <div class="hidden md:flex flex-col">
+                        <span class="font-bold text-lg">ระบบทะเบียนนักศึกษา</span>
+                        <span class="text-sm">มหาวิทยาลัยแม่โจ้</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <div class="flex space-x-2">
+                        <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            หน้าหลัก
+                        </a>
+                        <a href="register.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ลงทะเบียนเรียน
+                        </a>
+                        <a href="classtable.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
+                            ตารางเรียน
+                        </a>
+                        <a href="mainpage.html#exam-schedule" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ตารางสอบ
+                        </a>
+                        <a href="datestudy.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ปฏิทินการศึกษา
+                        </a>
+                        <a href="mainpage.html#tuition-fees" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ค่าธรรมเนียม
+                        </a>
+                        <a href="mainpage.html#grade-report" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ผลการเรียน
+                        </a>
+                        <a href="mainpage.html#enrollment-status" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            สถานะการลงทะเบียน
+                        </a>
+                        <a href="tableclassuse.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ตารางการใช้ห้อง
+                        </a>
+                    </div>
+                    <div class="border-l border-green-600 h-8"></div>
+                    <div class="relative" id="loginSection">
+                        <button id="loginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                            <i data-lucide="user" size="18"></i>
+                            <span>เข้าสู่ระบบ</span>
+                            <i data-lucide="chevron-down" size="16"></i>
+                        </button>
+                        <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                            <a href="login.html?type=student" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
+                                สำหรับนักศึกษา
+                            </a>
+                            <a href="professorlogin.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                <i data-lucide="user-check" size="16" class="inline mr-2"></i>
+                                สำหรับอาจารย์
+                            </a>
+                        </div>
+                    </div>
+                    <div class="relative hidden" id="profileSection">
+                        <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                            <i data-lucide="user" size="18"></i>
+                            <span>นักศึกษา</span>
+                            <i data-lucide="chevron-down" size="16"></i>
+                        </button>
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                            <a href="mainpage.html#profile" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                <i data-lucide="user" size="16" class="inline mr-2"></i>
+                                โปรไฟล์
+                            </a>
+                            <a href="#" onclick="logout()" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                <i data-lucide="log-out" size="16" class="inline mr-2"></i>
+                                ออกจากระบบ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
+                    <i id="menuIcon" data-lucide="menu" size="24"></i>
+                    <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
+                <div class="flex flex-col space-y-1">
+                    <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        หน้าหลัก
+                    </a>
+                    <a href="register.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ลงทะเบียนเรียน
+                    </a>
+                    <a href="classtable.html" class="mobile-nav-link px-3 py-2 rounded bg-green-700 transition">
+                        ตารางเรียน
+                    </a>
+                    <a href="mainpage.html#exam-schedule" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ตารางสอบ
+                    </a>
+                    <a href="datestudy.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ปฏิทินการศึกษา
+                    </a>
+                    <a href="mainpage.html#tuition-fees" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ค่าธรรมเนียม
+                    </a>
+                    <a href="mainpage.html#grade-report" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ผลการเรียน
+                    </a>
+                    <a href="mainpage.html#enrollment-status" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        สถานะการลงทะเบียน
+                    </a>
+                    <a href="tableclassuse.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        ตารางการใช้ห้อง
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">ตารางเรียน</h1>
             <div class="flex space-x-2 no-print">
@@ -102,7 +227,54 @@
                 </table>
             </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
+                    <p class="text-sm">
+                        63 หมู่ 4 ตำบลหนองหาร อำเภอสันทราย จังหวัดเชียงใหม่ 50290
+                    </p>
+                    <p class="text-sm">โทรศัพท์: 053-873000</p>
+                </div>
+                <div class="mb-4 md:mb-0">
+                    <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
+                    <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
+                    <p class="text-sm">โทรศัพท์: 053-873460</p>
+                    <p class="text-sm">อีเมล: academic@mju.ac.th</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
+                    <ul class="text-sm">
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คำถามที่พบบ่อย
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                คู่มือการใช้งาน
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">
+                                แจ้งปัญหาการใช้งาน
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
+                <p>
+                    &copy; <span id="currentYear"></span> ระบบทะเบียนนักศึกษา
+                    มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Sample course data - registered courses
@@ -324,11 +496,116 @@
             alert('ฟีเจอร์ดาวน์โหลด PDF จะพัฒนาในอนาคต');
         }
 
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+            
+            if (isLoggedIn === 'true' && userType === 'student') {
+                showProfileSection();
+            } else {
+                showLoginSection();
+            }
+        }
+
+        // Show/Hide login and profile sections
+        function showLoginSection() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+        }
+
+        function showProfileSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('isLoggedIn');
+                showLoginSection();
+            }
+        }
+
+        // Initialize dropdowns and mobile menu
+        function initializeDropdowns() {
+            // Login dropdown
+            const loginDropdownBtn = document.getElementById('loginDropdownBtn');
+            const loginDropdown = document.getElementById('loginDropdown');
+            
+            if (loginDropdownBtn && loginDropdown) {
+                loginDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!loginDropdownBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+                        loginDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Profile dropdown
+            const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileDropdownBtn && profileDropdown) {
+                profileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Mobile menu
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            let isMenuOpen = false;
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    isMenuOpen = !isMenuOpen;
+                    
+                    if (isMenuOpen) {
+                        mobileMenu.classList.remove('hidden');
+                        menuIcon.classList.add('hidden');
+                        closeIcon.classList.remove('hidden');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('hidden');
+                        closeIcon.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Set current year in footer
+        function setCurrentYear() {
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+        }
+
         // Initialize the page
         function init() {
             renderScheduleTable();
             renderExamTable();
             renderCourseSummary();
+            checkLoginStatus();
+            initializeDropdowns();
+            setCurrentYear();
             lucide.createIcons();
         }
 
