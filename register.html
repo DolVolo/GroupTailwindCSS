@@ -1,10 +1,10 @@
-<!--หน้าหลัก-->
+<!--ลงทะเบียนเรียน-->
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้</title>
+    <title>ลงทะเบียนเรียน - ระบบทะเบียนนักศึกษา</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
@@ -39,7 +39,7 @@
                             <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                                 หน้าหลัก
                             </a>
-                            <a href="register.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            <a href="register.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
                                 ลงทะเบียนเรียน
                             </a>
                             <a href="classtable.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
@@ -114,7 +114,7 @@
                         <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             หน้าหลัก
                         </a>
-                        <a href="register.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                        <a href="register.html" class="mobile-nav-link px-3 py-2 rounded bg-green-700 transition">
                             ลงทะเบียนเรียน
                         </a>
                         <a href="classtable.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
@@ -180,135 +180,70 @@
 
         <!-- Main Content Area -->
         <main class="flex-grow w-full">
-            <!-- Home Page -->
-            <div class="bg-gray-50 min-h-screen">
-                <!-- Hero Section -->
-                <div class="bg-green-800 text-white py-12">
-                    <div class="container mx-auto px-4">
-                        <h1 class="text-3xl md:text-4xl font-bold mb-4">
-                            ระบบทะเบียนนักศึกษา
-                        </h1>
-                        <p class="text-xl mb-6">
-                            คณะวิทยาการคอมพิวเตอร์ มหาวิทยาลัยแม่โจ้
-                        </p>
-                        <div class="flex flex-wrap gap-4">
-                            <a href="register.html" class="bg-white text-green-800 hover:bg-green-100 px-6 py-3 rounded-lg font-bold transition">
-                                ลงทะเบียนเรียน
-                            </a>
-                            <a href="classtable.html" class="bg-green-700 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold transition">
-                                ตารางเรียน
-                            </a>
+            <!-- Course Registration Page -->
+            <div class="container mx-auto px-4 py-8">
+                <h1 class="text-3xl font-bold mb-6">ลงทะเบียนเรียน</h1>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <!-- Search Bar -->
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                            <div class="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
+                                <div class="px-3 py-2">
+                                    <i data-lucide="search" class="text-gray-500" size="20"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="courseSearchInput"
+                                    placeholder="ค้นหารายวิชาด้วยรหัสวิชา เช่น CS101" 
+                                    class="flex-grow py-3 px-2 focus:outline-none"
+                                />
+                                <button id="clearCourseSearch" class="px-3 py-2 hover:text-gray-700 hidden">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Quick Links -->
-                <div class="container mx-auto px-4 py-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <a href="register.html" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
-                            <i data-lucide="book-open" class="text-green-700 mr-3" size="24"></i>
-                            <div>
-                                <h3 class="font-bold text-lg">ลงทะเบียนเรียน</h3>
-                                <p class="text-gray-600 text-sm">ค้นหาและลงทะเบียนรายวิชา</p>
-                            </div>
-                        </a>
-                        <a href="classtable.html" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
-                            <i data-lucide="calendar" class="text-green-700 mr-3" size="24"></i>
-                            <div>
-                                <h3 class="font-bold text-lg">ตารางเรียน</h3>
-                                <p class="text-gray-600 text-sm">ดูตารางเรียนและ��ารางสอบ</p>
-                            </div>
-                        </a>
-                        <a href="mainpage.html" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
-                            <i data-lucide="clipboard-list" class="text-green-700 mr-3" size="24"></i>
-                            <div>
-                                <h3 class="font-bold text-lg">ผลการเรียน</h3>
-                                <p class="text-gray-600 text-sm">
-                                    ตรวจสอบผลการเรียนทุกภาคการศึกษา
+                        <!-- Search Results -->
+                        <div id="courseSearchResults" class="space-y-4">
+                            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                                <p class="text-gray-500">
+                                    กรุณาค้นหารายวิชาด้วยรหัสวิชา เช่น CS101
                                 </p>
                             </div>
-                        </a>
-                        <a href="datestudy.html" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition flex items-center">
-                            <i data-lucide="bell" class="text-green-700 mr-3" size="24"></i>
-                            <div>
-                                <h3 class="font-bold text-lg">ปฏิทินการศึกษา</h3>
-                                <p class="text-gray-600 text-sm">
-                                    กำหนดการสำคัญประจำภาคการศึกษา
+                        </div>
+                    </div>
+
+                    <!-- Registration Cart -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white p-6 rounded-lg shadow-md sticky top-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-xl font-bold flex items-center">
+                                    <i data-lucide="shopping-cart" size="20" class="mr-2"></i>
+                                    รายวิชาที่เลือก
+                                </h2>
+                                <span id="courseCartCount" class="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
+                                    0 รายวิชา
+                                </span>
+                            </div>
+                            
+                            <div id="courseCartItems" class="space-y-3 mb-4">
+                                <div class="text-center py-6 text-gray-500">
+                                    <p>ยังไม่มีรายวิชาที่เลือก</p>
+                                </div>
+                            </div>
+
+                            <div class="border-t pt-4">
+                                <button 
+                                    id="confirmCourseRegistration"
+                                    class="w-full py-3 rounded-lg font-bold text-white bg-gray-400 cursor-not-allowed"
+                                    disabled
+                                >
+                                    ยืนยันการลงทะเบียน
+                                </button>
+                                <p class="text-center text-sm text-gray-500 mt-2">
+                                    กรุณาตรวจสอบรายวิชาและตารางเรียนก่อนยืนยัน
                                 </p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Announcements -->
-                <div class="container mx-auto px-4 py-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold">ประกาศจากมหาวิทยาลัย</h2>
-                        <a href="mainpage.html" class="text-green-700 hover:underline">
-                            ดูทั้งหมด
-                        </a>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="p-4 border-b bg-green-50">
-                            <div class="flex items-start">
-                                <div class="bg-red-500 text-white text-xs px-2 py-1 rounded mr-2 mt-1">
-                                    สำคัญ
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-lg">เปิดลงทะเบียนเรียนภาคเรียนที่ 1/2566</h3>
-                                    <p class="text-gray-500 text-sm mb-2">
-                                        วันที่ 15 เมษายน 2566
-                                    </p>
-                                    <p class="text-gray-700">ขอเชิญนักศึกษาทุกชั้นปีลงทะเบียนเรียนประจำภาคเรียนที่ 1/2566</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-4 border-b">
-                            <div class="flex items-start">
-                                <div>
-                                    <h3 class="font-bold text-lg">การชำระค่าธรรมเนียมการศึกษา</h3>
-                                    <p class="text-gray-500 text-sm mb-2">
-                                        วันที่ 20 เมษายน 2566
-                                    </p>
-                                    <p class="text-gray-700">นักศึกษาสามารถชำระค่าธรรมเนียมการศึกษาได้ที่ธนาคารกรุงไทยทุกสาขา</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Academic Calendar Highlight -->
-                <div class="bg-green-50 py-8">
-                    <div class="container mx-auto px-4">
-                        <h2 class="text-2xl font-bold mb-6">
-                            ปฏิทินการศึกษา - กำหนดการสำคัญ
-                        </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">ลงทะเบียนเรียน</h3>
-                                <p class="text-gray-700">1-15 พฤษภาคม 2566</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">เปิดภาคเรียน</h3>
-                                <p class="text-gray-700">1 มิถุนายน 2566</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">สอบกลางภาค</h3>
-                                <p class="text-gray-700">1-7 กรกฎาคม 2566</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">
-                                    วันสุดท้ายของการถอนรายวิชา
-                                </h3>
-                                <p class="text-gray-700">31 กรกฎาคม 2566</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">สอบปลายภาค</h3>
-                                <p class="text-gray-700">1-15 ตุลาคม 2566</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h3 class="font-bold text-green-800">ประกาศผลการเรียน</h3>
-                                <p class="text-gray-700">31 ตุลาคม 2566</p>
                             </div>
                         </div>
                     </div>
@@ -365,6 +300,256 @@
     </div>
 
     <script>
+        // Sample course data
+        const sampleCourses = [
+            {
+                code: 'CS101',
+                name: 'วิทยาการคอมพิวเตอร์เบื้องต้น',
+                section: 1,
+                time: [
+                    { day: 'Monday', start: '09:00', end: '12:00' },
+                    { day: 'Thursday', start: '13:00', end: '15:00' }
+                ],
+                room: 'CS-201',
+                instructor: 'ดร.สมช���ย ใจดี',
+                seats: { total: 40, available: 15 },
+                credits: 3
+            },
+            {
+                code: 'CS102',
+                name: 'การเขียนโปรแกรมคอมพิวเตอร์',
+                section: 1,
+                time: [
+                    { day: 'Tuesday', start: '09:00', end: '12:00' },
+                    { day: 'Friday', start: '13:00', end: '15:00' }
+                ],
+                room: 'CS-202',
+                instructor: 'ผศ.ดร.วิชัย เรียนเก่ง',
+                seats: { total: 35, available: 10 },
+                credits: 3
+            },
+            {
+                code: 'CS301',
+                name: 'วิศวกรรมซอฟต์แวร์',
+                section: 1,
+                time: [
+                    { day: 'Wednesday', start: '09:00', end: '12:00' }
+                ],
+                room: 'CS-301',
+                instructor: 'อ.เก่ง มากมาย',
+                seats: { total: 30, available: 8 },
+                credits: 3
+            },
+            {
+                code: 'CS201',
+                name: 'โครงสร้างข้อมูลและอัลกอริทึม',
+                section: 1,
+                time: [
+                    { day: 'Monday', start: '13:00', end: '16:00' },
+                    { day: 'Wednesday', start: '13:00', end: '15:00' }
+                ],
+                room: 'CS-203',
+                instructor: 'ผศ.ดร.สมหญิง เก่งมาก',
+                seats: { total: 30, available: 12 },
+                credits: 3
+            },
+            {
+                code: 'CS202',
+                name: 'ฐานข้อมูล',
+                section: 1,
+                time: [
+                    { day: 'Tuesday', start: '13:00', end: '16:00' }
+                ],
+                room: 'CS-204',
+                instructor: 'อ.ดร.วิทยา ฉลาด',
+                seats: { total: 25, available: 8 },
+                credits: 3
+            }
+        ];
+
+        let cartItems = [];
+
+        // Course Registration functionality
+        function initializeCourseRegistration() {
+            const searchInput = document.getElementById('courseSearchInput');
+            const clearBtn = document.getElementById('clearCourseSearch');
+            const resultsDiv = document.getElementById('courseSearchResults');
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                if (searchTerm.trim() === '') {
+                    clearBtn.classList.add('hidden');
+                    resultsDiv.innerHTML = `
+                        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                            <p class="text-gray-500">กรุณาค้นหารายวิชาด้วยรหัสวิชา เช่น CS101</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                clearBtn.classList.remove('hidden');
+                const filteredCourses = sampleCourses.filter(course => 
+                    course.code.toLowerCase().includes(searchTerm) ||
+                    course.name.toLowerCase().includes(searchTerm)
+                );
+                
+                renderCourseResults(filteredCourses);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.classList.add('hidden');
+                resultsDiv.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <p class="text-gray-500">กรุณาค้นหารายวิชาด้วยรหัสวิชา เช่น CS101</p>
+                    </div>
+                `;
+            });
+
+            updateCourseCart();
+        }
+
+        function renderCourseResults(courses) {
+            const resultsDiv = document.getElementById('courseSearchResults');
+            
+            if (courses.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <p class="text-gray-500">ไม่พบรายวิชาที่ค้นหา</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsDiv.innerHTML = courses.map(course => {
+                const isInCart = cartItems.some(item => item.code === course.code);
+                const buttonClass = isInCart ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700';
+                const buttonText = isInCart ? 'ลบออก' : 'เพิ่ม';
+                const buttonIcon = isInCart ? 'x' : 'plus';
+
+                return `
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold">
+                                    ${course.code} - ${course.name}
+                                </h3>
+                                <p class="text-gray-600">
+                                    Section ${course.section} • ${course.credits} หน่วยกิต
+                                </p>
+                            </div>
+                            <button 
+                                onclick="${isInCart ? `removeFromCourseCart('${course.code}')` : `addToCourseCart('${course.code}')`}"
+                                class="flex items-center px-4 py-2 rounded-lg text-white ${buttonClass}"
+                            >
+                                <i data-lucide="${buttonIcon}" size="18" class="mr-1"></i> ${buttonText}
+                            </button>
+                        </div>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold mb-1">เวลาเรียน:</h4>
+                                ${course.time.map(time => `
+                                    <p class="text-gray-600">
+                                        ${getDayName(time.day)} ${time.start}-${time.end} น.
+                                    </p>
+                                `).join('')}
+                            </div>
+                            <div>
+                                <p><span class="font-semibold">ห้องเรียน:</span> ${course.room}</p>
+                                <p><span class="font-semibold">อาจารย์ผู้สอน:</span> ${course.instructor}</p>
+                                <p><span class="font-semibold">ที่นั่งว่าง:</span> ${course.seats.available}/${course.seats.total}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        function addToCourseCart(courseCode) {
+            const course = sampleCourses.find(c => c.code === courseCode);
+            if (course && !cartItems.some(item => item.code === courseCode)) {
+                cartItems.push(course);
+                updateCourseCart();
+                renderCourseResults(sampleCourses.filter(c => 
+                    c.code.toLowerCase().includes(document.getElementById('courseSearchInput').value.toLowerCase()) ||
+                    c.name.toLowerCase().includes(document.getElementById('courseSearchInput').value.toLowerCase())
+                ));
+            }
+        }
+
+        function removeFromCourseCart(courseCode) {
+            cartItems = cartItems.filter(item => item.code !== courseCode);
+            updateCourseCart();
+            renderCourseResults(sampleCourses.filter(c => 
+                c.code.toLowerCase().includes(document.getElementById('courseSearchInput').value.toLowerCase()) ||
+                c.name.toLowerCase().includes(document.getElementById('courseSearchInput').value.toLowerCase())
+            ));
+        }
+
+        function updateCourseCart() {
+            const countElement = document.getElementById('courseCartCount');
+            const itemsElement = document.getElementById('courseCartItems');
+            const confirmBtn = document.getElementById('confirmCourseRegistration');
+            
+            countElement.textContent = `${cartItems.length} รายวิชา`;
+            
+            if (cartItems.length === 0) {
+                itemsElement.innerHTML = `
+                    <div class="text-center py-6 text-gray-500">
+                        <p>ยังไม่มีรายวิชาที่เลือก</p>
+                    </div>
+                `;
+                confirmBtn.disabled = true;
+                confirmBtn.className = 'w-full py-3 rounded-lg font-bold text-white bg-gray-400 cursor-not-allowed';
+            } else {
+                itemsElement.innerHTML = cartItems.map(course => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium">${course.code}</p>
+                            <p class="text-sm text-gray-600">${course.name}</p>
+                        </div>
+                        <button onclick="removeFromCourseCart('${course.code}')" class="text-red-500 hover:text-red-700">
+                            <i data-lucide="x" size="18"></i>
+                        </button>
+                    </div>
+                `).join('');
+                
+                confirmBtn.disabled = false;
+                confirmBtn.className = 'w-full py-3 rounded-lg font-bold text-white bg-green-600 hover:bg-green-700';
+                
+                // Add click handler for confirmation
+                confirmBtn.onclick = () => {
+                    if (confirm(`คุณต้องการยืนยันการลงทะเบียนรายวิชา ${cartItems.length} วิชาหรือไม่?`)) {
+                        alert('ลงทะเบียนเรียนสำเร็จ!');
+                        cartItems = [];
+                        updateCourseCart();
+                        document.getElementById('courseSearchInput').value = '';
+                        document.getElementById('courseSearchResults').innerHTML = `
+                            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                                <p class="text-gray-500">กรุณาค้นหารายวิชาด้วยรหัสวิชา เช่น CS101</p>
+                            </div>
+                        `;
+                    }
+                };
+            }
+            
+            lucide.createIcons();
+        }
+
+        function getDayName(day) {
+            const dayMap = {
+                'Monday': 'จันทร์',
+                'Tuesday': 'อังคาร',
+                'Wednesday': 'พุธ',
+                'Thursday': 'พฤหัสบดี',
+                'Friday': 'ศุกร์'
+            };
+            return dayMap[day] || day;
+        }
+
         // Mobile menu functionality
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -499,6 +684,9 @@
             
             // Initialize profile dropdown
             initializeProfileDropdown();
+            
+            // Initialize course registration
+            initializeCourseRegistration();
         }
 
         // Run initialization when page loads
