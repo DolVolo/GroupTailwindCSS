@@ -1,4 +1,4 @@
-// Course data for the registration system
+// Course data for the student registration system
 const courseData = [
     {
         code: 'CS101',
@@ -66,7 +66,7 @@ const courseData = [
     },
     {
         code: 'CS106',
-        name: 'วิศวกรรมซอฟต์แวร์',
+        name: 'วิศวกร���มซอฟต์แวร์',
         section: 1,
         time: [
             { day: 'Wednesday', start: '13:00', end: '16:00' }
@@ -187,8 +187,3 @@ const courseData = [
         credits: 3
     }
 ];
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { courseData };
-}
