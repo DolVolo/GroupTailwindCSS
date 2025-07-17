@@ -7,6 +7,7 @@
     <title>ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="data.js"></script>
     <style>
         .page-content {
             display: none;
@@ -603,50 +604,11 @@
     </div>
 
     <script>
-        // Sample course data
-        const sampleCourses = [
-            {
-                code: 'CS101',
-                name: 'วิทยาการคอมพิวเตอร์เบื้องต้น',
-                section: 1,
-                time: [
-                    { day: 'Monday', start: '09:00', end: '12:00' },
-                    { day: 'Thursday', start: '13:00', end: '15:00' }
-                ],
-                room: 'CS-201',
-                instructor: 'ดร.สมชาย ใจดี',
-                seats: { total: 40, available: 15 },
-                credits: 3
-            },
-            {
-                code: 'CS102',
-                name: 'การเขียนโปรแกรมคอมพิวเตอร์',
-                section: 1,
-                time: [
-                    { day: 'Tuesday', start: '09:00', end: '12:00' },
-                    { day: 'Friday', start: '13:00', end: '15:00' }
-                ],
-                room: 'CS-202',
-                instructor: 'ผศ.ดร.วิชัย เรียนเก่ง',
-                seats: { total: 35, available: 10 },
-                credits: 3
-            },
-            {
-                code: 'CS301',
-                name: 'วิศวกรรมซอฟต์แวร์',
-                section: 1,
-                time: [
-                    { day: 'Wednesday', start: '09:00', end: '12:00' }
-                ],
-                room: 'CS-301',
-                instructor: 'อ.เก่ง มากมาย',
-                seats: { total: 30, available: 8 },
-                credits: 3
-            }
-        ];
+        // Use course data from external file
+        const sampleCourses = courseData;
 
         // Registered courses for schedule
-        const registeredCourses = [sampleCourses[0], sampleCourses[2]]; // CS101 and CS301
+        const registeredCourses = [sampleCourses[0], sampleCourses[2]]; // CS101 and CS103
         let cartItems = [];
         let currentPage = 'home';
 
