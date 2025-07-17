@@ -45,11 +45,11 @@
                             <a href="#" onclick="navigateTo('home')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="home">
                                 หน้าหลัก
                             </a>
-                            <a href="#" onclick="navigateTo('course-registration')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="course-registration">
+                            <a href="register.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                                 ลงทะเบียนเรียน
                             </a>
                             <a href="#" onclick="navigateTo('class-schedule')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="class-schedule">
-                                ตารางเรียน   
+                                ตารางเรียน
                             </a>
                             <a href="#" onclick="navigateTo('exam-schedule')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="exam-schedule">
                                 ตารางสอบ
@@ -65,6 +65,9 @@
                             </a>
                             <a href="#" onclick="navigateTo('enrollment-status')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="enrollment-status">
                                 สถานะการลงทะเบียน
+                            </a>
+                            <a href="#" onclick="navigateTo('table-class-use')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="table-class-use">
+                                ตารางการใช้ห้อง
                             </a>
                         </div>
                         <div class="border-l border-green-600 h-8"></div>
@@ -143,6 +146,9 @@
                         </a>
                         <a href="#" onclick="navigateTo('student-directory')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="student-directory">
                             รายชื่อนักศึกษา
+                        </a>
+                        <a href="#" onclick="navigateTo('table-class-use')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="table-class-use">
+                            ตารางการใช้ห้อง
                         </a>
                         <a href="#" onclick="navigateTo('student-history')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition" data-page="student-history">
                             ประวัตินักศึกษา
@@ -649,6 +655,12 @@
             // Special case for academic-calendar - redirect to datestudy.html
             if (page === 'academic-calendar') {
                 window.location.href = 'datestudy.html';
+                return;
+            }
+            
+            // Special case for table-class-use - redirect to tableclassuse.html
+            if (page === 'table-class-use') {
+                window.location.href = 'tableclassuse.html';
                 return;
             }
             
