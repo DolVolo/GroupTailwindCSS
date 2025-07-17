@@ -1,90 +1,194 @@
-<!--ปฎิทินการศึกษา-->
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MJU Student Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Sarabun', sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f4fdf5;
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f7fdf9;
       color: #2c3e50;
     }
+
     header {
-      background: #2ecc71;
-      padding: 1rem;
+      background-color: #15803d;
       color: white;
-      text-align: center;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
     }
-    .calendar {
-      max-width: 800px;
+
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    header div p {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    .container {
+      max-width: 900px;
       margin: 2rem auto;
-      background: white;
-      padding: 1rem;
+      background: #fff;
+      padding: 2rem;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     }
-    .month {
+
+    .month-title {
       text-align: center;
       font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .weekdays, .days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-    .weekdays div {
       font-weight: bold;
       color: #27ae60;
+      margin-bottom: 1rem;
     }
-    .days div {
-      padding: 10px;
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      text-align: center;
+    }
+
+    .day-name {
+      font-weight: bold;
+      padding: 10px 0;
+      background: #ecfdf2;
+      border-radius: 5px;
+    }
+
+    .day {
+      padding: 10px 5px;
       border-radius: 6px;
-      transition: 0.2s;
+      background: #f4fdf5;
+      position: relative;
     }
-    .days div:hover {
-      background-color: #e1f5e3;
-      cursor: pointer;
+
+    .day.today {
+      background-color: #2ecc71;
+      color: white;
+      font-weight: bold;
     }
-    .event {
-      background-color: #ff6b6b;
+
+    .day.exam::after {
+      content: "📕";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 14px;
+    }
+
+    .day.holiday {
+      background: #ffeaa7;
+      color: #6d4c41;
+      font-weight: bold;
+    }
+
+    .day.event {
+      background: #a29bfe;
       color: white;
     }
-    .holiday {
-      background-color: #f1c40f;
-      color: white;
-    }
-    .note {
-      margin-top: 1rem;
+
+    .legend {
+      margin-top: 1.5rem;
       font-size: 0.9rem;
-      color: #888;
+      color: #666;
     }
+
+    .legend span {
+      display: inline-block;
+      margin-right: 15px;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .exam-color { background: #f44336; }
+    .holiday-color { background: #ffeaa7; }
+    .event-color { background: #a29bfe; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>MJU Student Calendar</h1>
-  <p>ปฏิทินกิจกรรมนักศึกษา มหาวิทยาลัยแม่โจ้</p>
+  <img src="https://upload.wikimedia.org/wikipedia/th/b/b7/MJU_LOGO.svg" alt="MJU Logo">
+  <div>
+    <h1>MJU Student Calendar</h1>
+    <p style="margin: 0; font-size: 1rem;">ปฏิทินการศึกษามหาวิทยาลัยแม่โจ้</p>
+  </div>
 </header>
 
-<div class="calendar">
-  <div class="month">กรกฎาคม 2025</div>
-  <div class="weekdays">
-    <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+<div class="container">
+  <div class="month-title">กรกฎาคม 2025</div>
+  <div class="calendar">
+    <div class="day-name">อา</div>
+    <div class="day-name">จ</div>
+    <div class="day-name">อ</div>
+    <div class="day-name">พ</div>
+    <div class="day-name">พฤ</div>
+    <div class="day-name">ศ</div>
+    <div class="day-name">ส</div>
+
+    <!-- ช่องว่างก่อนวันที่ 1 -->
+    <div></div><div></div>
+
+    <!-- ปฏิทินรายวัน -->
+    <div class="day">1</div>
+    <div class="day">2</div>
+    <div class="day holiday">3</div> <!-- วันหยุด -->
+    <div class="day">4</div>
+    <div class="day">5</div>
+    <div class="day">6</div>
+    <div class="day">7</div>
+    <div class="day">8</div>
+    <div class="day">9</div>
+    <div class="day today">10</div> <!-- วันนี้ -->
+    <div class="day">11</div>
+    <div class="day event">12</div> <!-- มีกิจกรรม -->
+    <div class="day">13</div>
+    <div class="day">14</div>
+    <div class="day">15</div>
+    <div class="day exam">16</div> <!-- วันสอบ -->
+    <div class="day">17</div>
+    <div class="day">18</div>
+    <div class="day">19</div>
+    <div class="day">20</div>
+    <div class="day">21</div>
+    <div class="day">22</div>
+    <div class="day">23</div>
+    <div class="day holiday">24</div>
+    <div class="day">25</div>
+    <div class="day">26</div>
+    <div class="day event">27</div>
+    <div class="day">28</div>
+    <div class="day">29</div>
+    <div class="day">30</div>
+    <div class="day">31</div>
   </div>
-  <div class="days">
-    <div></div><div>1</div><div>2</div><div class="event">3</div><div>4</div><div>5</div><div>6</div>
-    <div>7</div><div>8</div><div class="holiday">9</div><div>10</div><div>11</div><div>12</div><div>13</div>
-    <!-- ต่อจนจบเดือน -->
-  </div>
-  <div class="note">
-    🔴 = วันสอบ | 🟡 = วันหยุดนักขัตฤกษ์
+
+  <div class="legend">
+    <p>
+      <span><i class="exam-color"></i> 📕 วันสอบ</span>
+      <span><i class="holiday-color"></i> วันหยุด</span>
+      <span><i class="event-color"></i> วันกิจกรรม</span>
+    </p>
   </div>
 </div>
 
