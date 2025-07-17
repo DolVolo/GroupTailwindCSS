@@ -3,18 +3,176 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ตารางการใช้ห้อง</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตารางการใช้ห้อง - ระบบทะเบียนนักศึกษา</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
+    <!-- App Component Structure with Layout -->
+    <div class="flex flex-col min-h-screen bg-gray-50">
+        
+        <!-- Navbar Component -->
+        <header class="bg-green-800 text-white shadow-lg">
+            <nav class="container mx-auto px-4 py-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
+                             alt="Maejo University" 
+                             class="h-12" />
+                        <div class="hidden md:flex flex-col">
+                            <span class="font-bold text-lg">ระบบทะเบียนนักศึกษา</span>
+                            <span class="text-sm">มหาวิทยาลัยแม่โจ้</span>
+                        </div>
+                    </div>
 
-  <!-- Header -->
-  <header class="bg-green-800 text-white p-5">
-    <div class="container mx-auto">
-      <h1 class="text-2xl font-bold">ตารางการใช้ห้อง</h1>
-      <p class="text-sm">ภาคการศึกษาที่ 1/2566</p>
-    </div>
-  </header>
+                    <!-- Desktop Navigation -->
+                    <div class="hidden lg:flex items-center space-x-4">
+                        <div class="flex space-x-2">
+                            <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                หน้าหลัก
+                            </a>
+                            <a href="register.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ลงทะเบียนเรียน
+                            </a>
+                            <a href="classtable.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ตารางเรียน
+                            </a>
+                            <a href="classtable.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ตารางสอบ
+                            </a>
+                            <a href="datestudy.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ปฏิทินการศึกษา
+                            </a>
+                            <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ค่าธรรมเนียม
+                            </a>
+                            <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                ผลการเรียน
+                            </a>
+                            <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                                สถานะการลงทะเบียน
+                            </a>
+                            <a href="tableclassuse.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
+                                ตารางการใช้ห้อง
+                            </a>
+                        </div>
+                        <div class="border-l border-green-600 h-8"></div>
+                        <div class="relative" id="loginSection">
+                            <button id="loginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                                <i data-lucide="user" size="18"></i>
+                                <span>เข้าสู่ระบบ</span>
+                                <i data-lucide="chevron-down" size="16"></i>
+                            </button>
+                            <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                                <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
+                                    สำหรับนักศึกษา
+                                </a>
+                                <a href="professorlogin.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="user-check" size="16" class="inline mr-2"></i>
+                                    สำหรับอาจารย์
+                                </a>
+                            </div>
+                        </div>
+                        <div class="relative hidden" id="profileSection">
+                            <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
+                                <i data-lucide="user" size="18"></i>
+                                <span>นักศึกษา</span>
+                                <i data-lucide="chevron-down" size="16"></i>
+                            </button>
+                            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                                <a href="mainpage.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="user" size="16" class="inline mr-2"></i>
+                                    โปรไฟล์
+                                </a>
+                                <a href="#" onclick="logout()" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="log-out" size="16" class="inline mr-2"></i>
+                                    ออกจากระบบ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
+                        <i id="menuIcon" data-lucide="menu" size="24"></i>
+                        <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation -->
+                <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
+                    <div class="flex flex-col space-y-1">
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            หน้าหลัก
+                        </a>
+                        <a href="register.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ลงทะเบียนเรียน
+                        </a>
+                        <a href="classtable.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ตารางเรียน
+                        </a>
+                        <a href="classtable.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ตารางสอบ
+                        </a>
+                        <a href="datestudy.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ปฏิทินการศึกษา
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ค่าธรรมเนียม
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ผลการเรียน
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            สถานะการลงทะเบียน
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            แบบประเมิน
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            รายชื่อนักศึกษา
+                        </a>
+                        <a href="tableclassuse.html" class="mobile-nav-link px-3 py-2 rounded bg-green-700 transition">
+                            ตารางการใช้ห้อง
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            ประวัตินักศึกษา
+                        </a>
+                        <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
+                            โปรไฟล์
+                        </a>
+                        <div class="relative mt-2" id="mobileLoginSection">
+                            <button id="mobileLoginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition w-full">
+                                <i data-lucide="user" size="18"></i>
+                                <span>เข้าสู่ระบบ</span>
+                                <i data-lucide="chevron-down" size="16" class="ml-auto"></i>
+                            </button>
+                            <div id="mobileLoginDropdown" class="mt-2 w-full bg-white rounded-lg shadow-lg border hidden">
+                                <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
+                                    <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
+                                    สำหรับน��กศึกษา
+                                </a>
+                                <a href="professorlogin.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-b-lg">
+                                    <i data-lucide="user-check" size="16" class="inline mr-2"></i>
+                                    สำหรับอาจารย์
+                                </a>
+                            </div>
+                        </div>
+                        <div class="relative mt-2 hidden" id="mobileProfileSection">
+                            <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-red-600 rounded hover:bg-red-700 transition w-full">
+                                <i data-lucide="log-out" size="18"></i>
+                                <span>ออกจากระบบ</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow w-full">
 
   <!-- Schedule Table -->
   <main class="container mx-auto my-10 bg-white p-6 rounded shadow">
@@ -176,5 +334,195 @@
     </table>
   </main>
 
+        </main>
+
+        <!-- Footer Component -->
+        <footer class="bg-green-800 text-white py-6">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
+                        <p class="text-sm">
+                            63 หมู่ 4 ตำบลหนองหาร อำเภอสันทราย จังหวัดเชียงใหม่ 50290
+                        </p>
+                        <p class="text-sm">โทรศัพท์: 053-873000</p>
+                    </div>
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
+                        <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
+                        <p class="text-sm">โทรศัพท์: 053-873460</p>
+                        <p class="text-sm">อีเมล: academic@mju.ac.th</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
+                        <ul class="text-sm">
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    คำถามที่พบบ่อย
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    คู่มือการใช้งาน
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:underline">
+                                    แจ้งปัญหาการใช้งาน
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
+                    <p>
+                        &copy; <span id="currentYear"></span> ระบบทะเบียนนักศึกษา
+                        มหาวิทยาลัยแม่โจ้ สงวนลิขสิทธิ์
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+        let isMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                closeMobileMenu();
+            }
+        });
+
+        function closeMobileMenu() {
+            isMenuOpen = false;
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        }
+
+        // Login dropdown functionality
+        function initializeLoginDropdown() {
+            const dropdownBtn = document.getElementById('loginDropdownBtn');
+            const dropdown = document.getElementById('loginDropdown');
+            const mobileDropdownBtn = document.getElementById('mobileLoginDropdownBtn');
+            const mobileDropdown = document.getElementById('mobileLoginDropdown');
+            
+            if (dropdownBtn && dropdown) {
+                dropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (mobileDropdownBtn && mobileDropdown) {
+                mobileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    mobileDropdown.classList.toggle('hidden');
+                });
+
+                // Close mobile dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!mobileDropdownBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
+                        mobileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Profile dropdown functionality
+        function initializeProfileDropdown() {
+            const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            
+            if (profileDropdownBtn && profileDropdown) {
+                profileDropdownBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('isLoggedIn');
+                showLoginSection();
+            }
+        }
+
+        // Show/Hide login and profile sections
+        function showLoginSection() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+            document.getElementById('mobileLoginSection').classList.remove('hidden');
+            document.getElementById('mobileProfileSection').classList.add('hidden');
+        }
+
+        function showProfileSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+            document.getElementById('mobileLoginSection').classList.add('hidden');
+            document.getElementById('mobileProfileSection').classList.remove('hidden');
+        }
+
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+            
+            if (isLoggedIn === 'true' && userType === 'student') {
+                showProfileSection();
+            } else {
+                showLoginSection();
+            }
+        }
+
+        // Initialize the app
+        function initializeApp() {
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Check login status first
+            checkLoginStatus();
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Initialize login dropdown
+            initializeLoginDropdown();
+            
+            // Initialize profile dropdown
+            initializeProfileDropdown();
+        }
+
+        // Run initialization when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
 </body>
 </html>
