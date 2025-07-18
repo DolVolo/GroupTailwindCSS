@@ -18,7 +18,7 @@
                 display: none !important;
             }
         }
-        /* กำหนดความสูงขั้นต่ำของช่องวันใน��ฏิทิน */
+        /* กำหนดความสูงขั้นต่ำของช่องวันในปฏิทิน */
         .calendar-day {
             min-height: 100px;
             position: relative;
@@ -56,6 +56,11 @@
         .event-holiday {
             background-color: #fed7aa;
             color: #c2410c;
+        }
+        /* สีสำหรับวันเปิด-ปิดการเรียนและกิจกรรมทางการศึกษา (สีชมพู) */
+        .event-academic {
+            background-color: #fce7f3;
+            color: #be185d;
         }
         /* ปรับขนาดสำหรับหน้าจอมือถือ */
         @media (max-width: 768px) {
@@ -169,7 +174,7 @@
                 </button>
             </div>
 
-            <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเม��่อกดปุ่มเมนู) -->
+            <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเมื่อกดปุ่มเมนู) -->
             <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
                 <div class="flex flex-col space-y-1">
                     <!-- รายการเมนูเหมือนกับเมนูหลัก แต่จัดเรียงแนวตั้ง -->
@@ -207,7 +212,7 @@
                         ตารางการใช้ห้อง
                     </a>
                     <a href="#" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
-                        ประวัตินักศ��กษา
+                        ประวัตินักศึกษา
                     </a>
                     <a href="#" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         โปรไฟล์
@@ -288,9 +293,9 @@
                         <option value="10">พฤศจิกายน</option>
                         <option value="11">ธันวาคม</option>
                     </select>
-                    <!-- ดรอปดาวน์เลือกปี (จะถูกเติมด้วย JavaScript) -->
+                    <!-- ดรอปดาวน์เลือก (จะถูกเติมด้วย JavaScript) -->
                     <select id="yearSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" onchange="changeMonth()">
-                        <!-- ป��จะถูกเพิ่มด้วย JavaScript -->
+                        <!-- ปีจะถูกเพิ่มด้วย JavaScript -->
                     </select>
                     <!-- ปุ่มกลับไปวันนี้ -->
                     <button onclick="goToToday()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
@@ -342,6 +347,11 @@
                     <div class="w-4 h-4 bg-orange-100 border border-orange-300 rounded mr-2"></div>
                     <span class="text-sm">วันหยุดราชการ/วันสำคัญทางศาสนา</span>
                 </div>
+                <!-- วันเปิด-ปิดการเรียน -->
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-pink-100 border border-pink-300 rounded mr-2"></div>
+                    <span class="text-sm">วันเปิด-ปิดการเรียน/กิจกรรมทางการศึกษา</span>
+                </div>
                 <!-- วันนี้ -->
                 <div class="flex items-center">
                     <div class="w-4 h-4 bg-green-200 border border-green-400 rounded mr-2"></div>
@@ -354,7 +364,7 @@
         <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
             <div class="bg-white rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
                 <div class="p-6">
-                    <!-- หัว���้อแสดงวันที่ -->
+                    <!-- หัวข้อแสดงวันที่ -->
                     <div class="flex justify-between items-start mb-4">
                         <h3 id="modalDate" class="text-xl font-bold"></h3>
                         <!-- ปุ่มปิด -->
@@ -448,7 +458,7 @@
 
         // ฟังก์ชันเริ่มต้นปฏิทิน
         function initializeCalendar() {
-            // สร้างตัวเลือกปี (��ีปัจจุบัน -2 ถึง +2)
+            // สร้างตัวเลือกปี (ปีปัจจุบัน -2 ถึง +2)
             const yearSelect = document.getElementById('yearSelect');
             const currentYear = new Date().getFullYear();
             for (let year = currentYear - 2; year <= currentYear + 2; year++) {
@@ -550,7 +560,7 @@
                 dayDiv.appendChild(eventDiv);
             });
 
-            // ถ้ามีมากกว่�� 3 กิจกรรม แสดงข้อความ "+X more"
+            // ถ้ามีมากกว่า 3 กิจกรรม แสดงข้อความ "+X more"
             if (events.length > 3) {
                 const moreDiv = document.createElement('div');
                 moreDiv.className = 'text-xs text-gray-500 text-center';
@@ -581,6 +591,23 @@
                                 holidayName: holiday.name,
                                 description: holiday.description,
                                 type: holiday.type
+                            }
+                        });
+                    }
+                });
+            }
+
+            // ตรวจสอบวันเปิด-ปิดการเรียนและกิจกรรมทางการศึกษา
+            if (typeof academicCalendar !== 'undefined') {
+                academicCalendar.forEach(academic => {
+                    if (academic.date === dateStr) {
+                        events.push({
+                            type: 'event-academic',
+                            title: academic.name,
+                            details: {
+                                academicName: academic.name,
+                                description: academic.description,
+                                type: academic.type
                             }
                         });
                     }
@@ -698,6 +725,14 @@
                             <p class="text-sm text-gray-600">${event.details.description}</p>
                             <p class="text-sm text-gray-600">ประเภท: ${getHolidayTypeText(event.details.type)}</p>
                         `;
+                    } else if (event.type === 'event-academic') {
+                        // วันเปิด-ปิดการเรียนและกิจกรรมทางการศึกษา - สีชมพู
+                        eventCard.classList.add('border-pink-200', 'bg-pink-50');
+                        eventCard.innerHTML = `
+                            <h4 class="font-bold text-pink-800">${event.details.academicName}</h4>
+                            <p class="text-sm text-gray-600">${event.details.description}</p>
+                            <p class="text-sm text-gray-600">ประเภท: ${getAcademicTypeText(event.details.type)}</p>
+                        `;
                     }
                     
                     modalContent.appendChild(eventCard);
@@ -717,6 +752,16 @@
                 case 'royal': return 'วันสำคัญของพระราชวงศ์';
                 case 'traditional': return 'วันสำคัญทางประเพณี';
                 default: return 'วันสำคัญ';
+            }
+        }
+
+        // ฟังก์ชันแปลงประเภทกิจกรรมทางการศึกษาเป็นข้อความภาษาไทย
+        function getAcademicTypeText(type) {
+            switch(type) {
+                case 'semester_start': return 'วันเปิดการเรียน';
+                case 'semester_end': return 'วันปิดการเรียน';
+                case 'academic_deadline': return 'วันสำคัญทางการศึกษา';
+                default: return 'กิจกรรมทางการศึกษา';
             }
         }
 
@@ -858,7 +903,7 @@
 
         // ฟังก์ชันออกจากระบบ
         function logout() {
-            if (confirm('คุณต้องการออกจากระบบหรือไ���่?')) {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
                 // ลบข้อมูลการล็อกอินออกจาก localStorage
                 localStorage.removeItem('userType');
                 localStorage.removeItem('isLoggedIn');

@@ -157,7 +157,7 @@ const courseData = [
             { day: 'Wednesday', start: '13:00', end: '16:00' }
         ],
         room: 'CS-302',
-        instructor: 'ผศ.ดร.พัฒนา ซอฟต์แวร์',
+        instructor: 'ผอ.ดร.พัฒนา ซอฟต์แวร์',
         seats: { total: 30, available: 7 },
         credits: 3,
         exams: {
@@ -356,7 +356,7 @@ const courseData = [
     },
     {
         code: 'CS113',
-        name: 'คลาวด์ คอมพิวติ้ง',
+        name: 'คลาวด์คอมพิวติ้ง',
         section: 1,
         time: [
             { day: 'Tuesday', start: '13:00', end: '16:00' }
@@ -558,5 +558,63 @@ const thaiHolidays = [
         name: 'วันสิ้นปี',
         type: 'national',
         description: 'วันหยุดราชการ'
+    }
+];
+
+// Academic Calendar for 2025 (วันเปิด-ปิดการเรียน)
+const academicCalendar = [
+    {
+        date: '2025-01-06',
+        name: 'วันเปิดการเรียน ภาคเรียนที่ 2/2567',
+        type: 'semester_start',
+        description: 'เริ่มการเรียนการสอนภาคเรียนที่ 2 ปีการศึกษา 2567'
+    },
+    {
+        date: '2025-03-07',
+        name: 'วันสุดท้ายของการถอนรายวิชา',
+        type: 'academic_deadline',
+        description: 'วันสุดท้ายของการถอนรายวิชาโดยได้รับเงินคืน 50%'
+    },
+    {
+        date: '2025-05-16',
+        name: 'วันปิดการเรียน ภาคเรียนที่ 2/2567',
+        type: 'semester_end',
+        description: 'สิ้นสุดการเรียนการสอนภาคเรียนที่ 2 ปีการศึกษา 2567'
+    },
+    {
+        date: '2025-06-09',
+        name: 'วันเปิดการเรียน ภาคฤดูร้อน/2568',
+        type: 'semester_start',
+        description: 'เริ่มการเรียนการสอนภาคฤดูร้อน ปีการศึกษา 2568'
+    },
+    {
+        date: '2025-08-01',
+        name: 'วันปิดการเรียน ภาคฤดูร้อน/2568',
+        type: 'semester_end',
+        description: 'สิ้นสุดการเรียนการสอนภาคฤดูร้อน ปีการศึกษา 2568'
+    },
+    {
+        date: '2025-08-18',
+        name: 'วันเปิดการเรียน ภาคเรียนที่ 1/2568',
+        type: 'semester_start',
+        description: 'เริ่มการเรียนการสอนภาคเรียนที่ 1 ปีการศึกษา 2568'
+    },
+    {
+        date: '2025-09-19',
+        name: 'วันสุดท้ายของการลงทะเบียนเรียน',
+        type: 'academic_deadline',
+        description: 'วันสุดท้ายของการลงทะเบียนเรียนและการเพิ่ม-ถอนรายวิชา'
+    },
+    {
+        date: '2025-11-21',
+        name: 'วันสุดท้ายของการถอนรายวิชา',
+        type: 'academic_deadline',
+        description: 'วันสุดท้ายของการถอนรายวิชาโดยได้รับเงินคืน 50%'
+    },
+    {
+        date: '2025-12-19',
+        name: 'วันปิดการเรียน ภาคเรียนที่ 1/2568',
+        type: 'semester_end',
+        description: 'สิ้นสุดการเรียนการสอนภาคเรียนที่ 1 ปีการศึกษา 2568'
     }
 ];
