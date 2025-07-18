@@ -18,7 +18,7 @@
                 display: none !important;
             }
         }
-        /* กำหนดความสูงขั้นต่ำของช่องวันในปฏิทิน */
+        /* กำหนดความสูงขั้นต่ำของช่องวันใน��ฏิทิน */
         .calendar-day {
             min-height: 100px;
             position: relative;
@@ -51,6 +51,11 @@
         .event-final {
             background-color: #fee2e2;
             color: #991b1b;
+        }
+        /* สีสำหรับวันหยุดราชการและวันสำคัญทางศาสนา (สีส้ม) */
+        .event-holiday {
+            background-color: #fed7aa;
+            color: #c2410c;
         }
         /* ปรับขนาดสำหรับหน้าจอมือถือ */
         @media (max-width: 768px) {
@@ -164,7 +169,7 @@
                 </button>
             </div>
 
-            <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเมื่อกดปุ่มเมนู) -->
+            <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเม��่อกดปุ่มเมนู) -->
             <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
                 <div class="flex flex-col space-y-1">
                     <!-- รายการเมนูเหมือนกับเมนูหลัก แต่จัดเรียงแนวตั้ง -->
@@ -202,7 +207,7 @@
                         ตารางการใช้ห้อง
                     </a>
                     <a href="#" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
-                        ประวัตินักศึกษา
+                        ประวัตินักศ��กษา
                     </a>
                     <a href="#" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                         โปรไฟล์
@@ -285,7 +290,7 @@
                     </select>
                     <!-- ดรอปดาวน์เลือกปี (จะถูกเติมด้วย JavaScript) -->
                     <select id="yearSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" onchange="changeMonth()">
-                        <!-- ปีจะถูกเพิ่มด้วย JavaScript -->
+                        <!-- ป��จะถูกเพิ่มด้วย JavaScript -->
                     </select>
                     <!-- ปุ่มกลับไปวันนี้ -->
                     <button onclick="goToToday()" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
@@ -332,6 +337,11 @@
                     <div class="w-4 h-4 bg-red-100 border border-red-300 rounded mr-2"></div>
                     <span class="text-sm">สอบปลายภาค</span>
                 </div>
+                <!-- วันหยุดราชการและวันสำคัญทางศาสนา -->
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-orange-100 border border-orange-300 rounded mr-2"></div>
+                    <span class="text-sm">วันหยุดราชการ/วันสำคัญทางศาสนา</span>
+                </div>
                 <!-- วันนี้ -->
                 <div class="flex items-center">
                     <div class="w-4 h-4 bg-green-200 border border-green-400 rounded mr-2"></div>
@@ -344,7 +354,7 @@
         <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
             <div class="bg-white rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
                 <div class="p-6">
-                    <!-- หัวข้อแสดงวันที่ -->
+                    <!-- หัว���้อแสดงวันที่ -->
                     <div class="flex justify-between items-start mb-4">
                         <h3 id="modalDate" class="text-xl font-bold"></h3>
                         <!-- ปุ่มปิด -->
@@ -438,7 +448,7 @@
 
         // ฟังก์ชันเริ่มต้นปฏิทิน
         function initializeCalendar() {
-            // สร้างตัวเลือกปี (ปีปัจจุบัน -2 ถึง +2)
+            // สร้างตัวเลือกปี (��ีปัจจุบัน -2 ถึง +2)
             const yearSelect = document.getElementById('yearSelect');
             const currentYear = new Date().getFullYear();
             for (let year = currentYear - 2; year <= currentYear + 2; year++) {
@@ -452,8 +462,8 @@
             document.getElementById('monthSelect').value = currentMonth;
             document.getElementById('yearSelect').value = currentYear;
 
-            // โหลดรายวิชาที่ลงทะเบียน (ตัวอย่างใช้ 5 วิชาแรก)
-            registeredCourses = courseData.slice(0, 5);
+            // โหลดรายวิชาที่ลงทะเบียน (ใช้ทุกวิชาเพื่อแสดงการสอบ)
+            registeredCourses = courseData;
 
             // แสดงปฏิทิน
             renderCalendar();
@@ -517,7 +527,7 @@
                 dayDiv.classList.add('other-month');
             }
 
-            // ตรวจสอบว่��เป็นวันนี้หรือไม่
+            // ตรวจสอบว่าเป็นวันนี้หรือไม่
             const today = new Date();
             if (date.toDateString() === today.toDateString()) {
                 dayDiv.classList.add('bg-green-100', 'border-green-400');
@@ -540,7 +550,7 @@
                 dayDiv.appendChild(eventDiv);
             });
 
-            // ถ้ามีมากกว่า 3 กิจกรรม แสดงข้อความ "+X more"
+            // ถ้ามีมากกว่�� 3 กิจกรรม แสดงข้อความ "+X more"
             if (events.length > 3) {
                 const moreDiv = document.createElement('div');
                 moreDiv.className = 'text-xs text-gray-500 text-center';
@@ -560,6 +570,23 @@
             const dayOfWeek = date.getDay(); // 0=อาทิตย์, 1=จันทร์, ...
             const dateStr = date.toISOString().split('T')[0]; // รูปแบบ YYYY-MM-DD
 
+            // ตรวจสอบวันหยุดราชการและวันสำคัญทางศาสนา
+            if (typeof thaiHolidays !== 'undefined') {
+                thaiHolidays.forEach(holiday => {
+                    if (holiday.date === dateStr) {
+                        events.push({
+                            type: 'event-holiday',
+                            title: holiday.name,
+                            details: {
+                                holidayName: holiday.name,
+                                description: holiday.description,
+                                type: holiday.type
+                            }
+                        });
+                    }
+                });
+            }
+
             // ตรวจสอบวันเรียนปกติ
             registeredCourses.forEach(course => {
                 // ตรวจสอบแต่ละช่วงเวลาเรียน
@@ -567,7 +594,7 @@
                     if (dayMap[timeSlot.day] === dayOfWeek) {
                         events.push({
                             type: 'event-class', // ประเภท: วันเรียนปกติ
-                            title: course.code, // รหั���วิชา
+                            title: course.code, // รหัสวิชา
                             details: {
                                 courseName: course.name, // ชื่อวิชา
                                 time: `${timeSlot.start} - ${timeSlot.end}`, // เวลาเรียน
@@ -663,6 +690,14 @@
                             <p class="text-sm text-gray-600">เวลา: ${event.details.time}</p>
                             <p class="text-sm text-gray-600">ห้องสอบ: ${event.details.room}</p>
                         `;
+                    } else if (event.type === 'event-holiday') {
+                        // วันหยุดราชการและวันสำคัญทางศาสนา - สีส้ม
+                        eventCard.classList.add('border-orange-200', 'bg-orange-50');
+                        eventCard.innerHTML = `
+                            <h4 class="font-bold text-orange-800">${event.details.holidayName}</h4>
+                            <p class="text-sm text-gray-600">${event.details.description}</p>
+                            <p class="text-sm text-gray-600">ประเภท: ${getHolidayTypeText(event.details.type)}</p>
+                        `;
                     }
                     
                     modalContent.appendChild(eventCard);
@@ -672,6 +707,17 @@
             // แสดง Modal
             modal.classList.remove('hidden');
             lucide.createIcons();
+        }
+
+        // ฟังก์ชันแปลงประเภทวันหยุดเป็นข้อความภาษาไทย
+        function getHolidayTypeText(type) {
+            switch(type) {
+                case 'national': return 'วันหยุดราชการ';
+                case 'buddhist': return 'วันสำคัญทางพระพุทธศาสนา';
+                case 'royal': return 'วันสำคัญของพระราชวงศ์';
+                case 'traditional': return 'วันสำคัญทางประเพณี';
+                default: return 'วันสำคัญ';
+            }
         }
 
         // ฟังก์ชันปิด Modal
@@ -781,7 +827,7 @@
                     mobileDropdown.classList.toggle('hidden');
                 });
 
-                // ปิดดรอ��ดาวน์เมื่อคลิกที่อื่น
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!mobileDropdownBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
                         mobileDropdown.classList.add('hidden');
@@ -810,9 +856,9 @@
             }
         }
 
-        // ฟัง���์ชันออกจากระบบ
+        // ฟังก์ชันออกจากระบบ
         function logout() {
-            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+            if (confirm('คุณต้องการออกจากระบบหรือไ���่?')) {
                 // ลบข้อมูลการล็อกอินออกจาก localStorage
                 localStorage.removeItem('userType');
                 localStorage.removeItem('isLoggedIn');
