@@ -191,74 +191,60 @@
             <!-- Home Page -->
             <div id="page-home" class="page-content active">
                 <div class="bg-gray-50 min-h-screen">
-                    <!-- Hero Section with Carousel -->
-                    <div class="bg-green-800 text-white py-12 relative">
-                        <div class="container mx-auto px-4">
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                                <!-- Left Content -->
-                                <div>
-                                    <h1 class="text-3xl md:text-4xl font-bold mb-4">
-                                        ระบบทะเบียนนักศึกษา
-                                    </h1>
-                                    <p class="text-xl mb-6">
-                                        คณะวิทยาการคอมพิวเตอร์ มหาวิทยาลัยแม่โจ้
-                                    </p>
-                                    <div class="flex flex-wrap gap-4">
-                                        <button onclick="navigateTo('course-registration')" class="bg-white text-green-800 hover:bg-green-100 px-6 py-3 rounded-lg font-bold transition">
-                                            ลงทะเบียนเรียน
-                                        </button>
-                                        <button onclick="navigateTo('class-schedule')" class="bg-green-700 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold transition">
-                                            ตารางเรียน
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Right Carousel -->
-                                <div class="relative overflow-hidden rounded-lg shadow-xl">
-                                    <!-- Carousel Container -->
-                                    <div id="carouselContainer" class="relative h-64 md:h-80 bg-gray-200">
-                                        <!-- Slides -->
-                                        <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out" data-slide="0">
-                                            <img src="image/เกษตรเพื่อชีวิต.jpg" alt="เกษตรเพื่อชีวิต" class="w-full h-full object-cover">
-                                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                                <p class="text-white font-semibold">เกษตรเพื่อชีวิต</p>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="1">
-                                            <img src="image/คู่มือการใช้งาน Microsoft Teams.png" alt="คู่มือการใช้งาน Microsoft Teams" class="w-full h-full object-cover">
-                                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                                <p class="text-white font-semibold">คู่มือการใช้งาน Microsoft Teams</p>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="2">
-                                            <img src="image/พ้นสภาพ.jpg" alt="พ้นสภาพ" class="w-full h-full object-cover">
-                                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                                <p class="text-white font-semibold">ข้อมูลการพ้นสภาพนักศึกษา</p>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="3">
-                                            <img src="image/รักษาสภาพ.jpg" alt="รักษาสภาพ" class="w-full h-full object-cover">
-                                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                                <p class="text-white font-semibold">การรักษาสภาพนักศึกษา</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Navigation Buttons -->
-                                        <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all">
-                                            <i data-lucide="chevron-left" size="24"></i>
-                                        </button>
-                                        <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all">
-                                            <i data-lucide="chevron-right" size="24"></i>
-                                        </button>
-                                        
-                                        <!-- Indicators -->
-                                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                                            <button class="carousel-indicator w-2 h-2 bg-white rounded-full transition-all" data-slide="0"></button>
-                                            <button class="carousel-indicator w-2 h-2 bg-white/50 rounded-full transition-all" data-slide="1"></button>
-                                            <button class="carousel-indicator w-2 h-2 bg-white/50 rounded-full transition-all" data-slide="2"></button>
-                                            <button class="carousel-indicator w-2 h-2 bg-white/50 rounded-full transition-all" data-slide="3"></button>
-                                        </div>
-                                    </div>
+                    <!-- Hero Section with Background Carousel -->
+                    <div class="relative bg-black text-white py-48 overflow-hidden">
+                        <!-- Background Carousel -->
+                        <div id="carouselContainer" class="absolute inset-0">
+                            <!-- Black Overlay -->
+                            <div class="absolute inset-0 bg-black opacity-50 z-[5]"></div>
+                            
+                            <!-- Slides -->
+                            <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out" data-slide="0">
+                                <img src="image/เกษตรเพื่อชีวิต.jpg" alt="เกษตรเพื่อชีวิต" class="w-full h-full object-cover">
+                            </div>
+                            <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="1">
+                                <img src="image/คู่มือการใช้งาน Microsoft Teams.png" alt="คู่มือการใช้งาน Microsoft Teams" class="w-full h-full object-cover">
+                            </div>
+                            <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="2">
+                                <img src="image/พ้นสภาพ.jpg" alt="พ้นสภาพ" class="w-full h-full object-cover">
+                            </div>
+                            <div class="carousel-slide absolute inset-0 transition-transform duration-500 ease-in-out translate-x-full" data-slide="3">
+                                <img src="image/รักษาสภาพ.jpg" alt="รักษาสภาพ" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <!-- Navigation Buttons -->
+                            <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all z-10">
+                                <i data-lucide="chevron-left" size="24"></i>
+                            </button>
+                            <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all z-10">
+                                <i data-lucide="chevron-right" size="24"></i>
+                            </button>
+                            
+                            <!-- Indicators -->
+                            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+                                <button class="carousel-indicator w-3 h-3 bg-white rounded-full transition-all" data-slide="0"></button>
+                                <button class="carousel-indicator w-3 h-3 bg-white/50 rounded-full transition-all" data-slide="1"></button>
+                                <button class="carousel-indicator w-3 h-3 bg-white/50 rounded-full transition-all" data-slide="2"></button>
+                                <button class="carousel-indicator w-3 h-3 bg-white/50 rounded-full transition-all" data-slide="3"></button>
+                            </div>
+                        </div>
+                        
+                        <!-- Content Overlay -->
+                        <div class="relative z-20 container mx-auto px-4">
+                            <div class="max-w-2xl">
+                                <h1 class="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
+                                    ระบบทะเบียนนักศึกษา
+                                </h1>
+                                <p class="text-xl mb-6 drop-shadow-lg">
+                                    คณะวิทยาการคอมพิวเตอร์ มหาวิทยาลัยแม่โจ้
+                                </p>
+                                <div class="flex flex-wrap gap-4">
+                                    <button onclick="navigateTo('course-registration')" class="bg-white text-green-800 hover:bg-green-100 px-6 py-3 rounded-lg font-bold transition shadow-lg">
+                                        ลงทะเบียนเรียน
+                                    </button>
+                                    <button onclick="navigateTo('class-schedule')" class="bg-green-700 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold transition shadow-lg">
+                                        ตารางเรียน
+                                    </button>
                                 </div>
                             </div>
                         </div>
