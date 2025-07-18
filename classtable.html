@@ -316,12 +316,15 @@
         </div>
     </footer>
 
+    <!-- นำเข้าไฟล์ข้อมูลรายวิชา -->
     <script src="data.js"></script>
     <script>
-        // Load registered courses from localStorage
+        // โหลดรายวิชาที่ลงทะเบียนจาก localStorage
         let registeredCourses = [];
         
-        // Load registered courses from localStorage
+        // ฟังก์ชันโหลดรายวิชาที่ลงทะเบียนจาก localStorage
+        // หน้าที่: ดึงข้อมูลรายวิชาที่นักศึกษาลงทะเบียนไว้
+        // การทำงาน: อ่านข้อมูล JSON จาก localStorage และแปลงเป็น array
         function loadRegisteredCourses() {
             const savedCourses = localStorage.getItem('registeredCourses');
             if (savedCourses) {
@@ -329,11 +332,15 @@
             }
         }
 
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
-        const hours = Array.from({ length: 10 }, (_, i) => i + 8); // 8:00 to 17:00
+        // กำหนดวันและชื่อวันสำหรับตารางเรียน
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // วันภาษาอังกฤษ
+        const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์']; // วันภาษาไทย
+        const hours = Array.from({ length: 10 }, (_, i) => i + 8); // สร้างอาร์เรย์เวลา 8:00-17:00
 
-        // Get color for a course (consistently)
+        // ฟังก์ชันกำหนดสีสำหรับแต่ละรายวิชา
+        // หน้าที่: กำหนดสีที่สม่ำเสมอให้กับแต่ละรายวิชาตามรหัสวิชา
+        // การทำงาน: ใช้รหัสวิชาในการเลือกสีจากชุดสีที่กำหนดไว้
+        // พารามิเตอร์: courseCode - รหัสวิชา
         function getCourseColor(courseCode) {
             const colors = [
                 'bg-blue-100 border-blue-300 text-blue-800',

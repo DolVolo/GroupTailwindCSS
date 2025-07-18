@@ -1,69 +1,98 @@
+<!--หน้าเข้าสู่ระบบ-->
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="pageTitle">เข้าสู่ระบบ | มหาวิทยาลัยแม่โจ้</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-  <script src="data.js"></script>
+  <!-- ส่วนหัวของเอกสาร HTML กำหนดข้อมูลพื้นฐานของหน้าเว็บ -->
+  <meta charset="UTF-8" /> <!-- กำหนดการเข้ารหัสอักขระเป็น UTF-8 สำหรับรองรับภาษาไทย -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- กำหนดขนาดการแสดงผลให้เหมาะสมกับอุปกรณ์ -->
+  <title id="pageTitle">เข้าสู่ระบบ | มหาวิทยาลัยแม่โจ้</title> <!-- หัวข้อหน้าเว็บที่แสดงบน Tab ของ Browser -->
+  
+  <!-- นำเข้า CSS Framework และ Library ต่างๆ -->
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS สำหรับจัดการสไตล์ -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script> <!-- Lucide Icons สำหรับไอคอน -->
+  <script src="data.js"></script> <!-- ไฟล์ข้อมูลรายวิชาและอาจารย์ -->
+  
+  <!-- สไตล์เพิ่มเติมสำหรับ Autocomplete -->
   <style>
+    /* สไตล์สำหรับ dropdown ของ autocomplete */
     .autocomplete-dropdown {
-      position: absolute;
-      top: 100%;
+      position: absolute; /* วางตำแหน่งแบบ absolute */
+      top: 100%; /* อยู่ใต้ input field */
       left: 0;
       right: 0;
       background: white;
       border: 1px solid #d1d5db;
-      border-top: none;
-      border-radius: 0 0 0.5rem 0.5rem;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 1000;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-top: none; /* ไม่มีขอบด้านบน */
+      border-radius: 0 0 0.5rem 0.5rem; /* มุมโค้งด้านล่าง */
+      max-height: 200px; /* ความสูงสูงสุด */
+      overflow-y: auto; /* เลื่อนแนวตั้งเมื่อเนื้อหาเกิน */
+      z-index: 1000; /* อยู่ด้านบนสุด */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* เงา */
     }
+    
+    /* สไตล์สำหรับแต่ละรายการใน dropdown */
     .autocomplete-item {
-      padding: 0.75rem 1rem;
-      cursor: pointer;
-      border-bottom: 1px solid #f3f4f6;
+      padding: 0.75rem 1rem; /* ระยะห่างภายใน */
+      cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นมือ */
+      border-bottom: 1px solid #f3f4f6; /* เส้นขอบด้านล่าง */
     }
+    
+    /* เอฟเฟกต์เมื่อ hover บนรายการ */
     .autocomplete-item:hover {
       background-color: #f9fafb;
     }
+    
+    /* รายการสุดท้ายไม่มีเส้นขอบ */
     .autocomplete-item:last-child {
       border-bottom: none;
     }
+    
+    /* คอนเทนเนอร์สำหรับ username input */
     .username-container {
-      position: relative;
+      position: relative; /* สำหรับวาง dropdown */
     }
   </style>
 </head>
+<!-- ส่วน body: พื้นหลังแบบ gradient สีเขียว จัดกึ่งกลางหน้าจอ -->
 <body class="bg-gradient-to-br from-green-100 to-green-300 h-screen flex items-center justify-center font-sans">
 
+  <!-- กล่องหลักของฟอร์มเข้าสู่ระบบ: พื้นหลังสีขาว มีเงา และขอบโค้ง -->
   <div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-green-400">
+    <!-- ส่วนหัวของฟอร์ม: โลโก้ ชื่อระบบ และชื่อมหาวิทยาลัย -->
     <div class="text-center mb-6">
+      <!-- โลโก้มหาวิทยาลัยแม่โจ้ -->
       <img src="https://www.mju.ac.th/th/images/mju_logo_main-resize.png" alt="Maejo University Logo" class="h-20 mx-auto mb-4">
+      <!-- หัวข้อหลักของหน้า (จะเปลี่ยนตามประเภทผู้ใช้) -->
       <h1 id="loginTitle" class="text-2xl font-bold text-green-700">เข้าสู่ระบบ</h1>
+      <!-- ชื่อมหาวิทยาลัย -->
       <p class="text-sm text-gray-600">มหาวิทยาลัยแม่โจ้</p>
     </div>
 
+    <!-- ฟอร์มเข้าสู่ระบบ: เรียกใช้ฟังก์ชัน login เมื่อ submit -->
     <form onsubmit="return login(event)">
+      <!-- ช่องกรอกชื่อผู้ใช้ -->
       <div class="mb-4">
         <label for="username" class="block font-semibold text-gray-700 mb-1">ชื่อผู้ใช้</label>
+        <!-- คอนเทนเนอร์สำหรับ input และ dropdown autocomplete -->
         <div class="username-container">
+          <!-- ช่อง input สำหรับชื่อผู้ใช้ -->
           <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400" placeholder="ไม่จำเป็นต้องกรอก" autocomplete="off">
+          <!-- Dropdown สำหรับ autocomplete (ซ่อนไว้เริ่มต้น) -->
           <div id="autocomplete-dropdown" class="autocomplete-dropdown hidden"></div>
         </div>
       </div>
+      <!-- ช่องกรอกรหัสผ่าน -->
       <div class="mb-6">
         <label for="password" class="block font-semibold text-gray-700 mb-1">รหัสผ่าน</label>
         <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400" placeholder="ไม่จำเป็นต้องกรอก">
       </div>
+      <!-- ปุ่มเข้าสู่ระบบ -->
       <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition duration-300">
         เข้าสู่ระบบ
       </button>
     </form>
 
+    <!-- ส่วนล่าง: ปุ่มกลับไปหน้าหลัก -->
     <div class="mt-4 text-center">
       <button onclick="goBack()" class="flex items-center justify-center mx-auto text-green-600 hover:text-green-700 transition">
         <i data-lucide="arrow-left" size="16" class="mr-1"></i>
@@ -73,199 +102,240 @@
   </div>
 
   <script>
-    // Get user type from localStorage
+    // ดึงประเภทผู้ใช้จาก localStorage (ค่าเริ่มต้นเป็น 'student')
     const userType = localStorage.getItem('userType') || 'student';
     
-    // Get unique instructor names from course data
+    // ฟังก์ชันดึงรายชื่ออาจารย์ที่ไม่ซ้ำกันจากข้อมูลรายวิชา
+    // หน้าที่: สร้างรายชื่ออาจารย์สำหรับ autocomplete dropdown
+    // การทำงาน: ดึงชื่ออาจารย์จากข้อมูลรายวิชา กรองค่าซ้ำ และเรียงลำดับ
     function getInstructorNames() {
+      // ตรวจสอบว่ามีข้อมูลรายวิชาหรือไม่
       if (typeof courseData === 'undefined') {
-        return [];
+        return []; // ถ้าไม่มีข้อมูลให้คืนค่า array ว่าง
       }
+      // ดึงชื่ออาจารย์จากทุกรายวิชา
       const instructors = courseData.map(course => course.instructor);
+      // กรองค่าซ้ำด้วย Set และเรียงลำดับตามตัวอักษร
       return [...new Set(instructors)].sort();
     }
 
-    // Initialize autocomplete functionality
+    // ฟังก์ชันเริ่มต้นระบบ autocomplete สำหรับช่องชื่อผู้ใช้
+    // หน้าที่: ตั้งค่า event listener และฟีเจอร์ autocomplete สำหรับอาจารย์
+    // การทำงาน: เพิ่ม event listener ต่างๆ สำหรับการพิมพ์ คลิก และนำทางด้วยคีย์บอร์ด
     function initializeAutocomplete() {
+      // ดึง element ต่างๆ ที่จำเป็น
       const usernameInput = document.getElementById('username');
       const dropdown = document.getElementById('autocomplete-dropdown');
-      const instructors = getInstructorNames();
+      const instructors = getInstructorNames(); // ดึงรายชื่ออาจารย์
 
-      // Only enable autocomplete for teachers
+      // เปิดใช้งาน autocomplete เฉพาะสำหรับอาจารย์เท่านั้น
       if (userType !== 'teacher') {
-        return;
+        return; // ถ้าไม่ใช่อาจารย์ให้หยุดการทำงาน
       }
 
-      // Show dropdown when input is focused or clicked
+      // แสดง dropdown เมื่อ input ได้รับ focus
       usernameInput.addEventListener('focus', () => {
-        showAutocomplete(instructors, '');
+        showAutocomplete(instructors, ''); // แสดงรายชื่อทั้งหมด
       });
 
+      // แสดง dropdown เมื่อคลิกที่ input
       usernameInput.addEventListener('click', () => {
-        showAutocomplete(instructors, usernameInput.value);
+        showAutocomplete(instructors, usernameInput.value); // แสดงรายชื่อตามค่าปัจจุบัน
       });
 
-      // Filter dropdown based on input
+      // กรองรายชื่อตามที่ผู้ใช้พิมพ์
       usernameInput.addEventListener('input', (e) => {
-        const value = e.target.value.toLowerCase();
+        const value = e.target.value.toLowerCase(); // แปลงเป็นตัวพิมพ์เล็ก
+        // กรองรายชื่ออาจารย์ที่มีข้อความที่พิมพ์
         const filteredInstructors = instructors.filter(instructor => 
           instructor.toLowerCase().includes(value)
         );
-        showAutocomplete(filteredInstructors, value);
+        showAutocomplete(filteredInstructors, value); // แสดงรายชื่อที่กรองแล้ว
       });
 
-      // Hide dropdown when clicking outside
+      // ซ่อน dropdown เมื่อคลิกนอกพื้นที่
       document.addEventListener('click', (e) => {
+        // ตรวจสอบว่าคลิกนอก input และ dropdown หรือไม่
         if (!usernameInput.contains(e.target) && !dropdown.contains(e.target)) {
-          hideAutocomplete();
+          hideAutocomplete(); // ซ่อน dropdown
         }
       });
 
-      // Handle keyboard navigation
+      // จัดการการนำทางด้วยคีย์บอร์ด (ลูกศร, Enter, Escape)
       usernameInput.addEventListener('keydown', (e) => {
-        const items = dropdown.querySelectorAll('.autocomplete-item');
-        const activeItem = dropdown.querySelector('.autocomplete-item.active');
-        let activeIndex = -1;
+        const items = dropdown.querySelectorAll('.autocomplete-item'); // รายการทั้งหมด
+        const activeItem = dropdown.querySelector('.autocomplete-item.active'); // รายการที่เลือก
+        let activeIndex = -1; // ตำแหน่งรายการที่เลือก
 
+        // หาตำแหน่งของรายการที่เลือกอยู่
         if (activeItem) {
           activeIndex = Array.from(items).indexOf(activeItem);
         }
 
+        // จัดการปุ่มต่างๆ
         switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
+          case 'ArrowDown': // ลูกศรลง - เลือกรายการถัดไป
+            e.preventDefault(); // ป้องกันการเลื่อนหน้า
             if (activeIndex < items.length - 1) {
-              if (activeItem) activeItem.classList.remove('active');
-              items[activeIndex + 1].classList.add('active');
+              if (activeItem) activeItem.classList.remove('active'); // ลบการเลือกเดิม
+              items[activeIndex + 1].classList.add('active'); // เลือกรายการถัดไป
             }
             break;
-          case 'ArrowUp':
+          case 'ArrowUp': // ลูกศรขึ้น - เลือกรายการก่อนหน้า
             e.preventDefault();
             if (activeIndex > 0) {
               if (activeItem) activeItem.classList.remove('active');
               items[activeIndex - 1].classList.add('active');
             }
             break;
-          case 'Enter':
+          case 'Enter': // Enter - เลือกรายการที่ highlight
             if (activeItem) {
-              e.preventDefault();
-              selectInstructor(activeItem.textContent);
+              e.preventDefault(); // ป้องกันการ submit form
+              selectInstructor(activeItem.textContent); // เลือกอาจารย์
             }
             break;
-          case 'Escape':
+          case 'Escape': // Escape - ปิด dropdown
             hideAutocomplete();
             break;
         }
       });
     }
 
+    // ฟังก์ชันแสดง dropdown autocomplete
+    // หน้าที่: สร้างและแสดงรายการอาจารย์ใน dropdown
+    // การทำงาน: สร้าง HTML element สำหรับแต่ละอาจารย์และเพิ่ม event listener
+    // พารามิเตอร์: instructors - รายชื่ออาจารย์, currentValue - ข้อความที่พิมพ์
     function showAutocomplete(instructors, currentValue) {
       const dropdown = document.getElementById('autocomplete-dropdown');
       
+      // ถ้าไม่มีรายชื่ออาจารย์ให้ซ่อน dropdown
       if (instructors.length === 0) {
         hideAutocomplete();
         return;
       }
 
-      dropdown.innerHTML = '';
+      dropdown.innerHTML = ''; // ล้างเนื้อหาเดิม
       
+      // สร้างรายการสำหรับแต่ละอาจารย์
       instructors.forEach((instructor, index) => {
-        const item = document.createElement('div');
-        item.className = 'autocomplete-item';
-        item.textContent = instructor;
+        const item = document.createElement('div'); // สร้าง div สำหรับรายการ
+        item.className = 'autocomplete-item'; // เพิ่ม CSS class
+        item.textContent = instructor; // ตั้งชื่ออาจารย์
         
-        // Highlight matching text
+        // เน้นข้อความที่ตรงกับที่พิมพ์
         if (currentValue) {
-          const regex = new RegExp(`(${currentValue})`, 'gi');
-          item.innerHTML = instructor.replace(regex, '<strong>$1</strong>');
+          const regex = new RegExp(`(${currentValue})`, 'gi'); // สร้าง regex แบบไม่สนใจตัวพิมพ์
+          item.innerHTML = instructor.replace(regex, '<strong>$1</strong>'); // เน้นด้วย <strong>
         }
         
+        // เพิ่ม event listener สำหรับการคลิก
         item.addEventListener('click', () => {
-          selectInstructor(instructor);
+          selectInstructor(instructor); // เลือกอาจารย์เมื่อคลิก
         });
 
+        // เพิ่ม event listener สำหรับ hover
         item.addEventListener('mouseenter', () => {
-          // Remove active class from all items
+          // ลบ active class จากรายการทั้งหมด
           dropdown.querySelectorAll('.autocomplete-item').forEach(i => i.classList.remove('active'));
-          // Add active class to hovered item
+          // เพิ่ม active class ให้รายการที่ hover
           item.classList.add('active');
         });
 
-        dropdown.appendChild(item);
+        dropdown.appendChild(item); // เพิ่มรายการเข้าไปใน dropdown
       });
 
-      dropdown.classList.remove('hidden');
+      dropdown.classList.remove('hidden'); // แสดง dropdown
     }
 
+    // ฟังก์ชันซ่อน dropdown autocomplete
+    // หน้าที่: ซ่อน dropdown โดยเพิ่ม CSS class 'hidden'
     function hideAutocomplete() {
       const dropdown = document.getElementById('autocomplete-dropdown');
-      dropdown.classList.add('hidden');
+      dropdown.classList.add('hidden'); // ซ่อน dropdown
     }
 
+    // ฟังก์ชันเลือกอาจารย์จาก autocomplete
+    // หน้าที่: ตั้งค่าชื่ออาจารย์ที่เลือกใน input และซ่อน dropdown
+    // การทำงาน: ใส่ชื่อใน input, ซ่อน dropdown, และบันทึกใน localStorage
+    // พารามิเตอร์: instructorName - ชื่ออาจารย์ที่เลือก
     function selectInstructor(instructorName) {
       const usernameInput = document.getElementById('username');
-      usernameInput.value = instructorName;
-      hideAutocomplete();
+      usernameInput.value = instructorName; // ใส่ชื่ออาจารย์ใน input
+      hideAutocomplete(); // ซ่อน dropdown
       
-      // Store selected instructor in localStorage for potential future use
+      // บันทึกอาจารย์ที่เลือกใน localStorage สำหรับใช้ในอนาคต
       localStorage.setItem('selectedInstructor', instructorName);
     }
 
-    // Update page content based on user type
+    // ฟังก์ชันอัปเดตเนื้อหาหน้าเว็บตามประเภทผู้ใช้
+    // หน้าที่: เปลี่ยนข้อความและ placeholder ตามว่าเป็นอาจารย์หรือนักศึกษา
+    // การทำงาน: ตรวจสอบประเภทผู้ใช้และอัปเดต element ต่างๆ ตามนั้น
     function updatePageContent() {
+      // ดึง element ต่างๆ ที่ต้องอัปเดต
       const titleElement = document.getElementById('loginTitle');
       const pageTitleElement = document.getElementById('pageTitle');
       const usernameInput = document.getElementById('username');
       
+      // ตั้งค่าเนื้อหาตามประเภทผู้ใช้
       if (userType === 'teacher') {
+        // สำหรับอาจารย์
         titleElement.textContent = 'เข้าสู่ระบบสำหรับอาจารย์';
         pageTitleElement.textContent = 'เข้าสู่ระบบอาจารย์ | มหาวิทยาลัยแม่โจ้';
         usernameInput.placeholder = 'พิมพ์ชื่ออาจารย์หรือคลิกเพื่อดูรายชื่อ';
       } else {
+        // สำหรับนักศึกษา
         titleElement.textContent = 'เข้าสู่ระบบสำหรับนักศึกษา';
         pageTitleElement.textContent = 'เข้าสู่ระบบนักศึกษา | มหาวิทยาลัยแม่โจ้';
         usernameInput.placeholder = 'ไม่จำเป็นต้องกรอก';
       }
     }
 
+    // ฟังก์ชันจัดการการเข้าสู่ระบบ
+    // หน้าที่: ประมวลผลการ login และนำทางไปหน้าที่เหมาะสม
+    // การทำงาน: บันทึกสถานะการ login, แสดงข้อความต้อนรับ, และ redirect
+    // พารามิเตอร์: event - event object จากการ submit form
     function login(event) {
-      event.preventDefault();
+      event.preventDefault(); // ป้องกันการ submit form แบบปกติ
       
-      // Set login status in localStorage
+      // บันทึกสถานะการ login ใน localStorage
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userType', userType);
       
-      // Store username if provided
+      // บันทึกชื่อผู้ใช้ถ้ามีการกรอก
       const username = document.getElementById('username').value;
       if (username) {
         localStorage.setItem('currentUser', username);
       }
       
-      // Allow login without checking username/password
-      // Show success message and redirect
+      // อนุญาตให้ login โดยไม่ตรวจสอบ username/password (สำหรับการสาธิต)
+      // สร้างข้อความต้อนรับตามประเภทผู้ใช้
       const welcomeMessage = userType === 'teacher' 
         ? `เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ${username ? ' ' + username : 'อาจารย์'}`
         : `เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับนักศึกษา`;
       
-      alert(welcomeMessage);
+      alert(welcomeMessage); // แสดงข้อความต้อนรับ
       
-      // Redirect to appropriate page based on user type
+      // นำทางไปหน้าที่เหมาะสมตามประเภทผู้ใช้
       if (userType === 'teacher') {
-        window.location.href = "mainpageprofessor.html";
+        window.location.href = "mainpageprofessor.html"; // หน้าหลักอาจารย์
       } else {
-        window.location.href = "mainpage.html";
+        window.location.href = "mainpage.html"; // หน้าหลักนักศึกษา
       }
     }
 
+    // ฟังก์ชันกลับไปหน้าหลัก
+    // หน้าที่: นำทางกลับไปหน้าหลักของระบบ
     function goBack() {
       window.location.href = "mainpage.html";
     }
 
-    // Initialize page when loaded
+    // ฟังก์ชันเริ่มต้นหน้าเว็บ
+    // หน้าที่: เรียกใช้ฟังก์ชันต่างๆ ที่จำเป็นเมื่อหน้าเว็บโหลดเสร็จ
+    // การทำงาน: อัปเดตเนื้อหา, เริ่มต้น autocomplete, และเริ่มต้นไอคอน
     document.addEventListener('DOMContentLoaded', () => {
-      updatePageContent();
-      initializeAutocomplete();
-      lucide.createIcons();
+      updatePageContent(); // อัปเดตเนื้อหาตามประเภทผู้ใช้
+      initializeAutocomplete(); // เริ่มต้นระบบ autocomplete
+      lucide.createIcons(); // เริ่มต้นไอคอน Lucide
     });
   </script>
 

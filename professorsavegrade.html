@@ -2,19 +2,26 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <!-- ส่วนหัวของเอกสาร HTML กำหนดข้อมูลพื้นฐานของหน้าเว็บ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>บันทึกเกรดรายบุคคล - ระบบจัดการการเรียนการสอน</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="data.js"></script>
+    
+    <!-- นำเข้า CSS Framework และ Library ต่างๆ -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS สำหรับจัดการสไตล์ -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script> <!-- Lucide Icons สำหรับไอคอน -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> <!-- XLSX สำหรับอ่านไฟล์ Excel -->
+    <script src="data.js"></script> <!-- ไฟล์ข้อมูลรายวิชาและนักศึกษา -->
+    
+    <!-- สไตล์เพิ่มเติม -->
     <style>
+        /* ซ่อนส่วนที่ไม่ต้องการเมื่อสั่งพิมพ์ */
         @media print {
             .no-print {
                 display: none !important;
             }
         }
+        /* ซ่อน input file เพื่อใช้ปุ่มกดแทน */
         .file-input {
             display: none;
         }
@@ -22,22 +29,27 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50">
     
-    <!-- Navbar Component -->
+    <!-- ส่วนหัวเว็บไซต์ (Navbar) - แถบเมนูด้านบน -->
     <header class="bg-green-800 text-white shadow-lg">
         <nav class="container mx-auto px-2 py-3">
+            <!-- ส่วนหลักของ Navigation Bar จัดวางแบบ flex space-between -->
             <div class="flex justify-between items-center">
+                <!-- ส่วนซ้าย: โลโก้และชื่อระบบ -->
                 <div class="flex items-center space-x-2">
+                    <!-- โลโก้มหาวิทยาลัย -->
                     <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
                          alt="Maejo University" 
                          class="h-12" />
+                    <!-- ชื่อระบบ (ซ่อนบนมือถือ แสดงบน tablet ขึ้นไป) -->
                     <div class="hidden md:flex flex-col">
                         <span class="font-bold text-lg">ระบบจัดการการเรียนการสอน</span>
                         <span class="text-sm">มหาวิทยาลัยแม่โจ้</span>
                     </div>
                 </div>
 
-                <!-- Desktop Navigation -->
+                <!-- เมนูสำหรับหน้าจอขนาดใหญ่ (Desktop) - ซ่อนบนมือถือ -->
                 <div class="hidden lg:flex items-center space-x-4">
+                    <!-- กลุ่มเมนูหลัก -->
                     <div class="flex space-x-2">
                         <a href="mainpageprofessor.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             หน้าหลัก
@@ -49,13 +61,17 @@
                             บันทึกเกรดรายบุคคล
                         </a>
                     </div>
+                    <!-- เส้นแบ่งระหว่างเมนูและส่วนโปรไฟล์ -->
                     <div class="border-l border-green-600 h-8"></div>
+                    <!-- ส่วนโปรไฟล์ผู้ใช้ (Dropdown) -->
                     <div class="relative">
+                        <!-- ปุ่มแสดงโปรไฟล์ -->
                         <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
                             <i data-lucide="user" size="18"></i>
                             <span id="professorName">อาจารย์</span>
                             <i data-lucide="chevron-down" size="16"></i>
                         </button>
+                        <!-- เมนู Dropdown ที่แสดงเมื่อคลิกปุ่มโปรไฟล์ -->
                         <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
                             <a href="#" onclick="navigateTo('profile')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                 <i data-lucide="user" size="16" class="inline mr-2"></i>
@@ -69,14 +85,14 @@
                     </div>
                 </div>
 
-                <!-- Mobile menu button -->
+                <!-- ปุ่มเมนูสำหรับมือถือ (แสดงเฉพาะบนหน้าจอเล็ก) -->
                 <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
                     <i id="menuIcon" data-lucide="menu" size="24"></i>
                     <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
                 </button>
             </div>
 
-            <!-- Mobile Navigation -->
+            <!-- เมนูสำหรับมือถือ (แสดงเมื่อกดปุ่มเมนู) -->
             <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
                 <div class="flex flex-col space-y-1">
                     <a href="mainpageprofessor.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
@@ -102,13 +118,16 @@
         </nav>
     </header>
 
-    <!-- Main Content -->
+    <!-- ส่วนเนื้อหาหลัก -->
     <main class="flex-grow container mx-auto px-4 py-8">
+        <!-- ส่วนหัวของหน้า: แสดงชื่อหน้าและปุ่มควบคุม -->
         <div class="flex justify-between items-center mb-6">
+            <!-- ส่วนซ้าย: หัวข้อและชื่ออาจารย์ -->
             <div>
                 <h1 class="text-3xl font-bold">บันทึกเกรดรายบุคคล</h1>
                 <p id="professorNameDisplay" class="text-lg text-gray-600 mt-2"></p>
             </div>
+            <!-- ส่วนขวา: ปุ่มพิมพ์และดาวน์โหลด (ซ่อนเมื่อสั่งพิมพ์) -->
             <div class="flex space-x-2 no-print">
                 <button onclick="handlePrint()" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                     <i data-lucide="printer" size="18" class="mr-1"></i>
@@ -121,9 +140,10 @@
             </div>
         </div>
 
-        <!-- Course Selection -->
+        <!-- ส่วนเลือกรายวิชา: ให้อาจารย์เลือกวิชาที่ต้องการบันทึกเกรด -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-bold mb-4">เลือกรายวิชา</h2>
+            <!-- จัดเรียงแบบ Grid: 1 คอลัมน์บนมือถือ, 2 คอลัมน์บนหน้าจอใหญ่ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">รายวิชาที่สอน</label>
@@ -141,12 +161,14 @@
             </div>
         </div>
 
-        <!-- Student List and Grades -->
+        <!-- ส่วนแสดงรายชื่อนักศึกษาและบันทึกเกรด (แสดงเมื่อเลือกรายวิชาแล้ว) -->
         <div id="studentGradeSection" class="bg-white rounded-lg shadow-md overflow-hidden hidden">
+            <!-- หัวตาราง: แสดงชื่อวิชาและรายละเอียด -->
             <div class="p-4 bg-green-700 text-white">
                 <h2 class="text-xl font-bold" id="courseTitle">รายชื่อนักศึกษาและเกรด</h2>
                 <p class="text-sm" id="courseDetails">ภาคการศึกษาที่ 1/2566</p>
             </div>
+            <!-- ตารางรายชื่อนักศึกษา (รองรับการเลื่อนแนวนอนบนมือถือ) -->
             <div class="p-4 overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
@@ -173,10 +195,11 @@
                         </tr>
                     </thead>
                     <tbody id="studentTableBody">
-                        <!-- Student list will be populated by JavaScript -->
+                        <!-- รายชื่อนักศึกษาจะถูกเติมด้วย JavaScript -->
                     </tbody>
                 </table>
             </div>
+            <!-- ส่วนล่างตาราง: แสดงสรุปจำนวนนักศึกษาและเกรดที่ใช้ -->
             <div class="p-4 bg-gray-50 border-t">
                 <div class="flex justify-between items-center">
                     <div class="text-sm text-gray-600">
@@ -189,9 +212,10 @@
             </div>
         </div>
 
-        <!-- Grade Statistics -->
+        <!-- ส่วนแสดงสถิติเกรด: แสดงจำนวนนักศึกษาที่ได้เกรดแต่ละระดับ -->
         <div id="gradeStatsSection" class="bg-white rounded-lg shadow-md p-6 mt-6 hidden">
             <h2 class="text-xl font-bold mb-4">สถิติเกรด</h2>
+            <!-- จัดเรียงแบบ Grid: 2 คอลัมน์บนมือถือ, 4 คอลัมน์บน tablet, 8 คอลัมน์บนหน้าจอใหญ่ -->
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
                 <div class="text-center">
                     <div class="text-2xl font-bold text-green-600" id="gradeA">0</div>
@@ -229,13 +253,16 @@
         </div>
     </main>
 
-    <!-- Hidden file inputs for Excel upload -->
+    <!-- Input file ที่ซ่อนไว้สำหรับอัปโหลดไฟล์ Excel -->
+    <!-- ใช้สำหรับอัปโหลดเกรดภาคเรียนที่ 1 -->
     <input type="file" id="fileInput-semester1" class="file-input" accept=".xlsx,.xls" onchange="handleFileUpload(event, 'semester1')">
+    <!-- ใช้สำหรับอัปโหลดเกรดภาคเรียนที่ 2 -->
     <input type="file" id="fileInput-semester2" class="file-input" accept=".xlsx,.xls" onchange="handleFileUpload(event, 'semester2')">
 
-    <!-- Footer Component -->
+    <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
     <footer class="bg-green-800 text-white py-6">
         <div class="container mx-auto px-4">
+            <!-- จัดเรียงแบบ flex: แนวตั้งบนมือถือ, แนวนอนบนหน้าจอใหญ่ -->
             <div class="flex flex-col md:flex-row justify-between">
                 <div class="mb-4 md:mb-0">
                     <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
@@ -281,45 +308,48 @@
     </footer>
 
     <script>
-        let currentCourse = null;
-        let currentSemester = 'semester1';
+        // ตัวแปรสำหรับเก็บข้อมูลรายวิชาปัจจุบันและภาคเรียนที่เลือก
+        let currentCourse = null; // รายวิชาที่เลือกในปัจจุบัน
+        let currentSemester = 'semester1'; // ภาคเรียนที่เลือก (เริ่มต้นเป็นภาคเรียนที่ 1)
 
-        // Get logged-in professor name from localStorage
+        // ฟังก์ชันดึงชื่ออาจารย์ที่ล็อกอินจาก localStorage
         function getLoggedInProfessor() {
+            // ดึงข้อมูลจาก localStorage โดยลองหาจากหลายๆ key
             return localStorage.getItem('currentUser') || localStorage.getItem('selectedInstructor') || 'ไม่ระบุ';
         }
 
-        // Update professor name display
+        // ฟังก์ชันอัปเดตการแสดงชื่ออาจารย์ในหน้าเว็บ
         function updateProfessorName() {
             const professorNameElement = document.getElementById('professorNameDisplay');
             const professorName = getLoggedInProfessor();
             professorNameElement.textContent = `อาจารย์: ${professorName}`;
         }
 
-        // Check if user is logged in
+        // ฟังก์ชันตรวจสอบสถานะการล็อกอิน
         function checkLoginStatus() {
-            const userType = localStorage.getItem('userType');
-            const username = getLoggedInProfessor();
+            const userType = localStorage.getItem('userType'); // ประเภทผู้ใช้
+            const username = getLoggedInProfessor(); // ชื่อผู้ใช้
             
+            // ตรวจสอบว่าเป็นอาจารย์หรือไม่
             if (userType !== 'teacher') {
                 alert('กรุณาเข้าสู่ระบบในฐานะอาจารย์');
                 window.location.href = 'login.html';
                 return false;
             }
             
-            // Keep professor name as "อาจารย์" for consistency in navbar
+            // ตั้งค่าชื่อในแถบเมนูให้เป็น "อาจารย์" เพื่อความสม่ำเสมอ
             const professorNameElement = document.getElementById('professorName');
             if (professorNameElement) {
                 professorNameElement.textContent = 'อาจารย์';
             }
             
-            // Update professor name display in main content
+            // อัปเดตการแสดงชื่ออาจารย์ในเนื้อหาหลัก
             updateProfessorName();
             
             return true;
         }
 
-        // Load courses that the logged-in professor teaches
+        // ฟังก์ชันโหลดรายวิชาที่อาจารย์ที่ล็อกอินสอน
         function loadProfessorCourses() {
             const username = getLoggedInProfessor();
             if (!username || username === 'ไม่ระบุ') return;
@@ -327,14 +357,15 @@
             const courseSelect = document.getElementById('courseSelect');
             courseSelect.innerHTML = '<option value="">เลือกรายวิชา</option>';
 
-            // Filter courses by instructor name
+            // กรองรายวิชาตามชื่ออาจารย์
             const professorCourses = courseData.filter(course => 
                 course.instructor.includes(username) || 
                 course.instructor === username ||
-                // For demo purposes, allow any professor to access any course
+                // สำหรับการสาธิต อนุญาตให้อาจารย์เข้าถึงรายวิชาทั้งหมด
                 true
             );
 
+            // เพิ่มรายวิชาลงใน dropdown
             professorCourses.forEach(course => {
                 const option = document.createElement('option');
                 option.value = course.code;
@@ -343,158 +374,188 @@
             });
         }
 
-        // Trigger file upload
+        // ฟังก์ชันเรียกใช้การอัปโหลดไฟล์
         function triggerFileUpload(semester) {
+            // ตรวจสอบว่าได้เลือกรายวิชาแล้วหรือไม่
             if (!currentCourse) {
                 alert('กรุณาเลือกรายวิชาก่อน');
                 return;
             }
+            // เรียกใช้ input file ที่ซ่อนไว้
             document.getElementById(`fileInput-${semester}`).click();
         }
 
-        // Handle file upload
+        // ฟังก์ชันจัดการการอัปโหลดไฟล์ Excel
         function handleFileUpload(event, semester) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const file = event.target.files[0]; // ไฟล์ที่เลือก
+            if (!file) return; // ถ้าไม่มีไฟล์ให้หยุด
 
-            const reader = new FileReader();
+            const reader = new FileReader(); // สร้าง FileReader สำหรับอ่านไฟล์
             reader.onload = function(e) {
                 try {
+                    // แปลงข้อมูลไฟล์เป็น array buffer
                     const data = new Uint8Array(e.target.result);
+                    // อ่านไฟล์ Excel ด้วย XLSX library
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const sheetName = workbook.SheetNames[0];
+                    const sheetName = workbook.SheetNames[0]; // ใช้ sheet แรก
                     const worksheet = workbook.Sheets[sheetName];
+                    // แปลงข้อมูลเป็น JSON array
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
+                    // ประมวลผลข้อมูล Excel
                     processExcelData(jsonData, semester);
                 } catch (error) {
                     alert('เกิดข้อผิดพลาดในการอ่านไฟล์ Excel: ' + error.message);
                 }
             };
+            // อ่านไฟล์เป็น array buffer
             reader.readAsArrayBuffer(file);
         }
 
-        // Process Excel data and convert scores to grades (Updated for column format)
+        // ฟังก์ชันประมวลผลข้อมูล Excel และแปลงคะแนนเป็นเกรด
         function processExcelData(data, semester) {
-            console.log('Excel data:', data); // Debug log
+            console.log('Excel data:', data); // บันทึกข้อมูลสำหรับ debug
             
+            // ตรวจสอบว่าไฟล์มีข้อมูลเพียงพอหรือไม่
             if (data.length < 2) {
                 alert('ไฟล์ Excel ต้องมีอย่างน้อย 2 แถว (หัวตารางและข้อมูล)');
                 return;
             }
 
-            let updatedCount = 0;
+            let updatedCount = 0; // นับจำนวนนักศึกษาที่อัปเดตเกรดสำเร็จ
             
-            // Your Excel format (column-based):
-            // Column A: no (1, 2, 3, ...)
-            // Column B: name (student names)
-            // Column C: score (numerical scores)
+            // รูปแบบไฟล์ Excel ที่คาดหวัง:
+            // คอลัมน์ A: ลำดับ (1, 2, 3, ...)
+            // คอลัมน์ B: ชื่อนักศึกษา
+            // คอลัมน์ C: คะแนน (ตัวเลข)
             
-            // Skip header row (row 0) and process data rows
+            // ข้ามแถวหัวตาราง (แถวที่ 0) และประมวลผลข้อมูลแถวอื่นๆ
             for (let row = 1; row < data.length; row++) {
-                const rowData = data[row];
+                const rowData = data[row]; // ข้อมูลในแถวปัจจุบัน
                 
+                // ข้ามแถวที่ไม่มีข้อมูลครบ
                 if (!rowData || rowData.length < 3) continue;
                 
-                const no = rowData[0]; // Column A: number
-                const name = rowData[1]; // Column B: name
-                const score = rowData[2]; // Column C: score
+                const no = rowData[0]; // คอลัมน์ A: ลำดับ
+                const name = rowData[1]; // คอลัมน์ B: ชื่อ
+                const score = rowData[2]; // คอลัมน์ C: คะแนน
                 
-                console.log(`Row ${row}: No=${no}, Name=${name}, Score=${score}`); // Debug log
+                console.log(`Row ${row}: No=${no}, Name=${name}, Score=${score}`); // บันทึกข้อมูลสำหรับ debug
                 
+                // ข้ามแถวที่ไม่มีชื่อหรือคะแนน
                 if (!name || score === undefined || score === null || score === '') continue;
                 
-                // Clean the name (remove extra spaces)
+                // ทำความสะอาดชื่อ (ลบช่องว่างส่วนเกิน)
                 const cleanName = String(name).trim();
                 
-                // Use the row index to match with student array
-                const studentIndex = row - 1; // Subtract 1 for header row
+                // ใช้ลำดับแถวเพื่อจับคู่กับรายชื่อนักศึกษา
+                const studentIndex = row - 1; // ลบ 1 เพราะแถวหัวตาราง
                 
-                // Check if this index is valid for the current course
+                // ตรวจสอบว่าลำดับนี้อยู่ในช่วงที่ถูกต้องหรือไม่
                 if (studentIndex >= 0 && studentIndex < currentCourse.students.length) {
                     const student = currentCourse.students[studentIndex];
                     
-                    // Convert score to grade
+                    // แปลงคะแนนเป็นเกรด
                     const grade = convertScoreToGrade(score);
-                    student.grades[semester] = grade;
-                    updatedCount++;
+                    student.grades[semester] = grade; // บันทึกเกรด
+                    updatedCount++; // เพิ่มจำนวนที่อัปเดตสำเร็จ
                     console.log(`Updated ${student.studentId} - ${student.name}: ${score} -> ${grade}`);
                 } else {
                     console.log(`Row ${row} is out of range for student list`);
                 }
             }
 
+            // แสดงผลลัพธ์การอัปเดต
             if (updatedCount > 0) {
                 alert(`อัปเดตเกรดสำเร็จ: ${updatedCount} คน`);
-                renderStudentTable();
-                updateGradeStatistics();
+                renderStudentTable(); // อัปเดตตาราง
+                updateGradeStatistics(); // อัปเดตสถิติ
             } else {
                 alert('ไม่พบข้อมูลนักศึกษาที่ตรงกัน กรุณาตรวจสอบชื่อนักศึกษาในไฟล์ Excel\n\nรูปแบบที่ถูกต้อง:\nคอลัมน์ A: ลำดับ (1, 2, 3, ...)\nคอลัมน์ B: ชื่อนักศึกษา\nคอลัมน์ C: คะแนน');
             }
 
-            // Clear file input
+            // ล้างค่า input file
             document.getElementById(`fileInput-${semester}`).value = '';
         }
 
-        // Convert numerical score to letter grade
+        // ฟังก์ชันแปลงคะแนนตัวเลขเป็นเกรดตัวอักษร
         function convertScoreToGrade(score) {
-            const numScore = parseFloat(score);
+            const numScore = parseFloat(score); // แปลงเป็นตัวเลข
             
+            // ถ้าไม่ใช่ตัวเลขให้เกรด F
             if (isNaN(numScore)) return 'F';
             
-            if (numScore >= 80) return 'A';
-            if (numScore >= 75) return 'B+';
-            if (numScore >= 70) return 'B';
-            if (numScore >= 65) return 'C+';
-            if (numScore >= 60) return 'C';
-            if (numScore >= 55) return 'D+';
-            if (numScore >= 50) return 'D';
-            return 'F';
+            // เกณฑ์การให้เกรด
+            if (numScore >= 80) return 'A';   // 80-100
+            if (numScore >= 75) return 'B+';  // 75-79
+            if (numScore >= 70) return 'B';   // 70-74
+            if (numScore >= 65) return 'C+';  // 65-69
+            if (numScore >= 60) return 'C';   // 60-64
+            if (numScore >= 55) return 'D+';  // 55-59
+            if (numScore >= 50) return 'D';   // 50-54
+            return 'F'; // ต่ำกว่า 50
         }
 
-        // Load student list for selected course
+        // ฟังก์ชันโหลดรายชื่อนักศึกษาสำหรับรายวิชาที่เลือก
+        // หน้าที่: แสดงรายชื่อนักศึกษาและเตรียมส่วนต่างๆ ของหน้าเว็บเมื่อเลือกรายวิชา
+        // การทำงาน: ดึงข้อมูลรายวิชา อัปเดตการแสดงผล และเรียกฟังก์ชันที่เกี่ยวข้อง
         function loadStudentList() {
+            // ดึงรหัสวิชาที่เลือกจาก dropdown
             const courseCode = document.getElementById('courseSelect').value;
+            
+            // ตรวจสอบว่าได้เลือกรายวิชาหรือไม่
             if (!courseCode) {
+                // ถ้าไม่ได้เลือก ให้ซ่อนส่วนแสดงรายชื่อนักศึกษาและสถิติเกรด
                 document.getElementById('studentGradeSection').classList.add('hidden');
                 document.getElementById('gradeStatsSection').classList.add('hidden');
-                return;
+                return; // หยุดการทำงานของฟังก์ชัน
             }
 
+            // ค้นหาข้อมูลรายวิชาจากรหัสวิชาที่เลือก
             currentCourse = courseData.find(course => course.code === courseCode);
-            if (!currentCourse) return;
+            if (!currentCourse) return; // ถ้าไม่พบรายวิชา ให้หยุดการทำงาน
 
-            // Update course title
+            // อัปเดตชื่อวิชาในหัวตาราง
             document.getElementById('courseTitle').textContent = 
                 `${currentCourse.code} - ${currentCourse.name}`;
+            // อัปเดตรายละเอียดวิชา (Section, ห้องเรียน, อาจารย์ผู้สอน)
             document.getElementById('courseDetails').textContent = 
                 `Section ${currentCourse.section} | ห้อง ${currentCourse.room} | อาจารย์ ${currentCourse.instructor}`;
 
-            // Update total students count
+            // อัปเดตจำนวนนักศึกษาทั้งหมดในรายวิชา
             document.getElementById('totalStudents').textContent = currentCourse.students.length;
 
-            // Render student table
+            // เรียกฟังก์ชันสร้างตารางแสดงรายชื่อนักศึกษา
             renderStudentTable();
 
-            // Show sections
+            // แสดงส่วนตารางนักศึกษาและส่วนสถิติเกรด
             document.getElementById('studentGradeSection').classList.remove('hidden');
             document.getElementById('gradeStatsSection').classList.remove('hidden');
 
-            // Update grade statistics
+            // อัปเดตสถิติการกระจายเกรด
             updateGradeStatistics();
         }
 
-        // Render student table
+        // ฟังก์ชันสร้างตารางแสดงรายชื่อนักศึกษา
+        // หน้าที่: สร้างและแสดงตารางรายชื่อนักศึกษาพร้อม dropdown สำหรับเลือกเกรด
+        // การทำงาน: วนลูปผ่านรายชื่อนักศึกษาและสร้าง HTML สำหรับแต่ละแถว
         function renderStudentTable() {
+            // ตรวจสอบว่ามีรายวิชาที่เลือกหรือไม่
             if (!currentCourse) return;
 
+            // ดึง element ของ tbody ในตาราง
             const tbody = document.getElementById('studentTableBody');
+            // ล้างเนื้อหาเดิมในตาราง
             tbody.innerHTML = '';
 
+            // วนลูปผ่านรายชื่อนักศึกษาทั้งหมดในรายวิชา
             currentCourse.students.forEach((student, index) => {
+                // สร้างแถวใหม่สำหรับนักศึกษาแต่ละคน
                 const row = document.createElement('tr');
+                // เพิ่ม CSS class สำหรับ hover effect
                 row.className = 'hover:bg-gray-50';
                 
+                // สร้าง HTML สำหรับแถวนักศึกษา
                 row.innerHTML = `
                     <td class="border p-3">${index + 1}</td>
                     <td class="border p-3 font-mono">${student.studentId}</td>
@@ -533,43 +594,61 @@
                     </td>
                 `;
                 
+                // เพิ่มแถวที่สร้างเข้าไปในตาราง
                 tbody.appendChild(row);
             });
         }
 
-        // Update grade when changed
+        // ฟังก์ชันอัปเดตเกรดเมื่อมีการเปลี่ยนแปลง
+        // หน้าที่: บันทึกเกรดใหม่เมื่อผู้ใช้เลือกเกรดจาก dropdown
+        // การทำงาน: ดึงข้อมูลจาก dropdown แล้วอัปเดตข้อมูลนักศึกษาและสถิติ
+        // พารามิเตอร์: selectElement - element ของ dropdown ที่ถูกเปลี่ยนแปลง
         function updateGrade(selectElement) {
+            // ดึงรหัสนักศึกษาจาก data attribute
             const studentId = selectElement.dataset.studentId;
+            // ดึงภาคเรียนจาก data attribute (semester1 หรือ semester2)
             const semester = selectElement.dataset.semester;
+            // ดึงเกรดที่เลือกจาก dropdown
             const grade = selectElement.value;
 
+            // ตรวจสอบว่ามีรายวิชาที่เลือกหรือไม่
             if (!currentCourse) return;
 
+            // ค้นหานักศึกษาจากรหัสนักศึกษา
             const student = currentCourse.students.find(s => s.studentId === studentId);
             if (student) {
+                // บันทึกเกรดใหม่ลงในข้อมูลนักศึกษา
                 student.grades[semester] = grade;
+                // อัปเดตสถิติเกรดทันที
                 updateGradeStatistics();
             }
         }
 
-        // Update grade statistics
+        // ฟังก์ชันอัปเดตสถิติการกระจายเกรด
+        // หน้าที่: คำนวณและแสดงจำนวนนักศึกษาที่ได้เกรดแต่ละระดับ
+        // การทำงาน: นับจำนวนเกรดแต่ละประเภทและอัปเดตการแสดงผลในส่วนสถิติ
         function updateGradeStatistics() {
+            // ตรวจสอบว่ามีรายวิชาที่เลือกหรือไม่
             if (!currentCourse) return;
 
+            // ดึงภาคเรียนที่เลือกจาก dropdown
             const selectedSemester = document.getElementById('semesterSelect').value;
+            // สร้าง array ของเกรดทั้งหมดในภาคเรียนที่เลือก (กรองเฉพาะที่มีเกรด)
             const grades = currentCourse.students.map(student => student.grades[selectedSemester]).filter(grade => grade);
 
+            // สร้าง object สำหรับนับจำนวนเกรดแต่ละประเภท
             const gradeCount = {
                 'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'D+': 0, 'D': 0, 'F': 0
             };
 
+            // วนลูปนับจำนวนเกรดแต่ละประเภท
             grades.forEach(grade => {
                 if (gradeCount.hasOwnProperty(grade)) {
-                    gradeCount[grade]++;
+                    gradeCount[grade]++; // เพิ่มจำนวนเกรดนั้นๆ
                 }
             });
 
-            // Update display
+            // อัปเดตการแสดงผลจำนวนเกรดแต่ละประเภทในหน้าเว็บ
             document.getElementById('gradeA').textContent = gradeCount['A'];
             document.getElementById('gradeBPlus').textContent = gradeCount['B+'];
             document.getElementById('gradeB').textContent = gradeCount['B'];
@@ -580,97 +659,129 @@
             document.getElementById('gradeF').textContent = gradeCount['F'];
         }
 
-        // Update grade columns based on selected semester
+        // ฟังก์ชันอัปเดตคอลัมนเกรดตามภาคเรียนที่เลือก
+        // หน้าที่: เปลี่ยนการแสดงสถิติเกรดเมื่อผู้ใช้เปลี่ยนภาคเรียน
+        // การทำงาน: อัปเดตตัวแปร currentSemester และเรียกฟังก์ชันอัปเดตสถิติ
         function updateGradeColumns() {
+            // อัปเดตภาคเรียนปัจจุบันตามที่ผู้ใช้เลือก
             currentSemester = document.getElementById('semesterSelect').value;
+            // อัปเดตสถิติเกรดใหม่ตามภาคเรียนที่เลือก
             updateGradeStatistics();
         }
 
-        // Save all grades
+        // ฟังก์ชันบันทึกเกรดทั้งหมด
+        // หน้าที่: บันทึกเกรดทั้งหมดของนักศึกษาในรายวิชา (สำหรับระบบจริง)
+        // การทำงาน: ตรวจสอบว่ามีรายวิชาที่เลือก แล้วแสดงข้อความยืนยัน
         function saveAllGrades() {
+            // ตรวจสอบว่าได้เลือกรายวิชาแล้วหรือไม่
             if (!currentCourse) {
                 alert('กรุณาเลือกรายวิชาก่อน');
                 return;
             }
 
-            // In a real application, this would send data to a server
+            // ในระบบจริงจะส่งข้อมูลไปยังเซิร์ฟเวอร์
             alert('บันทึกเกรดเรียบร้อยแล้ว');
         }
 
-        // Export grades
+        // ฟังก์ชันส่งออกข้อมูลเกรด
+        // หน้าที่: ส่งออกข้อมูลเกรดเป็นไฟล์ (สำหรับระบบจริง)
+        // การทำงาน: ตรวจสอบว่ามีรายวิชาที่เลือก แล้วแสดงข้อความแจ้งเตือน
         function exportGrades() {
+            // ตรวจสอบว่าได้เลือกรายวิชาแล้วหรือไม่
             if (!currentCourse) {
                 alert('กรุณาเลือกรายวิชาก่อน');
                 return;
             }
 
-            // In a real application, this would generate and download a file
+            // ในระบบจริงจะสร้างและดาวน์โหลดไฟล์
             alert('ฟีเจอร์ส่งออกข้อมูลจะพัฒนาในอนาคต');
         }
 
-        // Handle print functionality
+        // ฟังก์ชันจัดการการพิมพ์
+        // หน้าที่: เปิดหน้าต่างพิมพ์ของเบราว์เซอร์
+        // การทำงาน: เรียกใช้ฟังก์ชัน window.print() ของเบราว์เซอร์
         function handlePrint() {
-            window.print();
+            window.print(); // เปิดหน้าต่างพิมพ์
         }
 
-        // Handle download functionality
+        // ฟังก์ชันจัดการการดาวน์โหลด PDF
+        // หน้าที่: ดาวน์โหลดหน้าเว็บเป็นไฟล์ PDF (สำหรับระบบจริง)
+        // การทำงาน: แสดงข้อความแจ้งเตือนว่าฟีเจอร์ยังไม่พร้อมใช้งาน
         function handleDownload() {
             alert('ฟีเจอร์ดาวน์โหลด PDF จะพัฒนาในอนาคต');
         }
 
-        // Navigation functionality (for profile link)
+        // ฟังก์ชันนำทางไปหน้าต่างๆ
+        // หน้าที่: จัดการนำทางไปยังหน้าต่างๆ ในระบบ
+        // การทำงาน: ตรวจสอบหน้าที่ต้องการไปและดำเนินการตามนั้น
+        // พารามิเตอร์: page - ชื่อหน้าที่ต้องการนำทางไป
         function navigateTo(page) {
             if (page === 'profile') {
+                // หน้าโปรไฟล์ยังไม่พร้อมใช้งาน
                 alert('หน้าโปรไฟล์อยู่ระหว่างการพัฒนา');
             }
         }
 
-        // Logout functionality
+        // ฟังก์ชันออกจากระบบ
+        // หน้าที่: จัดการการออกจากระบบของผู้ใช้
+        // การทำงาน: ยืนยันการออกจากระบบ ลบข้อมูลจาก localStorage และนำทางกลับหน้าหลัก
         function logout() {
+            // ยืนยันการออกจากระบบ
             if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                // ลบข้อมูลการล็อกอินทั้งหมดจาก localStorage
                 localStorage.removeItem('userType');
                 localStorage.removeItem('currentUser');
                 localStorage.removeItem('selectedInstructor');
+                // นำทางกลับไปหน้าหลัก
                 window.location.href = 'mainpage.html';
             }
         }
 
-        // Initialize dropdowns and mobile menu
+        // ฟังก์ชันเริ่มต้น dropdown และเมนูมือถือ
+        // หน้าที่: ตั้งค่า event listener สำหรับ dropdown โปรไฟล์และเมนูมือถือ
+        // การทำงาน: เพิ่ม event listener สำหรับการคลิกและจัดการการแสดง/ซ่อนเมนู
         function initializeDropdowns() {
-            // Profile dropdown
+            // ตั้งค่า Profile dropdown
             const profileDropdownBtn = document.getElementById('profileDropdownBtn');
             const profileDropdown = document.getElementById('profileDropdown');
             
+            // ตรวจสอบว่า element มีอยู่จริง
             if (profileDropdownBtn && profileDropdown) {
+                // เพิ่ม event listener สำหรับการคลิกปุ่มโปรไฟล์
                 profileDropdownBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    profileDropdown.classList.toggle('hidden');
+                    e.preventDefault(); // ป้องกันการ refresh หน้า
+                    profileDropdown.classList.toggle('hidden'); // สลับการแสดง/ซ่อน dropdown
                 });
 
-                // Close dropdown when clicking outside
+                // ปิด dropdown เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
+                    // ตรวจสอบว่าคลิกนอกพื้นที่ dropdown หรือไม่
                     if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-                        profileDropdown.classList.add('hidden');
+                        profileDropdown.classList.add('hidden'); // ซ่อน dropdown
                     }
                 });
             }
 
-            // Mobile menu
+            // ตั้งค่าเมนูมือถือ
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
             const menuIcon = document.getElementById('menuIcon');
             const closeIcon = document.getElementById('closeIcon');
-            let isMenuOpen = false;
+            let isMenuOpen = false; // ตัวแปรเก็บสถานะเมนู
 
+            // ตรวจสอบว่า element มีอยู่จริง
             if (mobileMenuBtn) {
+                // เพิ่ม event listener สำหรับการคลิกปุ่มเมนูมือถือ
                 mobileMenuBtn.addEventListener('click', () => {
-                    isMenuOpen = !isMenuOpen;
+                    isMenuOpen = !isMenuOpen; // สลับสถานะเมนู
                     
                     if (isMenuOpen) {
+                        // แสดงเมนูและเปลี่ยนไอคอน
                         mobileMenu.classList.remove('hidden');
                         menuIcon.classList.add('hidden');
                         closeIcon.classList.remove('hidden');
                     } else {
+                        // ซ่อนเมนูและเปลี่ยนไอคอน
                         mobileMenu.classList.add('hidden');
                         menuIcon.classList.remove('hidden');
                         closeIcon.classList.add('hidden');
@@ -679,25 +790,36 @@
             }
         }
 
-        // Set current year in footer
+        // ฟังก์ชันตั้งค่าปีปัจจุบันใน footer
+        // หน้าที่: แสดงปีปัจจุบันในส่วน copyright ของ footer
+        // การทำงาน: ดึงปีปัจจุบันจากระบบและแสดงใน element ที่กำหนด
         function setCurrentYear() {
             const currentYearElement = document.getElementById('currentYear');
             if (currentYearElement) {
+                // ตั้งค่าปีปัจจุบัน
                 currentYearElement.textContent = new Date().getFullYear();
             }
         }
 
-        // Initialize the page
+        // ฟังก์ชันเริ่มต้นหน้าเว็บ
+        // หน้าที่: เรียกใช้ฟังก์ชันต่างๆ ที่จำเป็นเมื่อหน้าเว็บโหลดเสร็จ
+        // การทำงาน: ตรวจสอบการล็อกอิน โหลดข้อมูล และเริ่มต้นส่วนประกอบต่างๆ
         function init() {
+            // ตรวจสอบสถานะการล็อกอิน หากไม่ผ่านให้หยุดการทำงาน
             if (!checkLoginStatus()) return;
             
+            // โหลดรายวิชาที่อาจารย์สอน
             loadProfessorCourses();
+            // เริ่มต้น dropdown และเมนูต่างๆ
             initializeDropdowns();
+            // ตั้งค่าปีปัจจุบัน
             setCurrentYear();
+            // เริ่มต้นไอคอน Lucide
             lucide.createIcons();
         }
 
-        // Run initialization when page loads
+        // เรียกใช้ฟังก์ชันเริ่มต้นเมื่อหน้าเว็บโหลดเสร็จ
+        // Event listener นี้จะรอให้ DOM โหลดเสร็จก่อนเรียกใช้ฟังก์ชัน init
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

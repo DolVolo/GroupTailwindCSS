@@ -1,12 +1,16 @@
+<!--หน้าลงทะเบียนเรียน-->
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียนเรียน - ระบบทะเบียนนักศึกษา</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="data.js"></script>
+    <!-- ส่วนหัวของเอกสาร HTML กำหนดข้อมูลพื้นฐานของหน้าเว็บ -->
+    <meta charset="UTF-8"> <!-- กำหนดการเข้ารหัสอักขระเป็น UTF-8 สำหรับรองรับภาษาไทย -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- กำหนดขนาดการแสดงผลให้เหมาะสมกับอุปกรณ์ -->
+    <title>ลงทะเบียนเรียน - ระบบทะเบียนนักศึกษา</title> <!-- หัวข้อหน้าเว็บที่แสดงบน Tab ของ Browser -->
+    
+    <!-- นำเข้า CSS Framework และ Library ต่างๆ -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS สำหรับจัดการสไตล์ -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script> <!-- Lucide Icons สำหรับไอคอน -->
+    <script src="data.js"></script> <!-- ไฟล์ข้อมูลรายวิชาและอาจารย์ -->
 </head>
 <body class="bg-gray-50">
     <!-- Navbar -->
@@ -289,11 +293,13 @@
     </footer>
 
     <script>
-        // Use course data from external file
+        // ใช้ข้อมูลรายวิชาจากไฟล์ภายนอก data.js
         const sampleCourses = courseData;
-        let cartItems = [];
+        let cartItems = []; // ตะกร้ารายวิชาที่เลือก
 
-        // Course Registration functionality
+        // ฟังก์ชันเริ่มต้นระบบลงทะเบียนเรียน
+        // หน้าที่: ตั้งค่า event listener สำหรับการค้นหาและจัดการตะกร้ารายวิชา
+        // การทำงาน: เพิ่ม event listener ให้กับช่องค้นหา ปุ่มล้าง และอัปเดตตะกร้า
         function initializeCourseRegistration() {
             const searchInput = document.getElementById('courseSearchInput');
             const clearBtn = document.getElementById('clearCourseSearch');
@@ -334,9 +340,14 @@
             updateCourseCart();
         }
 
+        // ฟังก์ชันแสดงผลการค้นหารายวิชา
+        // หน้าที่: สร้าง HTML สำหรับแสดงรายวิชาที่ค้นหาเจอ
+        // การทำงาน: วนลูปสร้างการ์ดรายวิชา พร้อมปุ่มเพิ่ม/ลบ
+        // พารามิเตอร์: courses - อาร์เรย์ของรายวิชาที่จะแสดง
         function renderCourseResults(courses) {
             const resultsDiv = document.getElementById('courseSearchResults');
             
+            // ถ้าไม่พบรายวิชา แสดงข้อความแจ้ง
             if (courses.length === 0) {
                 resultsDiv.innerHTML = `
                     <div class="bg-white p-6 rounded-lg shadow-md text-center">

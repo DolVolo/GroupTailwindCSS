@@ -2,19 +2,27 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="data.js"></script>
+    <!-- ส่วนหัวของเอกสาร HTML กำหนดข้อมูลพื้นฐานของหน้าเว็บ -->
+    <meta charset="UTF-8"> <!-- กำหนดการเข้ารหัสอักขระเป็น UTF-8 สำหรับรองรับภาษาไทย -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- กำหนดขนาดการแสดงผลให้เหมาะสมกับอุปกรณ์ -->
+    <title>ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้</title> <!-- หัวข้อหน้าเว็บที่แสดงบน Tab ของ Browser -->
+    
+    <!-- นำเข้า CSS Framework และ Library ต่างๆ -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS สำหรับจัดการสไตล์ -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script> <!-- Lucide Icons สำหรับไอคอน -->
+    <script src="data.js"></script> <!-- ไฟล์ข้อมูลรายวิชาและอาจารย์ -->
+    
+    <!-- สไตล์เพิ่มเติมสำหรับการแสดงผลหน้าต่างๆ -->
     <style>
+        /* ซ่อนเนื้อหาหน้าทั้งหมดโดยค่าเริ่มต้น */
         .page-content {
             display: none;
         }
+        /* แสดงเฉพาะหน้าที่มี class active */
         .page-content.active {
             display: block;
         }
+        /* ซ่อน element ที่มี class no-print เมื่อพิมพ์ */
         @media print {
             .no-print {
                 display: none !important;
@@ -23,10 +31,10 @@
     </style>
 </head>
 <body>
-    <!-- App Component Structure with Layout -->
+    <!-- โครงสร้างหลักของแอปพลิเคชัน: ใช้ Flexbox แบบ column เต็มความสูงหน้าจอ -->
     <div class="flex flex-col min-h-screen bg-gray-50">
         
-        <!-- Navbar Component -->
+        <!-- ส่วน Navbar: แถบนำทางด้านบนของเว็บไซต์ -->
         <header class="bg-green-800 text-white shadow-lg">
             <nav class="container mx-auto px-2 py-3">
                 <div class="flex justify-between items-center">
@@ -185,17 +193,17 @@
             </nav>
         </header>
 
-        <!-- Main Content Area (Routes) -->
+        <!-- ส่วนเนื้อหาหลัก: แสดงหน้าต่างๆ ตามการนำทาง (Single Page Application) -->
         <main class="flex-grow w-full">
             
-            <!-- Home Page -->
+            <!-- หน้าหลัก: แสดงเมื่อเข้าเว็บไซต์ครั้งแรก -->
             <div id="page-home" class="page-content active">
                 <div class="bg-gray-50 min-h-screen">
-                    <!-- Hero Section with Background Carousel -->
+                    <!-- ส่วน Hero: แสดงภาพสไลด์และข้อความต้อนรับ -->
                     <div class="relative bg-black text-white py-20 md:py-32 lg:py-48 overflow-hidden">
-                        <!-- Background Carousel -->
+                        <!-- ระบบ Carousel: แสดงภาพหมุนเวียนอัตโนมัติ -->
                         <div id="carouselContainer" class="absolute inset-0">
-                            <!-- Black Overlay -->
+                            <!-- ชั้นสีดำโปร่งแสง: ทำให้ข้อความอ่านง่ายขึ้น -->
                             <div class="absolute inset-0 bg-black opacity-50 z-[5]"></div>
                             
                             <!-- Slides -->
@@ -645,69 +653,78 @@
     </div>
 
     <script>
-        // Use course data from external file
+        // ใช้ข้อมูลรายวิชาจากไฟล์ภายนอก data.js
         const sampleCourses = courseData;
 
-        // Registered courses for schedule
-        const registeredCourses = [sampleCourses[0], sampleCourses[2]]; // CS101 and CS103
-        let cartItems = [];
-        let currentPage = 'home';
+        // รายวิชาที่ลงทะเบียนแล้วสำหรับแสดงในตารางเรียน
+        const registeredCourses = [sampleCourses[0], sampleCourses[2]]; // CS101 และ CS103
+        let cartItems = []; // ตะกร้ารายวิชาที่เลือก
+        let currentPage = 'home'; // หน้าปัจจุบันที่แสดง
 
-        // Navigation functionality
+        // ฟังก์ชันนำทางไปยังหน้าต่างๆ
+        // หน้าที่: เปลี่ยนหน้าที่แสดงตาม page ที่ระบุ
+        // การทำงาน: ซ่อนหน้าทั้งหมด แสดงเฉพาะหน้าที่เลือก อัปเดตเมนู
+        // พารามิเตอร์: page - ชื่อหน้าที่ต้องการแสดง
         function navigateTo(page) {
-            // Special case for academic-calendar - redirect to datestudy.html
+            // กรณีพิเศษ: ปฏิทินการศึกษา - เปลี่ยนไปหน้า datestudy.html
             if (page === 'academic-calendar') {
                 window.location.href = 'datestudy.html';
                 return;
             }
             
-            // Special case for table-class-use - redirect to tableclassuse.html
+            // กรณีพิเศษ: ตารางการใช้ห้อง - เปลี่ยนไปหน้า tableclassuse.html
             if (page === 'table-class-use') {
                 window.location.href = 'tableclassuse.html';
                 return;
             }
             
-            // Hide all pages
+            // ซ่อนหน้าทั้งหมด
             document.querySelectorAll('.page-content').forEach(content => {
                 content.classList.remove('active');
             });
             
-            // Show selected page
+            // แสดงหน้าที่เลือก
             const targetPage = document.getElementById(`page-${page}`);
             if (targetPage) {
                 targetPage.classList.add('active');
                 currentPage = page;
             }
             
-            // Update navigation active states
+            // อัปเดตสถานะ active ของเมนูนำทาง
             updateNavigation(page);
             
-            // Close mobile menu
+            // ปิดเมนูมือถือ
             closeMobileMenu();
             
-            // Initialize page-specific functionality
+            // เริ่มต้นฟังก์ชันเฉพาะของแต่ละหน้า
             if (page === 'course-registration') {
                 initializeCourseRegistration();
             } else if (page === 'class-schedule') {
                 initializeClassSchedule();
             }
             
-            // Update page title
+            // อัปเดตหัวข้อหน้าเว็บ
             updatePageTitle(page);
         }
 
+        // ฟังก์ชันอัปเดตเมนูนำทาง
+        // หน้าที่: เปลี่ยนสีพื้นหลังของเมนูที่ active
+        // พารามิเตอร์: page - ชื่อหน้าปัจจุบัน
         function updateNavigation(page) {
-            // Remove active class from all nav links
+            // ลบ class active จากทุกลิงก์
             document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
                 link.classList.remove('bg-green-700');
             });
             
-            // Add active class to current page links
+            // เพิ่ม class active ให้ลิงก์ของหน้าปัจจุบัน
             document.querySelectorAll(`[data-page="${page}"]`).forEach(link => {
                 link.classList.add('bg-green-700');
             });
         }
 
+        // ฟังก์ชันอัปเดตหัวข้อหน้าเว็บ
+        // หน้าที่: เปลี่ยน title ของ browser tab ตามหน้าที่แสดง
+        // พารามิเตอร์: page - ชื่อหน้าปัจจุบัน
         function updatePageTitle(page) {
             const pageTitles = {
                 'home': 'ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้',
@@ -721,33 +738,39 @@
             document.title = pageTitles[page] || 'ระบบทะเบียนนักศึกษา - มหาวิทยาลัยแม่โจ้';
         }
 
-        // Mobile menu functionality
+        // ฟังก์ชันจัดการเมนูมือถือ
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
         const closeIcon = document.getElementById('closeIcon');
-        let isMenuOpen = false;
+        let isMenuOpen = false; // สถานะการเปิด/ปิดเมนู
 
+        // เพิ่ม event listener สำหรับปุ่มเมนูมือถือ
         mobileMenuBtn.addEventListener('click', () => {
-            isMenuOpen = !isMenuOpen;
+            isMenuOpen = !isMenuOpen; // สลับสถานะเมนู
             
             if (isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                menuIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
+                // เปิดเมนู
+                mobileMenu.classList.remove('hidden'); // แสดงเมนู
+                menuIcon.classList.add('hidden'); // ซ่อนไอคอนเมนู
+                closeIcon.classList.remove('hidden'); // แสดงไอคอนปิด
             } else {
-                closeMobileMenu();
+                closeMobileMenu(); // ปิดเมนู
             }
         });
 
+        // ฟังก์ชันปิดเมนูมือถือ
+        // หน้าที่: ปิดเมนูและรีเซ็ตไอคอน
         function closeMobileMenu() {
-            isMenuOpen = false;
-            mobileMenu.classList.add('hidden');
-            menuIcon.classList.remove('hidden');
-            closeIcon.classList.add('hidden');
+            isMenuOpen = false; // ตั้งสถานะเป็นปิด
+            mobileMenu.classList.add('hidden'); // ซ่อนเมนู
+            menuIcon.classList.remove('hidden'); // แสดงไอคอนเมนู
+            closeIcon.classList.add('hidden'); // ซ่อนไอคอนปิด
         }
 
-        // Course Registration functionality
+        // ฟังก์ชันเริ่มต้นระบบลงทะเบียนเรียน
+        // หน้าที่: ตั้งค่า event listener สำหรับการค้นหาและจัดการตะกร้ารายวิชา
+        // การทำงาน: เพิ่ม event listener ให้กับช่องค้นหา ปุ่มล้าง และอัปเดตตะกร้า
         function initializeCourseRegistration() {
             const searchInput = document.getElementById('courseSearchInput');
             const clearBtn = document.getElementById('clearCourseSearch');
