@@ -28,11 +28,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-15', time: '09:00-12:00', room: 'CS-201' },
-            final: { date: '2024-05-20', time: '09:00-12:00', room: 'CS-201' }
-        }
+        }))
     },
     {
         code: 'CS102',
@@ -62,11 +58,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-16', time: '13:00-16:00', room: 'CS-202' },
-            final: { date: '2024-05-21', time: '13:00-16:00', room: 'CS-202' }
-        }
+        }))
     },
     {
         code: 'CS103',
@@ -95,11 +87,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-17', time: '09:00-12:00', room: 'CS-301' },
-            final: { date: '2024-05-22', time: '09:00-12:00', room: 'CS-301' }
-        }
+        }))
     },
     {
         code: 'CS104',
@@ -129,11 +117,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-18', time: '13:00-16:00', room: 'CS-203' },
-            final: { date: '2024-05-23', time: '13:00-16:00', room: 'CS-203' }
-        }
+        }))
     },
     {
         code: 'CS105',
@@ -163,11 +147,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-19', time: '09:00-12:00', room: 'CS-204' },
-            final: { date: '2024-05-24', time: '09:00-12:00', room: 'CS-204' }
-        }
+        }))
     },
     {
         code: 'CS106',
@@ -196,11 +176,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-20', time: '13:00-16:00', room: 'CS-302' },
-            final: { date: '2024-05-25', time: '13:00-16:00', room: 'CS-302' }
-        }
+        }))
     },
     {
         code: 'CS107',
@@ -230,11 +206,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-21', time: '09:00-12:00', room: 'CS-205' },
-            final: { date: '2024-05-26', time: '09:00-12:00', room: 'CS-205' }
-        }
+        }))
     },
     {
         code: 'CS108',
@@ -264,11 +236,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-22', time: '13:00-16:00', room: 'CS-206' },
-            final: { date: '2024-05-27', time: '13:00-16:00', room: 'CS-206' }
-        }
+        }))
     },
     {
         code: 'CS109',
@@ -297,11 +265,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-15', time: '13:00-16:00', room: 'CS-303' },
-            final: { date: '2024-05-20', time: '13:00-16:00', room: 'CS-303' }
-        }
+        }))
     },
     {
         code: 'CS110',
@@ -330,11 +294,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-16', time: '09:00-12:00', room: 'CS-304' },
-            final: { date: '2024-05-21', time: '09:00-12:00', room: 'CS-304' }
-        }
+        }))
     },
     {
         code: 'CS111',
@@ -363,11 +323,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-17', time: '13:00-16:00', room: 'CS-305' },
-            final: { date: '2024-05-22', time: '13:00-16:00', room: 'CS-305' }
-        }
+        }))
     },
     {
         code: 'CS112',
@@ -396,11 +352,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-18', time: '09:00-12:00', room: 'CS-306' },
-            final: { date: '2024-05-23', time: '09:00-12:00', room: 'CS-306' }
-        }
+        }))
     },
     {
         code: 'CS113',
@@ -429,11 +381,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-19', time: '13:00-16:00', room: 'CS-307' },
-            final: { date: '2024-05-24', time: '13:00-16:00', room: 'CS-307' }
-        }
+        }))
     },
     {
         code: 'CS114',
@@ -462,11 +410,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-20', time: '09:00-12:00', room: 'CS-308' },
-            final: { date: '2024-05-25', time: '09:00-12:00', room: 'CS-308' }
-        }
+        }))
     },
     {
         code: 'CS115',
@@ -495,11 +439,7 @@ const courseData = [
             studentId: `6704101${String(i + 1).padStart(3, '0')}`,
             name: 'none none',
             grades: { semester1: '', semester2: '' }
-        })),
-        exams: {
-            midterm: { date: '2024-03-21', time: '13:00-16:00', room: 'CS-309' },
-            final: { date: '2024-05-26', time: '13:00-16:00', room: 'CS-309' }
-        }
+        }))
     }
 ];
 
