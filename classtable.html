@@ -230,11 +230,11 @@
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="bg-gray-50">
-                            <th class="border p-2">รหัสวิชา</th>
-                            <th class="border p-2">ชื่อวิชา</th>
-                            <th class="border p-2">วันที่</th>
-                            <th class="border p-2">เวลา</th>
-                            <th class="border p-2">ห้องสอบ</th>
+                            <th class="border p-3 min-w-[100px]">รหัสวิชา</th>
+                            <th class="border p-3 min-w-[200px]">ชื่อวิชา</th>
+                            <th class="border p-3 min-w-[150px]">วันที่</th>
+                            <th class="border p-3 min-w-[100px]">เวลา</th>
+                            <th class="border p-3 min-w-[100px]">ห้องสอบ</th>
                         </tr>
                     </thead>
                     <tbody id="examTableBody">
@@ -249,16 +249,16 @@
             <div class="p-4 bg-green-700 text-white">
                 <h2 class="text-xl font-bold">สรุปรายวิชาที่ลงทะเบียน</h2>
             </div>
-            <div class="p-4">
+            <div class="p-4 overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="bg-gray-50">
-                            <th class="border p-2">รหัสวิชา</th>
-                            <th class="border p-2">ชื่อวิชา</th>
-                            <th class="border p-2">Section</th>
-                            <th class="border p-2">หน่วยกิต</th>
-                            <th class="border p-2">อาจารย์ผู้สอน</th>
-                            <th class="border p-2 no-print">จัดการ</th>
+                            <th class="border p-3 min-w-[100px]">รหัสวิชา</th>
+                            <th class="border p-3 min-w-[200px]">ชื่อวิชา</th>
+                            <th class="border p-3 min-w-[80px]">Section</th>
+                            <th class="border p-3 min-w-[80px]">หน่วยกิต</th>
+                            <th class="border p-3 min-w-[150px]">อาจารย์ผู้สอน</th>
+                            <th class="border p-3 min-w-[80px] no-print">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody id="courseSummaryBody">
@@ -420,11 +420,11 @@
                         const midtermDate = new Date(course.exams.midterm.date);
                         html += `
                             <tr>
-                                <td class="border p-2 font-medium">${course.code}</td>
-                                <td class="border p-2">${course.name}</td>
-                                <td class="border p-2">${midtermDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (กลางภาค)</td>
-                                <td class="border p-2">${course.exams.midterm.time}</td>
-                                <td class="border p-2">${course.exams.midterm.room}</td>
+                                <td class="border p-3 font-medium">${course.code}</td>
+                                <td class="border p-3">${course.name}</td>
+                                <td class="border p-3">${midtermDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (กลางภาค)</td>
+                                <td class="border p-3">${course.exams.midterm.time}</td>
+                                <td class="border p-3">${course.exams.midterm.room}</td>
                             </tr>
                         `;
                     }
@@ -433,11 +433,11 @@
                         const finalDate = new Date(course.exams.final.date);
                         html += `
                             <tr>
-                                <td class="border p-2 font-medium">${course.code}</td>
-                                <td class="border p-2">${course.name}</td>
-                                <td class="border p-2">${finalDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (ปลายภาค)</td>
-                                <td class="border p-2">${course.exams.final.time}</td>
-                                <td class="border p-2">${course.exams.final.room}</td>
+                                <td class="border p-3 font-medium">${course.code}</td>
+                                <td class="border p-3">${course.name}</td>
+                                <td class="border p-3">${finalDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (ปลายภาค)</td>
+                                <td class="border p-3">${course.exams.final.time}</td>
+                                <td class="border p-3">${course.exams.final.room}</td>
                             </tr>
                         `;
                     }
@@ -464,12 +464,12 @@
 
             let html = registeredCourses.map(course => `
                 <tr>
-                    <td class="border p-2 font-medium">${course.code}</td>
-                    <td class="border p-2">${course.name}</td>
-                    <td class="border p-2 text-center">${course.section}</td>
-                    <td class="border p-2 text-center">${course.credits}</td>
-                    <td class="border p-2">${course.instructor}</td>
-                    <td class="border p-2 text-center no-print">
+                    <td class="border p-3 font-medium">${course.code}</td>
+                    <td class="border p-3">${course.name}</td>
+                    <td class="border p-3 text-center">${course.section}</td>
+                    <td class="border p-3 text-center">${course.credits}</td>
+                    <td class="border p-3">${course.instructor}</td>
+                    <td class="border p-3 text-center no-print">
                         <button onclick="removeCourse('${course.code}')" class="text-red-500 hover:text-red-700 p-1">
                             <i data-lucide="trash-2" size="18"></i>
                         </button>
@@ -479,10 +479,10 @@
 
             html += `
                 <tr class="bg-gray-50 font-bold">
-                    <td colspan="3" class="border p-2 text-right">รวมหน่วยกิต</td>
-                    <td class="border p-2 text-center">${totalCredits}</td>
-                    <td class="border p-2"></td>
-                    <td class="border p-2"></td>
+                    <td colspan="3" class="border p-3 text-right">รวมหน่วยกิต</td>
+                    <td class="border p-3 text-center">${totalCredits}</td>
+                    <td class="border p-3"></td>
+                    <td class="border p-3"></td>
                 </tr>
             `;
 

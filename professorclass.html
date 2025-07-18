@@ -209,16 +209,16 @@
                         <h2 class="text-xl font-bold">สรุปรายวิชาที่สอน</h2>
                     </div>
                     <!-- ตารางสรุป -->
-                    <div class="p-4">
+                    <div class="p-4 overflow-x-auto">
                         <table class="w-full border-collapse">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th class="border p-2">รหัสวิชา</th>
-                                    <th class="border p-2">ชื่อวิชา</th>
-                                    <th class="border p-2">Section</th>
-                                    <th class="border p-2">หน่วยกิต</th>
-                                    <th class="border p-2">ห้องเรียน</th>
-                                    <th class="border p-2">จำนวนนักศึกษา</th>
+                                    <th class="border p-3 min-w-[100px]">รหัสวิชา</th>
+                                    <th class="border p-3 min-w-[200px]">ชื่อวิชา</th>
+                                    <th class="border p-3 min-w-[80px]">Section</th>
+                                    <th class="border p-3 min-w-[80px]">หน่วยกิต</th>
+                                    <th class="border p-3 min-w-[100px]">ห้องเรียน</th>
+                                    <th class="border p-3 min-w-[120px]">จำนวนนักศึกษา</th>
                                 </tr>
                             </thead>
                             <tbody id="courseSummaryBody">
@@ -421,12 +421,12 @@
                 const enrolledStudents = course.seats.total - course.seats.available;
                 return `
                     <tr>
-                        <td class="border p-2 font-medium">${course.code}</td>
-                        <td class="border p-2">${course.name}</td>
-                        <td class="border p-2 text-center">${course.section}</td>
-                        <td class="border p-2 text-center">${course.credits}</td>
-                        <td class="border p-2 text-center">${course.room}</td>
-                        <td class="border p-2 text-center">${enrolledStudents}/${course.seats.total}</td>
+                        <td class="border p-3 font-medium">${course.code}</td>
+                        <td class="border p-3">${course.name}</td>
+                        <td class="border p-3 text-center">${course.section}</td>
+                        <td class="border p-3 text-center">${course.credits}</td>
+                        <td class="border p-3 text-center">${course.room}</td>
+                        <td class="border p-3 text-center">${enrolledStudents}/${course.seats.total}</td>
                     </tr>
                 `;
             }).join('');
@@ -434,10 +434,10 @@
             // เพิ่มแถวสรุปรวม
             html += `
                 <tr class="bg-gray-50 font-bold">
-                    <td colspan="3" class="border p-2 text-right">รวม</td>
-                    <td class="border p-2 text-center">${totalCredits} หน่วยกิต</td>
-                    <td class="border p-2 text-center">${professorCourses.length} ห้อง</td>
-                    <td class="border p-2 text-center">${totalStudents} คน</td>
+                    <td colspan="3" class="border p-3 text-right">รวม</td>
+                    <td class="border p-3 text-center">${totalCredits} หน่วยกิ���</td>
+                    <td class="border p-3 text-center">${professorCourses.length} ห้อง</td>
+                    <td class="border p-3 text-center">${totalStudents} คน</td>
                 </tr>
             `;
 
