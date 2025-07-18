@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายวิชาที่สอน - ระบบทะเบียนนักศึกษา</title>
+    <!-- นำเข้า Tailwind CSS สำหรับจัดการสไตล์ -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- นำเข้า Lucide Icons สำหรับไอคอนต่างๆ -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- นำเข้าไฟล์ข้อมูลรายวิชา -->
     <script src="data.js"></script>
     <style>
+        /* ซ่อนส่วนที่ไม่ต้องการเมื่อสั่งพิมพ์ */
         @media print {
             .no-print {
                 display: none !important;
@@ -17,13 +21,14 @@
     </style>
 </head>
 <body>
-    <!-- App Component Structure with Layout -->
+    <!-- โครงสร้างหลักของแอปพลิเคชัน ใช้ flex เพื่อให้ footer อยู่ด้านล่างเสมอ -->
     <div class="flex flex-col min-h-screen bg-gray-50">
         
-        <!-- Navbar Component -->
+        <!-- ส่วนหัวเว็บไซต์ (Navbar) สำหรับอาจารย์ -->
         <header class="bg-green-800 text-white shadow-lg">
             <nav class="container mx-auto px-4 py-3">
                 <div class="flex justify-between items-center">
+                    <!-- โลโก้และชื่อระบบ -->
                     <div class="flex items-center space-x-2">
                         <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
                              alt="Maejo University" 
@@ -34,27 +39,32 @@
                         </div>
                     </div>
 
-                    <!-- Desktop Navigation -->
+                    <!-- เมนูสำหรับหน้าจอคอมพิวเตอร์ (Desktop Navigation) -->
                     <div class="hidden lg:flex items-center space-x-4">
+                        <!-- รายการเมนูหลักสำหรับอาจารย์ -->
                         <div class="flex space-x-2">
                             <a href="mainpageprofessor.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                                 หน้าหลัก
                             </a>
+                            <!-- รายวิชาที่สอน (หน้าปัจจุบัน - แสดงสีเข้ม) -->
                             <a href="professorclass.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
                                 รายวิชาที่สอน
                             </a>
                             <a href="professorsavegrade.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                                 บันทึกเกรดรายบุคคล
                             </a>
-
                         </div>
+                        <!-- เส้นแบ่งระหว่างเมนูและปุ่มเข้าสู่ระบบ -->
                         <div class="border-l border-green-600 h-8"></div>
+                        
+                        <!-- ส่วนเข้าสู่ระบบ (แสดงเมื่อยังไม่ได้ล็อกอิน) -->
                         <div class="relative" id="loginSection">
                             <button id="loginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
                                 <i data-lucide="user" size="18"></i>
                                 <span>เข้าสู่ระบบ</span>
                                 <i data-lucide="chevron-down" size="16"></i>
                             </button>
+                            <!-- เมนูแบบดรอปดาวน์สำหรับเลือกประเภทผู้ใช้ -->
                             <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
                                 <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                     <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
@@ -66,12 +76,15 @@
                                 </a>
                             </div>
                         </div>
+                        
+                        <!-- ส่วนโปรไฟล์ (แสดงเมื่อล็อกอินแล้ว) -->
                         <div class="relative hidden" id="profileSection">
                             <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
                                 <i data-lucide="user" size="18"></i>
                                 <span>อาจารย์</span>
                                 <i data-lucide="chevron-down" size="16"></i>
                             </button>
+                            <!-- เมนูแบบดรอปดาวน์สำหรับจัดการโปรไฟล์ -->
                             <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
                                 <a href="#" onclick="navigateToMainPage('profile')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                     <i data-lucide="user" size="16" class="inline mr-2"></i>
@@ -85,16 +98,17 @@
                         </div>
                     </div>
 
-                    <!-- Mobile menu button -->
+                    <!-- ปุ่มเมนูสำหรับมือถือ -->
                     <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
                         <i id="menuIcon" data-lucide="menu" size="24"></i>
                         <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
                     </button>
                 </div>
 
-                <!-- Mobile Navigation -->
+                <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเมื่อกดปุ่มเมนู) -->
                 <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
                     <div class="flex flex-col space-y-1">
+                        <!-- รายการเมนูเหมือนกับเมนูหลัก แต่จัดเรียงแนวตั้ง -->
                         <a href="mainpageprofessor.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             หน้าหลัก
                         </a>
@@ -104,10 +118,11 @@
                         <a href="professorsavegrade.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             บันทึกเกรดรายบุคคล
                         </a>
-
                         <a href="#" onclick="navigateToMainPage('profile')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             โปรไฟล์
                         </a>
+                        
+                        <!-- ส่วนเข้าสู่ระบบสำหรับมือถือ -->
                         <div class="relative mt-2" id="mobileLoginSection">
                             <button id="mobileLoginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition w-full">
                                 <i data-lucide="user" size="18"></i>
@@ -125,6 +140,7 @@
                                 </a>
                             </div>
                         </div>
+                        <!-- ปุ่มออกจากระบบสำหรับมือถือ -->
                         <div class="relative mt-2 hidden" id="mobileProfileSection">
                             <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-green-600 rounded hover:bg-green-700 transition w-full">
                                 <i data-lucide="log-out" size="18"></i>
@@ -136,14 +152,17 @@
             </nav>
         </header>
 
-        <!-- Main Content Area -->
+        <!-- ส่วนเนื้อหาหลัก -->
         <main class="flex-grow w-full">
             <div class="container mx-auto px-4 py-8">
+                <!-- หัวข้อหน้าและส่วนควบคุม -->
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h1 class="text-3xl font-bold">รายวิชาที่สอน</h1>
+                        <!-- แสดงชื่ออาจารย์ที่ล็อกอิน -->
                         <p id="professorName" class="text-lg text-gray-600 mt-2"></p>
                     </div>
+                    <!-- ปุ่มพิมพ์และดาวน์โหลด -->
                     <div class="flex space-x-2 no-print">
                         <button onclick="handlePrint()" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                             <i data-lucide="printer" size="18" class="mr-1"></i>
@@ -156,12 +175,14 @@
                     </div>
                 </div>
 
-                <!-- Teaching Schedule -->
+                <!-- ตารางสอนประจำสัปดาห์ -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+                    <!-- หัวตาราง -->
                     <div class="p-4 bg-green-700 text-white">
                         <h2 class="text-xl font-bold">ตารางสอนประจำสัปดาห์</h2>
                         <p class="text-sm">ภาคการศึกษาที่ 1/2566</p>
                     </div>
+                    <!-- ตัวตาราง -->
                     <div class="p-4 overflow-x-auto">
                         <table class="w-full border-collapse">
                             <thead>
@@ -175,17 +196,19 @@
                                 </tr>
                             </thead>
                             <tbody id="scheduleTableBody">
-                                <!-- Schedule will be populated by JavaScript -->
+                                <!-- ตารางจะถูกสร้างด้วย JavaScript -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Course Summary -->
+                <!-- สรุปรายวิชาที่สอน -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- หัวข้อสรุป -->
                     <div class="p-4 bg-green-700 text-white">
                         <h2 class="text-xl font-bold">สรุปรายวิชาที่สอน</h2>
                     </div>
+                    <!-- ตารางสรุป -->
                     <div class="p-4">
                         <table class="w-full border-collapse">
                             <thead>
@@ -199,23 +222,24 @@
                                 </tr>
                             </thead>
                             <tbody id="courseSummaryBody">
-                                <!-- Course summary will be populated by JavaScript -->
+                                <!-- ตารางสรุปจะถูกสร้างด้วย JavaScript -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Course Details -->
+                <!-- รายละเอียดรายวิชา -->
                 <div id="courseDetailsSection" class="mt-8">
-                    <!-- Course details will be populated by JavaScript -->
+                    <!-- รายละเอียดแต่ละรายวิชาจะถูกสร้างด้วย JavaScript -->
                 </div>
             </div>
         </main>
 
-        <!-- Footer Component -->
+        <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
         <footer class="bg-green-800 text-white py-6">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-between">
+                    <!-- ข้อมูลมหาวิทยาลัย -->
                     <div class="mb-4 md:mb-0">
                         <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
                         <p class="text-sm">
@@ -223,12 +247,14 @@
                         </p>
                         <p class="text-sm">โทรศัพท์: 053-873000</p>
                     </div>
+                    <!-- ข้อมูลติดต่อ -->
                     <div class="mb-4 md:mb-0">
                         <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
                         <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
                         <p class="text-sm">โทรศัพท์: 053-873460</p>
                         <p class="text-sm">อีเมล: academic@mju.ac.th</p>
                     </div>
+                    <!-- ลิงก์ช่วยเหลือ -->
                     <div>
                         <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
                         <ul class="text-sm">
@@ -250,6 +276,7 @@
                         </ul>
                     </div>
                 </div>
+                <!-- ลิขสิทธิ์ -->
                 <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
                     <p>
                         &copy; <span id="currentYear"></span> ระบบจัดการการเรียนการสอน
@@ -261,27 +288,30 @@
     </div>
 
     <script>
-        // Get logged-in professor name from localStorage
+        // ฟังก์ชันดึงชื่ออาจารย์ที่ล็อกอินจาก localStorage
         function getLoggedInProfessor() {
             return localStorage.getItem('currentUser') || localStorage.getItem('selectedInstructor') || 'ไม่ระบุ';
         }
 
-        // Get courses taught by the logged-in professor
+        // ฟังก์ชันดึงรายวิชาที่อาจารย์ที่ล็อกอินสอน
         function getProfessorCourses() {
+            // ตรวจสอบว่าข้อมูลรายวิชาโหลดแล้วหรือยัง
             if (typeof courseData === 'undefined') {
                 console.error('Course data not loaded');
                 return [];
             }
 
             const professorName = getLoggedInProfessor();
+            // กรองรายวิชาที่อาจารย์คนนี้สอน
             return courseData.filter(course => course.instructor === professorName);
         }
 
+        // กำหนดวันและเวลาที่ใช้ในตาราง
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
-        const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8:00 to 19:00
+        const hours = Array.from({ length: 12 }, (_, i) => i + 8); // สร้างอาร์เรย์เวลา 8:00-19:00
 
-        // Get color for a course (consistently)
+        // ฟังก์ชันกำหนดสีสำหรับแต่ละรายวิชา
         function getCourseColor(courseCode) {
             const colors = [
                 'bg-blue-100 border-blue-300 text-blue-800',
@@ -293,14 +323,15 @@
                 'bg-red-100 border-red-300 text-red-800',
                 'bg-orange-100 border-orange-300 text-orange-800'
             ];
-            // Use the course code to determine a consistent color
+            // ใช้รหัสวิชาเพื่อกำหนดสีที่สม่ำเสมอ
             const index = parseInt(courseCode.replace('CS', '')) % colors.length;
             return colors[index];
         }
 
-        // Check if a course is scheduled at a specific day and hour
+        // ฟังก์ชันหารายวิชาที่สอนในเวลาที่กำหนด
         function getCourseAtTime(day, hour, professorCourses) {
             return professorCourses.filter(course => {
+                // ตรวจสอบว่ามีการสอนในวันและเวลาที่กำหนดหรือไม่
                 return course.time.some(timeSlot => {
                     if (timeSlot.day !== day) return false;
                     const startHour = parseInt(timeSlot.start.split(':')[0]);
@@ -310,19 +341,20 @@
             });
         }
 
-        // Calculate if a course spans multiple hours
+        // ฟังก์ชันคำนวณจำนวนชั่วโมงที่รายวิชาใช้
         function getCourseTimespan(course, day, hour) {
             const timeSlot = course.time.find(t => t.day === day);
             if (!timeSlot) return 1;
             const startHour = parseInt(timeSlot.start.split(':')[0]);
             const endHour = parseInt(timeSlot.end.split(':')[0]);
+            // คืนค่าจำนวนชั่วโมงถ้าเป็นชั่วโมงเริ่มต้น
             if (hour === startHour) {
                 return endHour - startHour;
             }
-            return 0; // Not the start hour
+            return 0; // ไม่ใช่ชั่วโมงเริ่มต้น
         }
 
-        // Convert day name from English to Thai
+        // ฟังก์ชันแปลงชื่อวันจากภาษาอังกฤษเป็นไทย
         function getDayNameThai(englishDay) {
             const dayMap = {
                 'Monday': 'จันทร์',
@@ -334,24 +366,28 @@
             return dayMap[englishDay] || englishDay;
         }
 
-        // Render the schedule table
+        // ฟังก์ชันสร้างตารางสอนประจำสัปดาห์
         function renderScheduleTable() {
             const tbody = document.getElementById('scheduleTableBody');
             const professorCourses = getProfessorCourses();
             let html = '';
 
+            // วนลูปสร้างแถวสำหรับแต่ละชั่วโมง
             hours.forEach(hour => {
                 html += '<tr>';
                 html += `<td class="border p-2 text-center bg-gray-50 font-medium">${hour}:00 - ${hour + 1}:00</td>`;
                 
+                // วนลูปสร้างคอลัมน์สำหรับแต่ละวัน
                 days.forEach(day => {
                     const coursesAtTime = getCourseAtTime(day, hour, professorCourses);
                     if (coursesAtTime.length === 0) {
+                        // ถ้าไม่มีรายวิชา แสดงเซลล์ว่าง
                         html += `<td class="border p-2"></td>`;
                     } else {
+                        // ถ้ามีรายวิชา แสดงข้อมูลรายวิชา
                         coursesAtTime.forEach(course => {
                             const timespan = getCourseTimespan(course, day, hour);
-                            if (timespan === 0) return; // Skip if not the start hour
+                            if (timespan === 0) return; // ข้ามถ้าไม่ใช่ชั่วโมงเริ่มต้น
                             
                             const colorClass = getCourseColor(course.code);
                             const timeSlot = course.time.find(t => t.day === day);
@@ -372,13 +408,15 @@
             tbody.innerHTML = html;
         }
 
-        // Render the course summary table
+        // ฟังก์ชันสร้างตารางสรุปรายวิชาที่สอน
         function renderCourseSummary() {
             const tbody = document.getElementById('courseSummaryBody');
             const professorCourses = getProfessorCourses();
+            // คำนวณหน่วยกิตรวมและจำนวนนักศึกษารวม
             const totalCredits = professorCourses.reduce((sum, course) => sum + course.credits, 0);
             const totalStudents = professorCourses.reduce((sum, course) => sum + (course.seats.total - course.seats.available), 0);
 
+            // สร้างแถวสำหรับแต่ละรายวิชา
             let html = professorCourses.map(course => {
                 const enrolledStudents = course.seats.total - course.seats.available;
                 return `
@@ -393,6 +431,7 @@
                 `;
             }).join('');
 
+            // เพิ่มแถวสรุปรวม
             html += `
                 <tr class="bg-gray-50 font-bold">
                     <td colspan="3" class="border p-2 text-right">รวม</td>
@@ -405,11 +444,12 @@
             tbody.innerHTML = html;
         }
 
-        // Render course details
+        // ฟังก์ชันสร้างรายละเอียดรายวิชา
         function renderCourseDetails() {
             const section = document.getElementById('courseDetailsSection');
             const professorCourses = getProfessorCourses();
 
+            // ถ้าไม่มีรายวิชา แสดงข้อความแจ้งเตือน
             if (professorCourses.length === 0) {
                 section.innerHTML = `
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -430,20 +470,25 @@
                 return;
             }
 
+            // สร้างการ์ดรายละเอียดสำหรับแต่ละรายวิชา
             let html = professorCourses.map(course => {
                 const enrolledStudents = course.seats.total - course.seats.available;
+                // สร้างข้อความตารางเวลา
                 const timeSchedule = course.time.map(time => 
                     `${getDayNameThai(time.day)} ${time.start}-${time.end} น.`
                 ).join(', ');
 
                 return `
                     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                        <!-- หัวการ์ด -->
                         <div class="p-4 bg-gradient-to-r from-green-600 to-green-700 text-white">
                             <h3 class="text-xl font-bold">${course.code} - ${course.name}</h3>
                             <p class="text-sm opacity-90">Section ${course.section} • ${course.credits} หน่วยกิต</p>
                         </div>
+                        <!-- เนื้อหาการ์ด -->
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- การ์ดเวลาเรียน -->
                                 <div class="bg-blue-50 p-4 rounded-lg">
                                     <div class="flex items-center">
                                         <i data-lucide="clock" class="h-5 w-5 text-blue-600 mr-2"></i>
@@ -451,6 +496,7 @@
                                     </div>
                                     <p class="text-sm text-blue-700 mt-2">${timeSchedule}</p>
                                 </div>
+                                <!-- การ์ดห้องเรียน -->
                                 <div class="bg-green-50 p-4 rounded-lg">
                                     <div class="flex items-center">
                                         <i data-lucide="map-pin" class="h-5 w-5 text-green-600 mr-2"></i>
@@ -458,12 +504,14 @@
                                     </div>
                                     <p class="text-sm text-green-700 mt-2">${course.room}</p>
                                 </div>
+                                <!-- การ์ดจำนวนนักศึกษา -->
                                 <div class="bg-purple-50 p-4 rounded-lg">
                                     <div class="flex items-center">
                                         <i data-lucide="users" class="h-5 w-5 text-purple-600 mr-2"></i>
                                         <h4 class="font-semibold text-purple-800">นักศึกษา</h4>
                                     </div>
                                     <p class="text-sm text-purple-700 mt-2">${enrolledStudents}/${course.seats.total} คน</p>
+                                    <!-- แถบแสดงเปอร์เซ็นต์ -->
                                     <div class="w-full bg-purple-200 rounded-full h-2 mt-2">
                                         <div class="bg-purple-600 h-2 rounded-full" style="width: ${(enrolledStudents/course.seats.total)*100}%"></div>
                                     </div>
@@ -477,37 +525,41 @@
             section.innerHTML = html;
         }
 
-        // Update professor name display
+        // ฟังก์ชันอัปเดตการแสดงชื่ออาจารย์
         function updateProfessorName() {
             const professorNameElement = document.getElementById('professorName');
             const professorName = getLoggedInProfessor();
             professorNameElement.textContent = `อาจารย์: ${professorName}`;
         }
 
-        // Navigation function to redirect to mainpageprofessor.html with specific page
+        // ฟังก์ชันนำทางไปหน้าหลักอาจารย์พร้อมระบุหน้าที่ต้องการ
         function navigateToMainPage(page) {
             window.location.href = `mainpageprofessor.html#${page}`;
         }
 
-        // Mobile menu functionality
+        // จัดการเมนูมือถือ
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
         const closeIcon = document.getElementById('closeIcon');
         let isMenuOpen = false;
 
+        // เมื่อคลิกปุ่มเมนู
         mobileMenuBtn.addEventListener('click', () => {
             isMenuOpen = !isMenuOpen;
             
             if (isMenuOpen) {
+                // เปิดเมนู
                 mobileMenu.classList.remove('hidden');
                 menuIcon.classList.add('hidden');
                 closeIcon.classList.remove('hidden');
             } else {
+                // ปิดเมนู
                 closeMobileMenu();
             }
         });
 
+        // ฟังก์ชันปิดเมนูมือถือ
         function closeMobileMenu() {
             isMenuOpen = false;
             mobileMenu.classList.add('hidden');
@@ -515,20 +567,21 @@
             closeIcon.classList.add('hidden');
         }
 
-        // Login dropdown functionality
+        // ฟังก์ชันจัดการดรอปดาวน์ล็อกอิน
         function initializeLoginDropdown() {
             const dropdownBtn = document.getElementById('loginDropdownBtn');
             const dropdown = document.getElementById('loginDropdown');
             const mobileDropdownBtn = document.getElementById('mobileLoginDropdownBtn');
             const mobileDropdown = document.getElementById('mobileLoginDropdown');
             
+            // ดรอปดาวน์สำหรับเดสก์ท็อป
             if (dropdownBtn && dropdown) {
                 dropdownBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     dropdown.classList.toggle('hidden');
                 });
 
-                // Close dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
                         dropdown.classList.add('hidden');
@@ -536,13 +589,14 @@
                 });
             }
 
+            // ดรอปดาวน์สำหรับมือถือ
             if (mobileDropdownBtn && mobileDropdown) {
                 mobileDropdownBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     mobileDropdown.classList.toggle('hidden');
                 });
 
-                // Close mobile dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!mobileDropdownBtn.contains(e.target) && !mobileDropdown.contains(e.target)) {
                         mobileDropdown.classList.add('hidden');
@@ -551,7 +605,7 @@
             }
         }
 
-        // Profile dropdown functionality
+        // ฟังก์ชันจัดการดรอปดาวน์โปรไฟล์
         function initializeProfileDropdown() {
             const profileDropdownBtn = document.getElementById('profileDropdownBtn');
             const profileDropdown = document.getElementById('profileDropdown');
@@ -562,7 +616,7 @@
                     profileDropdown.classList.toggle('hidden');
                 });
 
-                // Close dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
                         profileDropdown.classList.add('hidden');
@@ -571,19 +625,22 @@
             }
         }
 
-        // Logout functionality
+        // ฟังก์ชันออกจากระบบ
         function logout() {
             if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                // ลบข้อมูลการล็อกอินออกจาก localStorage
                 localStorage.removeItem('userType');
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('currentUser');
                 localStorage.removeItem('selectedInstructor');
+                // แสดงส่วนล็อกอิน
                 showLoginSection();
+                // กลับไปหน้าหลัก
                 window.location.href = 'mainpage.html';
             }
         }
 
-        // Show/Hide login and profile sections
+        // ฟังก์ชันแสดงส่วนล็อกอิน (ยังไม่ได้ล็อกอิน)
         function showLoginSection() {
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('profileSection').classList.add('hidden');
@@ -591,6 +648,7 @@
             document.getElementById('mobileProfileSection').classList.add('hidden');
         }
 
+        // ฟังก์ชันแสดงส่วนโปรไฟล์ (ล็อกอินแล้ว)
         function showProfileSection() {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('profileSection').classList.remove('hidden');
@@ -598,11 +656,12 @@
             document.getElementById('mobileProfileSection').classList.remove('hidden');
         }
 
-        // Check if user is logged in
+        // ฟังก์ชันตรวจสอบสถานะการล็อกอิน
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const userType = localStorage.getItem('userType');
             
+            // ถ้าล็อกอินแล้วและเป็นอาจารย์
             if (isLoggedIn === 'true' && userType === 'teacher') {
                 showProfileSection();
             } else {
@@ -610,22 +669,22 @@
             }
         }
 
-        // Handle print functionality
+        // ฟังก์ชันจัดการการพิมพ์
         function handlePrint() {
             window.print();
         }
 
-        // Handle download functionality
+        // ฟังก์ชันจัดการการดาวน์โหลด
         function handleDownload() {
             alert('ฟีเจอร์ดาวน์โหลด PDF จะพัฒนาในอนาคต');
         }
 
-        // Go back to previous page
+        // ฟังก์ชันกลับไปหน้าก่อนหน้า
         function goBack() {
             window.history.back();
         }
 
-        // Initialize the page
+        // ฟังก์ชันเริ่มต้นเนื้อหาหน้า
         function init() {
             updateProfessorName();
             renderScheduleTable();
@@ -634,23 +693,23 @@
             lucide.createIcons();
         }
 
-        // Initialize the app
+        // ฟังก์ชันเริ่มต้นแอปพลิเคชัน
         function initializeApp() {
-            // Set current year
+            // ตั้งค่าปีปัจจุบันใน footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
-            // Check login status first
+            // ตรวจสอบสถานะการล็อกอิน
             checkLoginStatus();
             
-            // Initialize navigation functions
+            // เริ่มต้นฟังก์ชันนำทาง
             initializeLoginDropdown();
             initializeProfileDropdown();
             
-            // Initialize main content
+            // เริ่มต้นเนื้อหาหลัก
             init();
         }
 
-        // Run initialization when page loads
+        // เรียกใช้เมื่อหน้าเว็บโหลดเสร็จ
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
