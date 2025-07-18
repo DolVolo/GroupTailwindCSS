@@ -5,17 +5,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ตารางการใช้ห้อง - ระบบทะเบียนนักศึกษา</title>
+  <!-- นำเข้า Tailwind CSS สำหรับจัดการสไตล์ -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- นำเข้า Lucide Icons สำหรับไอคอนต่างๆ -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* ซ่อนส่วนที่ไม่ต้องการเมื่อสั่งพิมพ์ */
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+    }
+  </style>
 </head>
 <body>
-    <!-- App Component Structure with Layout -->
+    <!-- โครงสร้างหลักของแอปพลิเคชัน ใช้ flex เพื่อให้ footer อยู่ด้านล่างเสมอ -->
     <div class="flex flex-col min-h-screen bg-gray-50">
         
-        <!-- Navbar Component -->
+        <!-- ส่วนหัวเว็บไซต์ (Navbar) -->
         <header class="bg-green-800 text-white shadow-lg">
             <nav class="container mx-auto px-2 py-3">
                 <div class="flex justify-between items-center">
+                    <!-- โลโก้และชื่อมหาวิทยาลัย -->
                     <div class="flex items-center space-x-2">
                         <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/1200px-MJU_LOGO.svg.png" 
                              alt="Maejo University" 
@@ -26,8 +37,9 @@
                         </div>
                     </div>
 
-                    <!-- Desktop Navigation -->
+                    <!-- เมนูสำหรับหน้าจอคอมพิวเตอร์ (Desktop Navigation) -->
                     <div class="hidden lg:flex items-center space-x-4">
+                        <!-- รายการเมนูหลัก -->
                         <div class="flex space-x-2">
                             <a href="mainpage.html" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                                 หน้าหลัก
@@ -53,17 +65,22 @@
                             <a href="#" onclick="showUnderDevelopment('สถานะการลงทะเบียน')" class="nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             สถานะการลงทะเบียน
                             </a>
+                            <!-- ตารางการใช้ห้อง (หน้าปัจจุบัน - แสดงสีเข้ม) -->
                             <a href="tableclassuse.html" class="nav-link px-3 py-2 rounded bg-green-700 transition">
                                 ตารางการใช้ห้อง
                             </a>
                         </div>
+                        <!-- เส้นแบ่งระหว่างเมนูและปุ่มเข้าสู่ระบบ -->
                         <div class="border-l border-green-600 h-8"></div>
+                        
+                        <!-- ส่วนเข้าสู่ระบบ (แสดงเมื่อยังไม่ได้ล็อกอิน) -->
                         <div class="relative" id="loginSection">
                             <button id="loginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
                                 <i data-lucide="user" size="18"></i>
                                 <span>เข้าสู่ระบบ</span>
                                 <i data-lucide="chevron-down" size="16"></i>
                             </button>
+                            <!-- เมนูแบบดรอปดาวน์สำหรับเลือกประเภทผู้ใช้ -->
                             <div id="loginDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
                                 <a href="#" onclick="navigateToLogin('student')" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                     <i data-lucide="graduation-cap" size="16" class="inline mr-2"></i>
@@ -75,12 +92,15 @@
                                 </a>
                             </div>
                         </div>
+                        
+                        <!-- ส่วนโปรไฟล์ (แสดงเมื่อล็อกอินแล้ว) -->
                         <div class="relative hidden" id="profileSection">
                             <button id="profileDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition">
                                 <i data-lucide="user" size="18"></i>
                                 <span>นักศึกษา</span>
                                 <i data-lucide="chevron-down" size="16"></i>
                             </button>
+                            <!-- เมนูแบบดรอปดาวน์สำหรับจัดการโปรไฟล์ -->
                             <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
                                 <a href="mainpage.html" class="block px-4 py-2 text-gray-700 hover:bg-green-50 rounded-t-lg">
                                     <i data-lucide="user" size="16" class="inline mr-2"></i>
@@ -94,16 +114,17 @@
                         </div>
                     </div>
 
-                    <!-- Mobile menu button -->
+                    <!-- ปุ่มเมนูสำหรับมือถือ -->
                     <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-white hover:bg-green-700 focus:outline-none">
                         <i id="menuIcon" data-lucide="menu" size="24"></i>
                         <i id="closeIcon" data-lucide="x" size="24" class="hidden"></i>
                     </button>
                 </div>
 
-                <!-- Mobile Navigation -->
+                <!-- เมนูสำหรับหน้าจอมือถือ (ซ่อนไว้ แสดงเมื่อกดปุ่มเมนู) -->
                 <div id="mobileMenu" class="lg:hidden mt-2 py-2 border-t border-green-700 hidden">
                     <div class="flex flex-col space-y-1">
+                        <!-- รายการเมนูเหมือนกับเมนูหลัก แต่จัดเรียงแนวตั้ง -->
                         <a href="mainpage.html" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             หน้าหลัก
                         </a>
@@ -143,6 +164,7 @@
                         <a href="#" onclick="showUnderDevelopment('โปรไฟล์')" class="mobile-nav-link px-3 py-2 rounded hover:bg-green-700 transition">
                             โปรไฟล์
                         </a>
+                        <!-- ส่วนเข้าสู่ระบบสำหรับมือถือ -->
                         <div class="relative mt-2" id="mobileLoginSection">
                             <button id="mobileLoginDropdownBtn" class="flex items-center space-x-1 px-3 py-2 bg-green-700 rounded hover:bg-green-600 transition w-full">
                                 <i data-lucide="user" size="18"></i>
@@ -160,6 +182,7 @@
                                 </a>
                             </div>
                         </div>
+                        <!-- ปุ่มออกจากระบบสำหรับมือถือ -->
                         <div class="relative mt-2 hidden" id="mobileProfileSection">
                             <button onclick="logout()" class="flex items-center space-x-1 px-3 py-2 bg-green-600 rounded hover:bg-green-700 transition w-full">
                                 <i data-lucide="log-out" size="18"></i>
@@ -171,174 +194,72 @@
             </nav>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-grow w-full">
-            <!-- Schedule Table -->
-            <div class="container mx-auto my-10 bg-white p-6 rounded shadow">
-                <h2 class="text-xl font-bold text-green-700 mb-4">ตารางการใช้ห้อง</h2>
+        <!-- ส่วนเนื้อหาหลัก -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <!-- หัวข้อหน้าและส่วนควบคุม -->
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold">ตารางการใช้ห้อง</h1>
+                <div class="flex space-x-2 no-print">
+                    <!-- ดรอปดาวน์เลือกห้องเรียน -->
+                    <select id="roomSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <option value="">เลือกห้องเรียน</option>
+                        <!-- ตัวเลือกห้องจะถูกเพิ่มด้วย JavaScript -->
+                    </select>
+                    <!-- ปุ่มพิมพ์ -->
+                    <button onclick="handlePrint()" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        <i data-lucide="printer" size="18" class="mr-1"></i>
+                        พิมพ์
+                    </button>
+                </div>
+            </div>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-gray-300 text-sm text-center">
-                        <thead class="bg-green-600 text-white">
+            <!-- ตารางการใช้ห้อง -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+                <!-- หัวตาราง -->
+                <div class="p-4 bg-green-700 text-white">
+                    <h2 class="text-xl font-bold">ตารางการใช้ห้อง <span id="selectedRoomName"></span></h2>
+                    <p class="text-sm">ภาคการศึกษาที่ 1/2566</p>
+                </div>
+                <!-- ตัวตาราง -->
+                <div class="p-4 overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
                             <tr>
-                                <th class="border px-2 py-2 min-w-[150px]">เวลา/วัน</th>
-                                <th class="border px-2 py-2 min-w-[150px]">จันทร์</th>
-                                <th class="border px-2 py-2 min-w-[150px]">อังคาร</th>
-                                <th class="border px-2 py-2 min-w-[150px]">พุธ</th>
-                                <th class="border px-2 py-2 min-w-[150px]">พฤหัสบดี</th>
-                                <th class="border px-2 py-2 min-w-[150px]">ศุกร์</th>
+                                <th class="border p-2 bg-gray-50">เวลา/วัน</th>
+                                <th class="border p-2 bg-gray-50 min-w-[150px]">จันทร์</th>
+                                <th class="border p-2 bg-gray-50 min-w-[150px]">อังคาร</th>
+                                <th class="border p-2 bg-gray-50 min-w-[150px]">พุธ</th>
+                                <th class="border p-2 bg-gray-50 min-w-[150px]">พฤหัสบดี</th>
+                                <th class="border p-2 bg-gray-50 min-w-[150px]">ศุกร์</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- 8:00 - 9:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">8:00 - 9:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 9:00 - 10:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">9:00 - 10:00</td>
-                                <td class="border px-2 py-2 bg-purple-100 text-left" rowspan="3">
-                                    <span class="font-bold text-purple-800">CS101</span><br>
-                                    วิทยาการคอมพิวเตอร์เบื้องต้น<br>
-                                    ห้อง: CS-201<br>
-                                    อ.ดร.สมชาย ใจดี
-                                </td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2 bg-green-100 text-left" rowspan="3">
-                                    <span class="font-bold text-green-800">CS103</span><br>
-                                    การพัฒนาเว็บ<br>
-                                    ห้อง: CS-301<br>
-                                    อ.สุดา เว็บเก่ง
-                                </td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 10:00 - 11:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">10:00 - 11:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 11:00 - 12:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">11:00 - 12:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 12:00 - 13:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">12:00 - 13:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 13:00 - 14:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">13:00 - 14:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2 bg-purple-100 text-left" rowspan="2">
-                                    <span class="font-bold text-purple-800">CS101</span><br>
-                                    วิทยาการคอมพิวเตอร์เบื้องต้น<br>
-                                    ห้อง: CS-201<br>
-                                    อ.ดร.สมชาย ใจดี
-                                </td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 14:00 - 15:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">14:00 - 15:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 15:00 - 16:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">15:00 - 16:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 16:00 - 17:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">16:00 - 17:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
-
-                            <!-- 17:00 - 18:00 -->
-                            <tr>
-                                <td class="border px-2 py-2">17:00 - 18:00</td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                                <td class="border px-2 py-2"></td>
-                            </tr>
+                        <tbody id="roomScheduleTableBody">
+                            <!-- ตารางจะถูกสร้างด้วย JavaScript -->
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                <!-- สรุปรายวิชาที่ลงทะเบียน -->
-                <h3 class="text-lg font-bold mt-8 text-green-700">สรุปรายวิชาที่ลงทะเบียน</h3>
-                <table class="min-w-full mt-2 border border-gray-300 text-sm text-center">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="border px-2 py-2">รหัสวิชา</th>
-                            <th class="border px-2 py-2">ชื่อวิชา</th>
-                            <th class="border px-2 py-2">Section</th>
-                            <th class="border px-2 py-2">หน่วยกิต</th>
-                            <th class="border px-2 py-2">อาจารย์ผู้สอน</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border px-2 py-2">CS101</td>
-                            <td class="border px-2 py-2">วิทยาการคอมพิวเตอร์เบื้องต้น</td>
-                            <td class="border px-2 py-2">1</td>
-                            <td class="border px-2 py-2">3</td>
-                            <td class="border px-2 py-2">ดร.สมชาย ใจดี</td>
-                        </tr>
-                        <tr>
-                            <td class="border px-2 py-2">CS103</td>
-                            <td class="border px-2 py-2">การพัฒนาเว็บ</td>
-                            <td class="border px-2 py-2">1</td>
-                            <td class="border px-2 py-2">3</td>
-                            <td class="border px-2 py-2">อ.สุดา เว็บเก่ง</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- สรุปการใช้ห้องเรียน -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <!-- หัวข้อสรุป -->
+                <div class="p-4 bg-green-700 text-white">
+                    <h2 class="text-xl font-bold">สรุปการใช้ห้องเรียน</h2>
+                </div>
+                <!-- เนื้อหาสรุป -->
+                <div class="p-4">
+                    <div id="roomSummaryContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- การ์ดสรุปแต่ละห้องจะถูกสร้างด้วย JavaScript -->
+                    </div>
+                </div>
             </div>
         </main>
 
-        <!-- Footer Component -->
+        <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
         <footer class="bg-green-800 text-white py-6">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-between">
+                    <!-- ข้อมูลมหาวิทยาลัย -->
                     <div class="mb-4 md:mb-0">
                         <h3 class="font-bold text-lg mb-2">มหาวิทยาลัยแม่โจ้</h3>
                         <p class="text-sm">
@@ -346,12 +267,14 @@
                         </p>
                         <p class="text-sm">โทรศัพท์: 053-873000</p>
                     </div>
+                    <!-- ข้อมูลติดต่อ -->
                     <div class="mb-4 md:mb-0">
                         <h3 class="font-bold text-lg mb-2">ติดต่อเรา</h3>
                         <p class="text-sm">สำนักบริหารและพัฒนาวิชาการ</p>
                         <p class="text-sm">โทรศัพท์: 053-873460</p>
                         <p class="text-sm">อีเมล: academic@mju.ac.th</p>
                     </div>
+                    <!-- ลิงก์ช่วยเหลือ -->
                     <div>
                         <h3 class="font-bold text-lg mb-2">ช่วยเหลือ</h3>
                         <ul class="text-sm">
@@ -373,6 +296,7 @@
                         </ul>
                     </div>
                 </div>
+                <!-- ลิขสิทธิ์ -->
                 <div class="mt-6 pt-4 border-t border-green-700 text-center text-sm">
                     <p>
                         &copy; <span id="currentYear"></span> ระบบทะเบียนนักศึกษา
@@ -383,34 +307,273 @@
         </footer>
     </div>
 
+    <!-- นำเข้าไฟล์ข้อมูลรายวิชา -->
+    <script src="data.js"></script>
     <script>
-        // Login navigation functionality
+        // ตัวแปรสำหรับเก็บข้อมูล
+        let allCourses = []; // เก็บรายวิชาทั้งหมด
+        let selectedRoom = ''; // เก็บห้องที่เลือก
+        
+        // กำหนดวันและเวลาที่ใช้ในตาราง
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
+        const hours = Array.from({ length: 10 }, (_, i) => i + 8); // สร้างอาร์เรย์เวลา 8:00-17:00
+
+        // ฟังก์ชันโหลดรายวิชาทั้งหมดจาก data.js และ localStorage
+        function loadAllCourses() {
+            // ดึงรายวิชาทั้งหมดจาก data.js
+            allCourses = [...courseData];
+            
+            // เพิ่มรายวิชาที่ลงทะเบียนจาก localStorage
+            const savedCourses = localStorage.getItem('registeredCourses');
+            if (savedCourses) {
+                const registeredCourses = JSON.parse(savedCourses);
+                // เพิ่มเฉพาะรายวิชาที่ยังไม่มีใน courseData
+                registeredCourses.forEach(course => {
+                    if (!allCourses.find(c => c.code === course.code)) {
+                        allCourses.push(course);
+                    }
+                });
+            }
+        }
+
+        // ฟังก์ชันดึงรายชื่อห้องทั้งหมดที่ไม่ซ้ำกัน
+        function getAllRooms() {
+            const rooms = new Set(); // ใช้ Set เพื่อเก็บค่าที่ไม่ซ้ำ
+            allCourses.forEach(course => {
+                if (course.room) {
+                    rooms.add(course.room);
+                }
+            });
+            return Array.from(rooms).sort(); // แปลงเป็นอาร์เรย์และเรียงลำดับ
+        }
+
+        // ฟังก์ชันสร้างตัวเลือกห้องในดรอปดาวน์
+        function initializeRoomDropdown() {
+            const roomSelect = document.getElementById('roomSelect');
+            const rooms = getAllRooms();
+            
+            // ล้างตัวเลือกเดิม
+            roomSelect.innerHTML = '<option value="">เลือกห้องเรียน</option>';
+            
+            // เพิ่มตัวเลือกห้องแต่ละห้อง
+            rooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = `ห้อง ${room}`;
+                roomSelect.appendChild(option);
+            });
+            
+            // เพิ่ม event listener เมื่อเลือกห้อง
+            roomSelect.addEventListener('change', (e) => {
+                selectedRoom = e.target.value;
+                updateRoomDisplay();
+            });
+        }
+
+        // ฟังก์ชันอัปเดตการแสดงผลเมื่อเลือกห้อง
+        function updateRoomDisplay() {
+            const selectedRoomName = document.getElementById('selectedRoomName');
+            if (selectedRoom) {
+                selectedRoomName.textContent = `- ห้อง ${selectedRoom}`;
+                renderRoomScheduleTable();
+            } else {
+                selectedRoomName.textContent = '';
+                renderRoomScheduleTable();
+            }
+            renderRoomSummary();
+        }
+
+        // ฟังก์ชันกำหนดสีสำหรับแต่ละรายวิชา
+        function getCourseColor(courseCode) {
+            const colors = [
+                'bg-blue-100 border-blue-300 text-blue-800',
+                'bg-green-100 border-green-300 text-green-800',
+                'bg-yellow-100 border-yellow-300 text-yellow-800',
+                'bg-purple-100 border-purple-300 text-purple-800',
+                'bg-pink-100 border-pink-300 text-pink-800',
+                'bg-indigo-100 border-indigo-300 text-indigo-800'
+            ];
+            // ใช้รหัสวิชาเพื่อกำหนดสีที่สม่ำเสมอ
+            const index = parseInt(courseCode.replace(/\D/g, '')) % colors.length;
+            return colors[index];
+        }
+
+        // ฟังก์ชันหารายวิชาที่ใช้ห้องในเวลาที่กำหนด
+        function getCoursesInRoomAtTime(room, day, hour) {
+            return allCourses.filter(course => {
+                // ตรวจสอบว่าเป็นห้องที่ต้องการหรือไม่
+                if (course.room !== room) return false;
+                // ตรวจสอบว่ามีการใช้ในวันและเวลาที่กำหนดหรือไม่
+                return course.time.some(timeSlot => {
+                    if (timeSlot.day !== day) return false;
+                    const startHour = parseInt(timeSlot.start.split(':')[0]);
+                    const endHour = parseInt(timeSlot.end.split(':')[0]);
+                    return hour >= startHour && hour < endHour;
+                });
+            });
+        }
+
+        // ฟังก์ชันคำนวณจำนวนชั่วโมงที่รายวิชาใช้
+        function getCourseTimespan(course, day, hour) {
+            const timeSlot = course.time.find(t => t.day === day);
+            if (!timeSlot) return 1;
+            const startHour = parseInt(timeSlot.start.split(':')[0]);
+            const endHour = parseInt(timeSlot.end.split(':')[0]);
+            // คืนค่าจำนวนชั่วโมงถ้าเป็นชั่วโมงเริ่มต้น
+            if (hour === startHour) {
+                return endHour - startHour;
+            }
+            return 0; // ไม่ใช่ชั่วโมงเริ่มต้น
+        }
+
+        // ฟังก์ชันสร้างตารางการใช้ห้อง
+        function renderRoomScheduleTable() {
+            const tbody = document.getElementById('roomScheduleTableBody');
+            
+            // ถ้ายังไม่ได้เลือกห้อง
+            if (!selectedRoom) {
+                tbody.innerHTML = '<tr><td colspan="6" class="border p-4 text-center text-gray-500">กรุณาเลือกห้องเรียน</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            const processedCells = new Set(); // เก็บเซลล์ที่ประมวลผลแล้ว (สำหรับ rowspan)
+
+            // วนลูปสร้างแถวสำหรับแต่ละชั่วโมง
+            hours.forEach(hour => {
+                html += '<tr>';
+                html += `<td class="border p-2 text-center bg-gray-50 font-medium">${hour}:00 - ${hour + 1}:00</td>`;
+                
+                // วนลูปสร้างคอลัมน์สำหรับแต่ละวัน
+                days.forEach(day => {
+                    const cellKey = `${day}-${hour}`;
+                    // ข้ามเซลล์ที่เป็นส่วนหนึ่งของ rowspan
+                    if (processedCells.has(cellKey)) {
+                        return;
+                    }
+                    
+                    // หารายวิชาที่ใช้ห้องในเวลานี้
+                    const coursesAtTime = getCoursesInRoomAtTime(selectedRoom, day, hour);
+                    if (coursesAtTime.length === 0) {
+                        // ถ้าไม่มีรายวิชา แสดงว่าห้องว่าง
+                        html += `<td class="border p-2 bg-green-50 text-center text-gray-500">ว่าง</td>`;
+                    } else {
+                        // ถ้ามีรายวิชา แสดงข้อมูลรายวิชา
+                        const course = coursesAtTime[0]; // ใช้รายวิชาแรกถ้ามีหลายรายวิชา
+                        const timespan = getCourseTimespan(course, day, hour);
+                        
+                        if (timespan > 0) {
+                            // ทำเครื่องหมายเซลล์ที่ใช้สำหรับ rowspan
+                            for (let i = 0; i < timespan; i++) {
+                                processedCells.add(`${day}-${hour + i}`);
+                            }
+                            
+                            const colorClass = getCourseColor(course.code);
+                            html += `<td rowspan="${timespan}" class="border p-2 ${colorClass}">
+                                <div class="font-bold">${course.code}</div>
+                                <div class="text-sm">${course.name}</div>
+                                <div class="text-xs">Section ${course.section}</div>
+                                <div class="text-xs">${course.instructor}</div>
+                            </td>`;
+                        }
+                    }
+                });
+                
+                html += '</tr>';
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // ฟังก์ชันสร้างสรุปการใช้ห้องทั้งหมด
+        function renderRoomSummary() {
+            const summaryContent = document.getElementById('roomSummaryContent');
+            const rooms = getAllRooms();
+            
+            let html = '';
+            // สร้างการ์ดสรุปสำหรับแต่ละห้อง
+            rooms.forEach(room => {
+                // คำนวณการใช้งานของห้อง
+                let totalSlots = 0; // จำนวนช่วงเวลาทั้งหมด
+                let usedSlots = 0; // จำนวนช่วงเวลาที่ใช้
+                
+                // นับช่วงเวลาทั้งหมดและที่ใช้
+                days.forEach(day => {
+                    hours.forEach(hour => {
+                        totalSlots++;
+                        const courses = getCoursesInRoomAtTime(room, day, hour);
+                        if (courses.length > 0) {
+                            usedSlots++;
+                        }
+                    });
+                });
+                
+                // คำนวณเปอร์เซ็นต์การใช้งาน
+                const usagePercent = totalSlots > 0 ? Math.round((usedSlots / totalSlots) * 100) : 0;
+                // กำหนดสีตามเปอร์เซ็นต์การใช้งาน
+                const bgColor = usagePercent > 70 ? 'bg-red-100' : usagePercent > 40 ? 'bg-yellow-100' : 'bg-green-100';
+                const textColor = usagePercent > 70 ? 'text-red-800' : usagePercent > 40 ? 'text-yellow-800' : 'text-green-800';
+                
+                // สร้าง HTML สำหรับการ์ดแต่ละห้อง
+                html += `
+                    <div class="border rounded-lg p-4 ${bgColor}">
+                        <h3 class="font-bold text-lg ${textColor}">ห้อง ${room}</h3>
+                        <div class="mt-2">
+                            <div class="flex justify-between text-sm">
+                                <span>การใช้งาน:</span>
+                                <span class="font-medium">${usagePercent}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div class="bg-${usagePercent > 70 ? 'red' : usagePercent > 40 ? 'yellow' : 'green'}-600 h-2 rounded-full" style="width: ${usagePercent}%"></div>
+                            </div>
+                            <div class="text-xs mt-2 ${textColor}">
+                                ${usedSlots} จาก ${totalSlots} ช่วงเวลา
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            summaryContent.innerHTML = html;
+        }
+
+        // ฟังก์ชันจัดการการพิมพ์
+        function handlePrint() {
+            window.print();
+        }
+
+        // ฟังก์ชันนำทางไปหน้าล็อกอิน
         function navigateToLogin(userType) {
-            // Store user type in localStorage to pass to login page
+            // บันทึกประเภทผู้ใช้ใน localStorage
             localStorage.setItem('userType', userType);
-            // Navigate to login.html
+            // ไปยังหน้าล็อกอิน
             window.location.href = 'login.html';
         }
 
-        // Mobile menu functionality
+        // จัดการเมนูมือถือ
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
         const closeIcon = document.getElementById('closeIcon');
         let isMenuOpen = false;
 
+        // เมื่อคลิกปุ่มเมนู
         mobileMenuBtn.addEventListener('click', () => {
             isMenuOpen = !isMenuOpen;
             
             if (isMenuOpen) {
+                // เปิดเมนู
                 mobileMenu.classList.remove('hidden');
                 menuIcon.classList.add('hidden');
                 closeIcon.classList.remove('hidden');
             } else {
+                // ปิดเมนู
                 closeMobileMenu();
             }
         });
 
+        // ฟังก์ชันปิดเมนูมือถือ
         function closeMobileMenu() {
             isMenuOpen = false;
             mobileMenu.classList.add('hidden');
@@ -418,9 +581,9 @@
             closeIcon.classList.add('hidden');
         }
 
-        // Initialize dropdowns and mobile menu
+        // ฟังก์ชันจัดการดรอปดาวน์ต่างๆ
         function initializeDropdowns() {
-            // Login dropdown
+            // ดรอปดาวน์ล็อกอินสำหรับเดสก์ท็อป
             const loginDropdownBtn = document.getElementById('loginDropdownBtn');
             const loginDropdown = document.getElementById('loginDropdown');
             
@@ -430,7 +593,7 @@
                     loginDropdown.classList.toggle('hidden');
                 });
 
-                // Close dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!loginDropdownBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
                         loginDropdown.classList.add('hidden');
@@ -438,7 +601,7 @@
                 });
             }
 
-            // Mobile login dropdown
+            // ดรอปดาวน์ล็อกอินสำหรับมือถือ
             const mobileLoginDropdownBtn = document.getElementById('mobileLoginDropdownBtn');
             const mobileLoginDropdown = document.getElementById('mobileLoginDropdown');
             
@@ -448,7 +611,7 @@
                     mobileLoginDropdown.classList.toggle('hidden');
                 });
 
-                // Close mobile dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!mobileLoginDropdownBtn.contains(e.target) && !mobileLoginDropdown.contains(e.target)) {
                         mobileLoginDropdown.classList.add('hidden');
@@ -456,7 +619,7 @@
                 });
             }
 
-            // Profile dropdown
+            // ดรอปดาวน์โปรไฟล์
             const profileDropdownBtn = document.getElementById('profileDropdownBtn');
             const profileDropdown = document.getElementById('profileDropdown');
             
@@ -466,7 +629,7 @@
                     profileDropdown.classList.toggle('hidden');
                 });
 
-                // Close dropdown when clicking outside
+                // ปิดดรอปดาวน์เมื่อคลิกที่อื่น
                 document.addEventListener('click', (e) => {
                     if (!profileDropdownBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
                         profileDropdown.classList.add('hidden');
@@ -475,16 +638,18 @@
             }
         }
 
-        // Logout functionality
+        // ฟังก์ชันออกจากระบบ
         function logout() {
             if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                // ลบข้อมูลการล็อกอินออกจาก localStorage
                 localStorage.removeItem('userType');
                 localStorage.removeItem('isLoggedIn');
+                // แสดงส่วนล็อกอิน
                 showLoginSection();
             }
         }
 
-        // Show/Hide login and profile sections
+        // ฟังก์ชันแสดงส่วนล็อกอิน (ยังไม่ได้ล็อกอิน)
         function showLoginSection() {
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('profileSection').classList.add('hidden');
@@ -492,6 +657,7 @@
             document.getElementById('mobileProfileSection').classList.add('hidden');
         }
 
+        // ฟังก์ชันแสดงส่วนโปรไฟล์ (ล็อกอินแล้ว)
         function showProfileSection() {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('profileSection').classList.remove('hidden');
@@ -499,11 +665,12 @@
             document.getElementById('mobileProfileSection').classList.remove('hidden');
         }
 
-        // Check if user is logged in
+        // ฟังก์ชันตรวจสอบสถานะการล็อกอิน
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const userType = localStorage.getItem('userType');
             
+            // ถ้าล็อกอินแล้วและเป็นนักศึกษา
             if (isLoggedIn === 'true' && userType === 'student') {
                 showProfileSection();
             } else {
@@ -511,27 +678,37 @@
             }
         }
 
-        // Initialize the app
+        // ฟังก์ชันเริ่มต้นแอปพลิเคชัน
         function initializeApp() {
-            // Set current year
+            // ตั้งค่าปีปัจจุบันใน footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
-            // Check login status first
+            // โหลดรายวิชาทั้งหมด
+            loadAllCourses();
+            
+            // สร้างดรอปดาวน์เลือกห้อง
+            initializeRoomDropdown();
+            
+            // แสดงผลเริ่มต้น
+            renderRoomScheduleTable();
+            renderRoomSummary();
+            
+            // ตรวจสอบสถานะการล็อกอิน
             checkLoginStatus();
             
-            // Initialize Lucide icons
+            // สร้างไอคอน Lucide
             lucide.createIcons();
             
-            // Initialize dropdowns
+            // เริ่มต้นดรอปดาวน์ต่างๆ
             initializeDropdowns();
         }
 
-        // Show under development modal
+        // ฟังก์ชันแสดงข้อความหน้าที่กำลังพัฒนา
         function showUnderDevelopment(pageName) {
             alert(`หน้า${pageName}\n\nหน้านี้อยู่ระหว่างการพัฒนา`);
         }
 
-        // Run initialization when page loads
+        // เรียกใช้เมื่อหน้าเว็บโหลดเสร็จ
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>

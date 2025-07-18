@@ -610,6 +610,43 @@
             alert(`หน้า${pageName}\n\nหน้านี้อยู่ระหว่างการพัฒนา`);
         }
 
+        // Check for time conflicts between courses
+        function checkTimeConflicts(courses) {
+            const conflicts = [];
+            
+            for (let i = 0; i < courses.length; i++) {
+                for (let j = i + 1; j < courses.length; j++) {
+                    const course1 = courses[i];
+                    const course2 = courses[j];
+                    
+                    // Check each time slot of course1 against course2
+                    for (const time1 of course1.time) {
+                        for (const time2 of course2.time) {
+                            if (time1.day === time2.day) {
+                                const start1 = parseInt(time1.start.split(':')[0]) * 60 + parseInt(time1.start.split(':')[1]);
+                                const end1 = parseInt(time1.end.split(':')[0]) * 60 + parseInt(time1.end.split(':')[1]);
+                                const start2 = parseInt(time2.start.split(':')[0]) * 60 + parseInt(time2.start.split(':')[1]);
+                                const end2 = parseInt(time2.end.split(':')[0]) * 60 + parseInt(time2.end.split(':')[1]);
+                                
+                                // Check if times overlap
+                                if ((start1 < end2 && end1 > start2) || (start2 < end1 && end2 > start1)) {
+                                    conflicts.push({
+                                        course1: course1,
+                                        course2: course2,
+                                        day: time1.day,
+                                        time1: `${time1.start}-${time1.end}`,
+                                        time2: `${time2.start}-${time2.end}`
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return conflicts;
+        }
+
         // Initialize the page
         function init() {
             initializeCourseRegistration();
@@ -621,11 +658,30 @@
             // Confirm registration
             document.getElementById('confirmCourseRegistration').addEventListener('click', () => {
                 if (cartItems.length > 0) {
+                    // Check for time conflicts
+                    const conflicts = checkTimeConflicts(cartItems);
+                    
+                    if (conflicts.length > 0) {
+                        // Show conflict details
+                        let conflictMessage = 'พบรายวิชาที่มีเวลาเรียนซ้อนทับกัน:\n\n';
+                        conflicts.forEach(conflict => {
+                            const dayName = getDayName(conflict.day);
+                            conflictMessage += `• ${conflict.course1.code} (${conflict.time1}) กับ ${conflict.course2.code} (${conflict.time2}) ในวัน${dayName}\n`;
+                        });
+                        conflictMessage += '\nกรุณาปรับเปลี่ยนรายวิชาที่เลือก';
+                        alert(conflictMessage);
+                        return;
+                    }
+                    
                     const totalCredits = cartItems.reduce((sum, course) => sum + course.credits, 0);
                     const courseList = cartItems.map(course => `• ${course.code} - ${course.name}`).join('\n');
                     
                     if (confirm(`คุณต้องการลงทะเบียนรายวิชาต่อไปนี้หรือไม่?\n\n${courseList}\n\nรวม ${totalCredits} หน่วยกิต`)) {
+                        // Save to localStorage
+                        localStorage.setItem('registeredCourses', JSON.stringify(cartItems));
+                        
                         alert('ลงทะเบียนเรียนสำเร็จ!\nคุณสามารถดูตารางเรียนได้ในหน้าตารางเรียน');
+                        
                         // Clear cart after successful registration
                         cartItems = [];
                         updateCourseCart();

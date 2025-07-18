@@ -258,6 +258,7 @@
                             <th class="border p-2">Section</th>
                             <th class="border p-2">หน่วยกิต</th>
                             <th class="border p-2">อาจารย์ผู้สอน</th>
+                            <th class="border p-2 no-print">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody id="courseSummaryBody">
@@ -315,90 +316,18 @@
         </div>
     </footer>
 
+    <script src="data.js"></script>
     <script>
-        // Sample course data - registered courses
-        const registeredCourses = [
-            {
-                code: "CS101",
-                name: "การเขียนโปรแกรมเบื้องต้น",
-                section: "001",
-                credits: 3,
-                time: [
-                    { day: "Monday", start: "09:00", end: "12:00" },
-                    { day: "Wednesday", start: "09:00", end: "12:00" }
-                ],
-                room: "CS-201",
-                instructor: "อ.สมชาย ใจดี"
-            },
-            {
-                code: "CS301",
-                name: "วิศวกรรมซอฟต์แวร์",
-                section: "001",
-                credits: 3,
-                time: [
-                    { day: "Tuesday", start: "09:00", end: "12:00" },
-                    { day: "Thursday", start: "09:00", end: "12:00" }
-                ],
-                room: "CS-401",
-                instructor: "อ.เก่ง มากมาย"
-            },
-            {
-                code: "CS201",
-                name: "การออกแบบและวิเคราะห์อัลกอริทึม",
-                section: "001",
-                credits: 3,
-                time: [
-                    { day: "Monday", start: "13:00", end: "16:00" },
-                    { day: "Wednesday", start: "13:00", end: "16:00" }
-                ],
-                room: "CS-301",
-                instructor: "อ.วิชาญ เก่งมาก"
-            },
-            {
-                code: "CS109",
-                name: "คณิตศาสตร์ดิสครีต",
-                section: "001",
-                credits: 3,
-                time: [
-                    { day: "Tuesday", start: "13:00", end: "16:00" },
-                    { day: "Friday", start: "09:00", end: "12:00" }
-                ],
-                room: "CS-101",
-                instructor: "อ.คณิต เลขดี"
+        // Load registered courses from localStorage
+        let registeredCourses = [];
+        
+        // Load registered courses from localStorage
+        function loadRegisteredCourses() {
+            const savedCourses = localStorage.getItem('registeredCourses');
+            if (savedCourses) {
+                registeredCourses = JSON.parse(savedCourses);
             }
-        ];
-
-        // Sample exam schedule
-        const examSchedule = [
-            {
-                code: "CS101",
-                name: "การเขียนโปรแกรมเบื้องต้น",
-                date: "15 ตุลาคม 2566",
-                time: "09:00-12:00",
-                room: "CS-201"
-            },
-            {
-                code: "CS301",
-                name: "วิศวกรรมซอฟต์แวร์",
-                date: "17 ตุลาคม 2566",
-                time: "13:00-16:00",
-                room: "CS-401"
-            },
-            {
-                code: "CS201",
-                name: "การออกแบบและวิเคราะห์อัลกอริทึม",
-                date: "20 ตุลาคม 2566",
-                time: "09:00-12:00",
-                room: "CS-301"
-            },
-            {
-                code: "CS109",
-                name: "คณิตศาสตร์ดิสครีต",
-                date: "22 ตุลาคม 2566",
-                time: "13:00-16:00",
-                room: "CS-101"
-            }
-        ];
+        }
 
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         const dayNames = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
@@ -481,20 +410,43 @@
         // Render the exam schedule table
         function renderExamTable() {
             const tbody = document.getElementById('examTableBody');
-            const registeredCoursesCodes = registeredCourses.map(c => c.code);
-            const registeredExams = examSchedule.filter(exam => 
-                registeredCoursesCodes.includes(exam.code)
-            );
+            
+            // Generate exam schedule from registered courses
+            let html = '';
+            registeredCourses.forEach(course => {
+                if (course.exams) {
+                    // Midterm exam
+                    if (course.exams.midterm) {
+                        const midtermDate = new Date(course.exams.midterm.date);
+                        html += `
+                            <tr>
+                                <td class="border p-2 font-medium">${course.code}</td>
+                                <td class="border p-2">${course.name}</td>
+                                <td class="border p-2">${midtermDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (กลางภาค)</td>
+                                <td class="border p-2">${course.exams.midterm.time}</td>
+                                <td class="border p-2">${course.exams.midterm.room}</td>
+                            </tr>
+                        `;
+                    }
+                    // Final exam
+                    if (course.exams.final) {
+                        const finalDate = new Date(course.exams.final.date);
+                        html += `
+                            <tr>
+                                <td class="border p-2 font-medium">${course.code}</td>
+                                <td class="border p-2">${course.name}</td>
+                                <td class="border p-2">${finalDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })} (ปลายภาค)</td>
+                                <td class="border p-2">${course.exams.final.time}</td>
+                                <td class="border p-2">${course.exams.final.room}</td>
+                            </tr>
+                        `;
+                    }
+                }
+            });
 
-            const html = registeredExams.map(exam => `
-                <tr>
-                    <td class="border p-2 font-medium">${exam.code}</td>
-                    <td class="border p-2">${exam.name}</td>
-                    <td class="border p-2">${exam.date}</td>
-                    <td class="border p-2">${exam.time}</td>
-                    <td class="border p-2">${exam.room}</td>
-                </tr>
-            `).join('');
+            if (html === '') {
+                html = '<tr><td colspan="5" class="border p-4 text-center text-gray-500">ไม่มีตารางสอบ</td></tr>';
+            }
 
             tbody.innerHTML = html;
         }
@@ -502,6 +454,12 @@
         // Render the course summary table
         function renderCourseSummary() {
             const tbody = document.getElementById('courseSummaryBody');
+            
+            if (registeredCourses.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="border p-4 text-center text-gray-500">ยังไม่มีรายวิชาที่ลงทะเบียน</td></tr>';
+                return;
+            }
+            
             const totalCredits = registeredCourses.reduce((sum, course) => sum + course.credits, 0);
 
             let html = registeredCourses.map(course => `
@@ -511,6 +469,11 @@
                     <td class="border p-2 text-center">${course.section}</td>
                     <td class="border p-2 text-center">${course.credits}</td>
                     <td class="border p-2">${course.instructor}</td>
+                    <td class="border p-2 text-center no-print">
+                        <button onclick="removeCourse('${course.code}')" class="text-red-500 hover:text-red-700 p-1">
+                            <i data-lucide="trash-2" size="18"></i>
+                        </button>
+                    </td>
                 </tr>
             `).join('');
 
@@ -519,10 +482,31 @@
                     <td colspan="3" class="border p-2 text-right">รวมหน่วยกิต</td>
                     <td class="border p-2 text-center">${totalCredits}</td>
                     <td class="border p-2"></td>
+                    <td class="border p-2"></td>
                 </tr>
             `;
 
             tbody.innerHTML = html;
+        }
+
+        // Remove a course from registration
+        function removeCourse(courseCode) {
+            const courseName = registeredCourses.find(c => c.code === courseCode)?.name;
+            if (confirm(`คุณต้องการถอนรายวิชา ${courseCode} - ${courseName} หรือไม่?`)) {
+                // Remove from array
+                registeredCourses = registeredCourses.filter(course => course.code !== courseCode);
+                
+                // Save to localStorage
+                localStorage.setItem('registeredCourses', JSON.stringify(registeredCourses));
+                
+                // Re-render all tables
+                renderScheduleTable();
+                renderExamTable();
+                renderCourseSummary();
+                
+                // Update icons
+                lucide.createIcons();
+            }
         }
 
         // Handle print functionality
@@ -678,6 +662,7 @@
 
         // Initialize the page
         function init() {
+            loadRegisteredCourses();
             renderScheduleTable();
             renderExamTable();
             renderCourseSummary();
